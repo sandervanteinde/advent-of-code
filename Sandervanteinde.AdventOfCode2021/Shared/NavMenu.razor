@@ -1,36 +1,15 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">Advent Of Code 2021</a>
-        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-    </div>
-</div>
-
-<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
-    <nav class="flex-column">
-        @foreach(var solution in Registry.Solutions)
-        {
-            <div class="nav-item px-3">
-                <NavLink class="nav-link" href="@("solution/" + solution.Day)">
-                    <span class="oi oi-list-rich" aria-hidden="true"></span> @solution.Title
-                </NavLink>
-            </div>
-        }
-    </nav>
-</div>
-
-@code {
-
-    [Inject]
-    public SolutionRegistry Registry { get; set; } = null!;
-
-    private bool collapseNavMenu = true;
-
-    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
-
-    private void ToggleNavMenu()
+﻿
+<MatNavMenu>
+    @foreach(var year in SelectedYears)
     {
-        collapseNavMenu = !collapseNavMenu;
+        <MatNavSubMenu @bind-Expanded="year.IsExpanded">
+            <MatNavSubMenuHeader>@year.Year</MatNavSubMenuHeader>
+            <MatNavSubMenuList>
+                @foreach(var solution in year.Solutions)
+                {
+                    <MatNavItem Href="@($"solution/{solution.Year}/{solution.Day}")">Day @solution.Day - @solution.Title</MatNavItem>
+                }
+            </MatNavSubMenuList>
+        </MatNavSubMenu>
     }
-}
+</MatNavMenu>

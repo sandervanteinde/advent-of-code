@@ -5,6 +5,7 @@ public class DayTwo : IAdventOfCodeSolution
     public string Title => "Day Two";
 
     public int Day => 2;
+    public int Year => 2021;
 
     public string GetStepOneResult(string input)
     {

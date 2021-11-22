@@ -1,4 +1,4 @@
-﻿@page "/solution/{solutionId:int}"
+﻿@page "/solution/{year:int}/{day:int}"
 
 
 @if (Solution is null)
@@ -30,7 +30,10 @@
     public IAdventOfCodeSolution? Solution { get; set; } = null;
 
     [Parameter]
-    public int SolutionId { get; set; }
+    public int Year { get; set; }
+
+    [Parameter]
+    public int Day { get; set; }
 
     public string StepOne { get; private set; } = string.Empty;
 
@@ -39,7 +42,7 @@
     protected override async Task OnParametersSetAsync()
     {
         Result = string.Empty;
-        var solution = Registry.Solutions.FirstOrDefault(solution => solution.Day == SolutionId);
+        var solution = Registry.GetSolution(Year, Day);
         Solution = solution;
 
         if(Solution is not null)

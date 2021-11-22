@@ -7,12 +7,15 @@ serviceCollection.AddSolutions();
 var serviceProvider = serviceCollection.BuildServiceProvider();
 
 var solutionRegistry = serviceProvider.GetRequiredService<SolutionRegistry>();
+Console.WriteLine("Write the year");
+Console.Write("--> ");
+var year = int.Parse(Console.ReadLine());
 
 Console.WriteLine("Write the test number");
 Console.Write("--> ");
 var testNumber = int.Parse(Console.ReadLine());
 
-var solution = solutionRegistry.Solutions.First(sln => sln.Day == testNumber);
+var solution = solutionRegistry.GetSolution(year, testNumber);
 if (solution == null)
 {
     Console.Error.WriteLine("Unknown solution");

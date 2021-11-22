@@ -5,7 +5,7 @@ public class DayOne : IAdventOfCodeSolution
     public string Title => "Day One";
 
     public int Day => 1;
-
+    public int Year => 2021;
     public string GetStepOneResult(string input)
     {
         return string.Join("❄️", input.Split(" "));
