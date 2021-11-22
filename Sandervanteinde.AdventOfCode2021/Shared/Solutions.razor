@@ -1,0 +1,55 @@
+﻿@page "/solution/{solutionId:int}"
+
+
+@if (Solution is null)
+{
+    <p>The solution was not found.</p>
+    return;
+}
+<h2>@Solution.Title</h2>
+
+<EditForm Model="StepOne">
+    <InputTextArea @bind-Value="StepOne"/>
+    <button @onclick="CalculateStepOne">Calculate</button>
+</EditForm>
+
+@if(Result != string.Empty)
+{
+    <EditForm Model="Result">
+        <textarea readonly>@Result</textarea>
+    </EditForm>
+}
+
+@code {
+    [Inject]
+    public SolutionRegistry Registry { get; set; } = null!;
+
+    [Inject]
+    public HttpClient Client { get; set; } = null!;
+
+    public IAdventOfCodeSolution? Solution { get; set; } = null;
+
+    [Parameter]
+    public int SolutionId { get; set; }
+
+    public string StepOne { get; private set; } = string.Empty;
+
+    public string Result { get; private set; } = string.Empty;
+
+    protected override  async Task OnParametersSetAsync()
+    {
+        Result = string.Empty;
+        var solution = Registry.Solutions.FirstOrDefault(solution => solution.Day == SolutionId);
+        Solution = solution;
+
+        if(Solution is not null)
+        {
+            StepOne = await Client.GetStringAsync($"sample-data/{Solution.StepOneFileName()}");
+        }
+    }
+
+    private void CalculateStepOne()
+    {
+        Result = Solution!.GetStepOneResult(StepOne);
+    }
+}
