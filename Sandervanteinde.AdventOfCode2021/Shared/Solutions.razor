@@ -36,7 +36,7 @@
 
     public string Result { get; private set; } = string.Empty;
 
-    protected override  async Task OnParametersSetAsync()
+    protected override async Task OnParametersSetAsync()
     {
         Result = string.Empty;
         var solution = Registry.Solutions.FirstOrDefault(solution => solution.Day == SolutionId);
