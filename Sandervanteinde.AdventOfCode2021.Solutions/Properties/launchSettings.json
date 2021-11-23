@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "Sandervanteinde.AdventOfCode2021.Solutions": {
+      "commandName": "Project"
+    },
+    "Latest": {
+      "commandName": "Project",
+      "commandLineArgs": "--run-latest"
+    }
+  }
+}
