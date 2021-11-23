@@ -1,4 +1,9 @@
-﻿<aside>
+﻿@if(SelectedYears.Count == 0)
+{
+    <p>There are no solutions made as of yet.</p>
+    return;
+}
+<aside>
     <MatNavMenu>
         @for(var i = 0; i < SelectedYears.Count; i++)
         {

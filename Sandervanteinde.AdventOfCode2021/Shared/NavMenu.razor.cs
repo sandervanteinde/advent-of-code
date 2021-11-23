@@ -33,7 +33,10 @@ public partial class NavMenu
             })
             .ToList();
         var highestYear = years.MaxBy(year => year.Year);
-        highestYear.IsExpanded = true;
+        if (highestYear is not null)
+        {
+            highestYear.IsExpanded = true;
+        }
         SelectedYears = years;
     }
 }
