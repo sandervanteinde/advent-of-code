@@ -1,15 +1,17 @@
-﻿
-<MatNavMenu>
-    @foreach(var year in SelectedYears)
-    {
-        <MatNavSubMenu @bind-Expanded="year.IsExpanded">
-            <MatNavSubMenuHeader>@year.Year</MatNavSubMenuHeader>
-            <MatNavSubMenuList>
-                @foreach(var solution in year.Solutions)
-                {
-                    <MatNavItem Href="@($"solution/{solution.Year}/{solution.Day}")">Day @solution.Day - @solution.Title</MatNavItem>
-                }
-            </MatNavSubMenuList>
-        </MatNavSubMenu>
-    }
-</MatNavMenu>
+﻿<aside>
+    <MatNavMenu>
+        @for(var i = 0; i < SelectedYears.Count; i++)
+        {
+            var year = SelectedYears[i];
+            <MatNavSubMenu  @bind-Expanded="year.IsExpanded">
+                <MatNavSubMenuHeader Style="background-color: var(--mdc-theme-primary); color: white; display: flex; align-items: center; justify-content: center">@year.Year</MatNavSubMenuHeader>
+                <MatNavSubMenuList>
+                    @foreach(var solution in year.Solutions)
+                    {
+                        <MatNavItem Href="@($"solution/{solution.Year}/{solution.Day}")">Day @solution.Day - @solution.Title</MatNavItem>
+                    }
+                </MatNavSubMenuList>
+            </MatNavSubMenu>
+        }
+    </MatNavMenu>
+</aside>

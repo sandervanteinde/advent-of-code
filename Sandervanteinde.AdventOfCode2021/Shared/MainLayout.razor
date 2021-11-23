@@ -1,11 +1,22 @@
 ﻿@inherits LayoutComponentBase
+
 <MatAppBarContainer>
-    <MatAppBar Fixed="true">
+    <MatAppBar Style="z-index: 3;" Fixed="true">
         <MatAppBarSection>
+            <MatIconButton OnClick="ToggleOpen" Icon="menu"></MatIconButton>
             <MatAppBarTitle>Advent of Code - Sander van 't Einde</MatAppBarTitle>
         </MatAppBarSection>
     </MatAppBar>
+    <MatAppBarContent>
+        <MatDrawerContainer Style="width: 90vw; height: calc(100vh - 64px);" >
+            <MatDrawer Style="box-shadow: 0px 5px 17px 3px #000000; z-index: 1;"  @bind-Opened="IsDrawerOpen">
+                <NavMenu/>
+            </MatDrawer>
+            <MatDrawerContent>
+                <main>
+                    @Body
+                </main>
+            </MatDrawerContent>
+        </MatDrawerContainer>
+    </MatAppBarContent>
 </MatAppBarContainer>
-<main>
-    @Body
-</main>

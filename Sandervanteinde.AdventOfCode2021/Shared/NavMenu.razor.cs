@@ -21,7 +21,16 @@ public partial class NavMenu
     protected override void OnInitialized()
     {
         var years = Registry.AvailableYears
-            .Select(year => new SelectedYear { Year = year, IsExpanded = false, Solutions = Registry.DaysForYear(year).Select(day => Registry.GetSolution(year, day)).ToList() })
+            .OrderByDescending(year => year)
+            .Select(year => new SelectedYear
+            {
+                Year = year,
+                IsExpanded = false,
+                Solutions = Registry.DaysForYear(year)
+                    .OrderBy(day => day)
+                    .Select(day => Registry.GetSolution(year, day))
+                    .ToList()
+            })
             .ToList();
         var highestYear = years.MaxBy(year => year.Year);
         highestYear.IsExpanded = true;

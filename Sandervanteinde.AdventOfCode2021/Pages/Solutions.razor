@@ -6,18 +6,32 @@
     <p>The solution was not found.</p>
     return;
 }
+
+<PageTitle>@Solution.Title - Advent of Code</PageTitle>
 <h2>@Solution.Title</h2>
 
+<p>
+    <MatButtonLink Href="@($"https://adventofcode.com/{Solution.Year}/day/{Solution.Day}")" Target="_blank">
+        Advent of Code
+    </MatButtonLink>
+</p>
+
 <EditForm Model="StepOne">
-    <InputTextArea @bind-Value="StepOne"/>
-    <button @onclick="CalculateStepOne">Calculate</button>
+    <p>
+        <MatTextField @bind-Value="StepOne" Label="Input" TextArea="true" FullWidth="true" />
+    </p>
+    <p>
+        <MatButton OnClick="CalculateStepOne">Calculate</MatButton>
+    </p>
 </EditForm>
 
 @if(Result != string.Empty)
 {
-    <EditForm Model="Result">
-        <textarea readonly>@Result</textarea>
-    </EditForm>
+    <p>
+        <EditForm Model="Result">
+            <MatTextField @bind-Value="StepOne" Label="Result" TextArea="true" ReadOnly="true" FullWidth="true" />
+        </EditForm>
+    </p>
 }
 
 @code {
