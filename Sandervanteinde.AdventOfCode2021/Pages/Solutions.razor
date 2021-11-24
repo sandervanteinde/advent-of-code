@@ -7,12 +7,15 @@
     return;
 }
 
-<PageTitle>@Solution.Title - Advent of Code</PageTitle>
-<h2>@Solution.Title</h2>
+<PageTitle>@Solution.Title - @Solution.Year Day @Solution.Day Advent of Code</PageTitle>
+<h2>Day @Solution.Day - @Solution.Title</h2>
 
 <p>
     <MatButtonLink Href="@($"https://adventofcode.com/{Solution.Year}/day/{Solution.Day}")" Target="_blank">
         Advent of Code
+    </MatButtonLink>
+    <MatButtonLink Href="@($"https://github.com/sandervanteinde/advent-of-code/blob/main/Sandervanteinde.AdventOfCode2021.Solutions/{Solution.Year}/Day{Solution.Day:X2}.cs")" Target="_blank">
+        View Code
     </MatButtonLink>
 </p>
 
@@ -21,7 +24,8 @@
         <MatTextField @bind-Value="StepOne" Label="Input" TextArea="true" FullWidth="true" />
     </p>
     <p>
-        <MatButton OnClick="CalculateStepOne">Calculate</MatButton>
+        <MatButton OnClick="CalculateStepOne">Calculate Step One</MatButton>
+        <MatButton OnClick="CalculateStepTwo">Calculate Step Two</MatButton>
     </p>
 </EditForm>
 
@@ -29,7 +33,7 @@
 {
     <p>
         <EditForm Model="Result">
-            <MatTextField @bind-Value="StepOne" Label="Result" TextArea="true" ReadOnly="true" FullWidth="true" />
+            <MatTextField @bind-Value="Result" Label="Result" TextArea="true" ReadOnly="true" FullWidth="true" />
         </EditForm>
     </p>
 }
@@ -61,12 +65,27 @@
 
         if(Solution is not null)
         {
-            StepOne = await Client.GetStringAsync($"sample-data/{Solution.StepOneFileName()}");
+            StepOne = await Client.GetStringAsync($"sample-data/{Solution.StepOneFileName()}?cacheBust={DateTime.Now.Ticks}");
         }
     }
 
-    private void CalculateStepOne()
+    private void CalculateStepOne() => SetResult(() => Solution!.GetStepOneResult(StepOne));
+
+    private void CalculateStepTwo() => SetResult(() => Solution!.GetStepTwoResult(StepOne));
+
+    private void SetResult(Func<string> resultSelector)
     {
-        Result = Solution!.GetStepOneResult(StepOne);
+        try
+        {
+            Result = resultSelector();
+        }
+        catch (PlatformNotSupportedException)
+        {
+            Result = "This solution requires technology that is not available in Blazor WASM";
+        }
+        catch(Exception ex)
+        {
+            Result = $"An exception occured:{Environment.NewLine}{ex.Message}";
+        } 
     }
 }

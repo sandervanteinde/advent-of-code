@@ -17,7 +17,8 @@ internal class FileReader
 
     public IEnumerable<string> ReadLineByLine()
     {
-        return Input.Split(new char[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+        var test = Input.Split(new char[] { '\n', '\r'}, StringSplitOptions.RemoveEmptyEntries);
+        return test;
     }
 
     public IEnumerable<char> ReadCharByChar()
