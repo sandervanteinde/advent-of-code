@@ -21,7 +21,7 @@ jobs:
     - name: Rewrite base href
       uses: SteveSandersonMS/ghaction-rewrite-base-href@v1
       with:
-        html_path: ${{ env.PUBLISH_DIR }}/index.html
+        html_path: ${GITHUB_WORKSPACE}/docs/wwwroot/index.html
         base_href: /advent-of-code/
 
     - name: GitHub Pages
@@ -29,6 +29,6 @@ jobs:
       uses: crazy-max/ghaction-github-pages@v1.5.1
       with:
         target_branch: gh-pages
-        build_dir: ${GITHUB_WORKSPACE}/docs
+        build_dir: ${GITHUB_WORKSPACE}/docs/wwwroot
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
