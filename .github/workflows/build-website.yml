@@ -31,6 +31,8 @@ jobs:
         mv ${GITHUB_WORKSPACE}/docs/wwwroot/* ${GITHUB_WORKSPACE}/docs
         rmdir ${GITHUB_WORKSPACE}/docs/wwwroot
         rm ${GITHUB_WORKSPACE}/docs/web.config
+        git config --global user.email "sandervanteinde@gmail.com"
+        git config --global user.name "Sander van 't Einde"
         git add *
         git commit -m "Automatically create page"
         git push
