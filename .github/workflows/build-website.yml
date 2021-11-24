@@ -19,11 +19,12 @@ jobs:
         dotnet-version: 6.0.x
     - name: Restore dependencies
       run: dotnet restore Sandervanteinde.AdventOfCode2021
+      
     - name: Build
-      run: dotnet -c Release build --no-restore Sandervanteinde.AdventOfCode2021
+      run: dotnet build Sandervanteinde.AdventOfCode2021 -c Release
       
     - name: Publish
-      run: dotnet publish --no-build --no-restore --output /docs
+      run: dotnet publish Sandervanteinde.AdventOfCode2021 --no-restore --no-restore --output /docs
       
     - name: Commit
       run: |
