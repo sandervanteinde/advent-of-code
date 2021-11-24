@@ -24,10 +24,12 @@ jobs:
       run: dotnet build Sandervanteinde.AdventOfCode2021 -c Release
       
     - name: Publish
-      run: dotnet publish Sandervanteinde.AdventOfCode2021 --no-restore --no-restore --output /docs
+      run: dotnet publish Sandervanteinde.AdventOfCode2021 --no-restore --no-restore --output $GITHUB_WORKSPACE/docs
       
     - name: Commit
       run: |
+        - mv $GITHUB_WORKSPACE/docs/wwwroot $GITHUB_WORKSPACE/docs
+        - rm $GITHUB_WORKSPACE/docs/web.config
         - git add *
         - git commit -m "Automatically create page"
         - git push
