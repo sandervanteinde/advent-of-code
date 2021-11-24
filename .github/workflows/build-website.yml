@@ -1,0 +1,33 @@
+name: .NET
+
+on:
+  push:
+    branches: [ main ]
+    paths-ignore:
+      - 'docs/**'
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.x
+    - name: Restore dependencies
+      run: dotnet restore Sandervanteinde.AdventOfCode2021
+    - name: Build
+      run: dotnet -c Release build --no-restore Sandervanteinde.AdventOfCode2021
+      
+    - name: Publish
+      run: dotnet publish --no-build --no-restore --output /docs
+      
+    - name: Commit
+      run: |
+        - git add *
+        - git commit -m "Automatically create page"
+        - git push
+    
