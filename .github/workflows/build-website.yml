@@ -1,4 +1,6 @@
 name: .NET
+env:
+  PUBLISH_DIR: Sandervanteinde.AdventOfCode2021/bin/Release/net6.0/publish/wwwroot
 
 on:
   push:
@@ -16,12 +18,12 @@ jobs:
         dotnet-version: 6.0.x
 
     - name: Publish app
-      run: dotnet publish Sandervanteinde.AdventOfCode2021 -c Release --output ${GITHUB_WORKSPACE}/docs
+      run: dotnet publish Sandervanteinde.AdventOfCode2021 -c Release
 
     - name: Rewrite base href
       uses: SteveSandersonMS/ghaction-rewrite-base-href@v1
       with:
-        html_path: ${GITHUB_WORKSPACE}/docs/wwwroot/index.html
+        html_path: ${{ env.PUBLISH_DIR }}/index.html
         base_href: /advent-of-code/
 
     - name: GitHub Pages
@@ -29,6 +31,6 @@ jobs:
       uses: crazy-max/ghaction-github-pages@v1.5.1
       with:
         target_branch: gh-pages
-        build_dir: ${GITHUB_WORKSPACE}/docs/wwwroot
+        build_dir: ${{ env.PUBLISH_DIR }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
