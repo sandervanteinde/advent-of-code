@@ -1,0 +1,11 @@
+/* /Shared/MainLayout.razor.rz.scp.css */
+main[b-tftwgujosd] {
+    padding: 0 20px;
+}
+/* /Shared/NavMenu.razor.rz.scp.css */
+aside[b-6s38zq8ral] {
+    box-shadow: 0px 5px 17px 3px #000000;
+    height: 100%;
+    width: 100%;
+    z-index: 1;
+}
