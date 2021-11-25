@@ -8,7 +8,7 @@ public static class ServiceCollectionExtensions
     {
         var solutionType = typeof(IAdventOfCodeSolution);
         var solutions = typeof(ServiceCollectionExtensions).Assembly.GetTypes()
-            .Where(type => type.IsAssignableTo(solutionType) && type is { IsAbstract: false, IsInterface: false})
+            .Where(type => type.IsAssignableTo(solutionType) && type is { IsAbstract: false, IsInterface: false })
             .ToArray();
 
         var registry = new SolutionRegistry();

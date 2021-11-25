@@ -1,5 +1,4 @@
-﻿using Sandervanteinde.AdventOfCode2021.Solutions.Utils;
-using System.Buffers;
+﻿using System.Buffers;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -22,12 +21,12 @@ internal class Day04 : BaseSolution
             var readBytes = Encoding.UTF8.GetBytes(text, bytes);
             var hash = md5.ComputeHash(bytes, 0, readBytes);
 
-            var isFirstFiveBitsZero = 
-                   hash[0] == 0 
-                && hash[1] == 0 
+            var isFirstFiveBitsZero =
+                   hash[0] == 0
+                && hash[1] == 0
                 && hash[2] < 16;
 
-            if(isFirstFiveBitsZero)
+            if (isFirstFiveBitsZero)
             {
                 return i;
             }

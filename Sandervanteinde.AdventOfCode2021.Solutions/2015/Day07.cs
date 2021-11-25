@@ -1,146 +1,9 @@
-﻿using Sandervanteinde.AdventOfCode2021.Solutions.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+﻿using System.Text.RegularExpressions;
 
 namespace Sandervanteinde.AdventOfCode2021.Solutions._2015;
 
-internal class Day07 : BaseSolution
+internal partial class Day07 : BaseSolution
 {
-    private class Instruction
-    {
-        public IOperand Operand { get; init; } = null!;
-        public string Target { get; init; }
-    }
-
-    private struct MemoryAddressOrConstant
-    {
-        public int Constant { get; }
-        public string? MemoryAddress { get; }
-        public bool IsMemoryAddress => MemoryAddress is not null;
-        private MemoryAddressOrConstant(int constant)
-        {
-            Constant = constant;
-            MemoryAddress = null;
-        }
-
-        private MemoryAddressOrConstant(string memoryAddress)
-        {
-            Constant = -1;
-            MemoryAddress = memoryAddress;
-        }
-
-        public int GetValue(IReadOnlyDictionary<string, int> memory)
-        {
-            if(IsMemoryAddress)
-            {
-                return memory[MemoryAddress!];
-            }
-            else
-            {
-                return Constant;
-            }
-        }
-
-        public static implicit operator MemoryAddressOrConstant(int constant) => new(constant);
-        public static implicit operator MemoryAddressOrConstant(string memoryAddress) => new(memoryAddress);
-    }
-
-    private interface IOperand
-    {
-        int GetResult(IReadOnlyDictionary<string, int> values);
-        bool CanPerform(IReadOnlyDictionary<string, int> values);
-    }
-
-    private class ConstantOperand : IOperand
-    {
-        private readonly int constantValue;
-
-        public ConstantOperand(int constantValue)
-        {
-            this.constantValue = constantValue;
-        }
-
-        public int GetResult(IReadOnlyDictionary<string, int> values)
-        {
-            return constantValue;
-        }
-
-        public bool CanPerform(IReadOnlyDictionary<string, int> values) => true;
-    }
-
-    private class TwoValueOperand : IOperand
-    {
-        private readonly MemoryAddressOrConstant left;
-        private readonly MemoryAddressOrConstant right;
-        private readonly Func<int, int, int> operand;
-
-        public TwoValueOperand(
-            MemoryAddressOrConstant left,
-            MemoryAddressOrConstant right,
-            Func<int, int, int> operand
-        )
-        {
-            this.left = left;
-            this.right = right;
-            this.operand = operand;
-        }
-
-        public bool CanPerform(IReadOnlyDictionary<string, int> values)
-        {
-            return (!left.IsMemoryAddress || values.ContainsKey(left.MemoryAddress!))
-                && (!right.IsMemoryAddress || values.ContainsKey(right.MemoryAddress!));
-        }
-
-        public int GetResult(IReadOnlyDictionary<string, int> values)
-        {
-            return operand(left.GetValue(values), right.GetValue(values));
-        }
-    }
-
-    private class NotOperand : IOperand
-    {
-        private readonly MemoryAddressOrConstant left;
-
-        public NotOperand(MemoryAddressOrConstant left)
-        {
-            this.left = left;
-        }
-
-        public bool CanPerform(IReadOnlyDictionary<string, int> values)
-        {
-            return !left.IsMemoryAddress || values.ContainsKey(left.MemoryAddress!);
-        }
-
-        public int GetResult(IReadOnlyDictionary<string, int> values)
-        {
-            return ~(left.GetValue(values));
-        }
-    }
-
-    private class CopyMemoryAddressOperand : IOperand
-    {
-        private readonly string memoryAddress;
-
-        public CopyMemoryAddressOperand(string memoryAddress)
-        {
-            this.memoryAddress = memoryAddress;
-        }
-
-        public bool CanPerform(IReadOnlyDictionary<string, int> values)
-        {
-            return values.ContainsKey(memoryAddress);
-        }
-
-        public int GetResult(IReadOnlyDictionary<string, int> values)
-        {
-            return values[memoryAddress];
-        }
-    }
-
     public Day07()
         : base("Some Assembly Required", 2015, 7)
     {
@@ -230,7 +93,7 @@ internal class Day07 : BaseSolution
             return new ConstantOperand(int.Parse(operandAsString));
         }
         var leftAndRightOperand = isLeftAndRightOperation.Match(operandAsString);
-        if(leftAndRightOperand.Success)
+        if (leftAndRightOperand.Success)
         {
             var left = DetermineValue(leftAndRightOperand.Groups[1].Value);
             var right = DetermineValue(leftAndRightOperand.Groups[3].Value);
@@ -249,7 +112,7 @@ internal class Day07 : BaseSolution
         }
 
         var notMatch = notRegex.Match(operandAsString);
-        if(notMatch.Success)
+        if (notMatch.Success)
         {
             var left = DetermineValue(notMatch.Groups[1].Value);
 
@@ -257,7 +120,7 @@ internal class Day07 : BaseSolution
         }
 
         var memoryAddressMatch = memoryAddressOnly.Match(operandAsString);
-        if(memoryAddressMatch.Success)
+        if (memoryAddressMatch.Success)
         {
             return new CopyMemoryAddressOperand(operandAsString);
         }

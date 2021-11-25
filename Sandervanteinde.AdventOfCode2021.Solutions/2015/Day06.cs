@@ -1,32 +1,9 @@
-﻿using Sandervanteinde.AdventOfCode2021.Solutions.Utils;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
 namespace Sandervanteinde.AdventOfCode2021.Solutions._2015;
 
-internal class Day06 : BaseSolution
+internal partial class Day06 : BaseSolution
 {
-    public struct Point
-    {
-        public int X { get; init; }
-        public int Y { get; init; }
-
-        public int GetId() => X * 1000 + Y;
-    }
-
-    public enum LightOperation
-    {
-        TurnOn,
-        TurnOff,
-        Toggle
-    }
-
-    public class LightInstruction
-    {
-        public Point From { get; init; }
-        public Point Through { get; init; }
-        public LightOperation Operation { get; init; }
-
-    }
     public Day06()
         : base("Probably a Fire Hazard", 2015, 6)
     {
@@ -36,17 +13,17 @@ internal class Day06 : BaseSolution
     public override object DetermineStepOneResult(FileReader reader)
     {
         var lights = new Dictionary<int, bool>(1000 * 1000);
-        for(var x = 0; x <= 999; x++)
+        for (var x = 0; x <= 999; x++)
         {
-            for(var y = 0; y <= 999; y++)
+            for (var y = 0; y <= 999; y++)
             {
                 lights.Add(x * 1000 + y, false);
             }
         }
 
-        foreach(var instruction in ParseInstructions(reader))
+        foreach (var instruction in ParseInstructions(reader))
         {
-            foreach(var point in IteratePoints(instruction.From, instruction.Through))
+            foreach (var point in IteratePoints(instruction.From, instruction.Through))
             {
                 var id = point.GetId();
                 switch (instruction.Operation)
@@ -103,9 +80,9 @@ internal class Day06 : BaseSolution
 
     private static IEnumerable<Point> IteratePoints(Point from, Point through)
     {
-        for(var x = from.X; x <= through.X; x++)
+        for (var x = from.X; x <= through.X; x++)
         {
-            for(var y = from.Y; y <= through.Y; y++)
+            for (var y = from.Y; y <= through.Y; y++)
             {
                 yield return new Point { X = x, Y = y };
             }

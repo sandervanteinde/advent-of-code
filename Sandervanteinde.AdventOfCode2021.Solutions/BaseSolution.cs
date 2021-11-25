@@ -1,17 +1,10 @@
-﻿using Sandervanteinde.AdventOfCode2021.Solutions.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Sandervanteinde.AdventOfCode2021.Solutions;
+﻿namespace Sandervanteinde.AdventOfCode2021.Solutions;
 
 internal abstract class BaseSolution : IAdventOfCodeSolution
 {
     public string Title { get; }
     public int Day { get; }
-    public  int Year { get; }
+    public int Year { get; }
 
     private readonly string _fileNameOne;
     private readonly string _fileNameTwo;

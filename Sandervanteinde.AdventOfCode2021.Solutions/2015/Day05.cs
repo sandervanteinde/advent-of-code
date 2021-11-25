@@ -1,5 +1,4 @@
-﻿using Sandervanteinde.AdventOfCode2021.Solutions.Utils;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
 namespace Sandervanteinde.AdventOfCode2021.Solutions._2015;
 
@@ -22,9 +21,9 @@ internal class Day05 : BaseSolution
 
         var niceTexts = 0;
 
-        foreach(var line in reader.ReadLineByLine())
+        foreach (var line in reader.ReadLineByLine())
         {
-            if(disallowedCombinations.Any(combination => line.Contains(combination)))
+            if (disallowedCombinations.Any(combination => line.Contains(combination)))
             {
                 continue;
             }
@@ -36,7 +35,7 @@ internal class Day05 : BaseSolution
             }
 
             var vowelMatches = vowels.Matches(line);
-            if(vowelMatches.Count < 3)
+            if (vowelMatches.Count < 3)
             {
                 continue;
             }
@@ -51,9 +50,9 @@ internal class Day05 : BaseSolution
         var notOverlappingTwoLetters = new Regex("([a-z])([a-z]).*\\1\\2", RegexOptions.Compiled);
         var repeated = new Regex("([a-z])[a-z]\\1", RegexOptions.Compiled);
         var niceWords = 0;
-        foreach(var line in reader.ReadLineByLine())
+        foreach (var line in reader.ReadLineByLine())
         {
-            if(notOverlappingTwoLetters.IsMatch(line) && repeated.IsMatch(line))
+            if (notOverlappingTwoLetters.IsMatch(line) && repeated.IsMatch(line))
             {
                 niceWords++;
             }

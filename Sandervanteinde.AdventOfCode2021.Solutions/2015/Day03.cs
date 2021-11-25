@@ -1,14 +1,7 @@
-﻿using Sandervanteinde.AdventOfCode2021.Solutions.Utils;
+﻿namespace Sandervanteinde.AdventOfCode2021.Solutions._2015;
 
-namespace Sandervanteinde.AdventOfCode2021.Solutions._2015;
-
-internal class Day03 : BaseSolution
+internal partial class Day03 : BaseSolution
 {
-    private struct Point
-    {
-        public int X { get; init; }
-        public int Y { get; init; }
-    }
     public Day03()
         : base("Perfectly Spherical Houses in a Vacuum", 2015, 3)
     {
@@ -23,7 +16,7 @@ internal class Day03 : BaseSolution
             { location, 1 }
         };
 
-        foreach(var c in reader.ReadCharByChar())
+        foreach (var c in reader.ReadCharByChar())
         {
             location = c switch
             {
@@ -33,7 +26,7 @@ internal class Day03 : BaseSolution
                 '^' => new Point { X = location.X, Y = location.Y - 1 },
                 _ => throw new NotSupportedException($"The char {c} is not supported")
             };
-            if(!points.TryGetValue(location, out var presents))
+            if (!points.TryGetValue(location, out var presents))
             {
                 points[location] = 1;
             }
@@ -77,10 +70,10 @@ internal class Day03 : BaseSolution
             {
                 points[location] = presents + 1;
             }
-            if(isSanta)
+            if (isSanta)
             {
                 santa = location;
-            } 
+            }
             else
             {
                 roboSanta = location;

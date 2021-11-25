@@ -1,15 +1,7 @@
-﻿using Sandervanteinde.AdventOfCode2021.Solutions.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Sandervanteinde.AdventOfCode2021.Solutions._2015;
+﻿namespace Sandervanteinde.AdventOfCode2021.Solutions._2015;
 
 internal class Day01 : BaseSolution
 {
-
     public Day01()
         : base("Not Quite List", 2015, 1)
     {

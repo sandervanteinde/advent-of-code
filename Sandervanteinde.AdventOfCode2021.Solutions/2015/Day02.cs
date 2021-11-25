@@ -1,5 +1,4 @@
-﻿using Sandervanteinde.AdventOfCode2021.Solutions.Utils;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
 namespace Sandervanteinde.AdventOfCode2021.Solutions._2015;
 
@@ -22,7 +21,7 @@ internal class Day02 : BaseSolution
                 .OrderBy(i => i)
                 .Take(2)
                 .ToArray();
-            uint slack = slackSizes[0] * slackSizes[1];
+            var slack = slackSizes[0] * slackSizes[1];
 
             total += (wrappingPaperRequired + slack);
         }
@@ -39,7 +38,7 @@ internal class Day02 : BaseSolution
                 .OrderBy(i => i)
                 .Take(2)
                 .ToArray();
-            uint ribbonForWrap = smallestSides[0] * 2 + smallestSides[1] * 2;
+            var ribbonForWrap = smallestSides[0] * 2 + smallestSides[1] * 2;
             var ribbonForBow = length * width * height;
             total += ribbonForBow + ribbonForWrap;
         }

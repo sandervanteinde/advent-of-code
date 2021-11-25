@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Sandervanteinde.AdventOfCode2021.Solutions.Utils;
+﻿namespace Sandervanteinde.AdventOfCode2021.Solutions.Utils;
 
 internal class FileReader
 {
@@ -17,7 +11,7 @@ internal class FileReader
 
     public IEnumerable<string> ReadLineByLine()
     {
-        var test = Input.Split(new char[] { '\n', '\r'}, StringSplitOptions.RemoveEmptyEntries);
+        var test = Input.Split(new char[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
         return test;
     }
 
