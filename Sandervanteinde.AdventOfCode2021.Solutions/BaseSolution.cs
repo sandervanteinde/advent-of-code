@@ -9,12 +9,12 @@ internal abstract class BaseSolution : IAdventOfCodeSolution
     private readonly string _fileNameOne;
     private readonly string _fileNameTwo;
 
-    public BaseSolution(string title, int year, int day, string fileName = null, string? fileNameTwo = null)
+    public BaseSolution(string title, int year, int day, string? fileName = null, string? fileNameTwo = null)
     {
         Title = title;
         Day = day;
         Year = year;
-        _fileNameOne = fileName ?? $"{year}/{day}.txt";
+        _fileNameOne = fileName ?? $"{year}/{day:D2}.txt";
         _fileNameTwo = fileNameTwo ?? _fileNameOne;
     }
 
