@@ -1,4 +1,7 @@
-﻿namespace Sandervanteinde.AdventOfCode2021.Solutions.Utils;
+﻿using System.Text.Json;
+using System.Text.RegularExpressions;
+
+namespace Sandervanteinde.AdventOfCode2021.Solutions.Utils;
 
 internal class FileReader
 {
@@ -15,8 +18,26 @@ internal class FileReader
         return test;
     }
 
+    public IEnumerable<Match> MatchLineByLine(Regex regex)
+    {
+        foreach (var line in ReadLineByLine())
+        {
+            var match = regex.Match(line);
+            if (!match.Success)
+            {
+                throw new InvalidOperationException($"Expected each line to match regex '{regex}', but '{line}' did not match.");
+            }
+            yield return match;
+        }
+    }
+
     public IEnumerable<char> ReadCharByChar()
     {
         return Input;
+    }
+
+    public T? DeserializeJsonAs<T>()
+    {
+        return JsonSerializer.Deserialize<T>(Input);
     }
 }
