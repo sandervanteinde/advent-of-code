@@ -15,7 +15,7 @@ if (args.Contains("--run-latest"))
 
     Console.WriteLine($"Answers for Solution {solution.Year} - {solution.Day}");
     Console.WriteLine("Step one:");
-    var input = await File.ReadAllTextAsync(Path.Combine($"C:\\Git\\advent-of-code\\Sandervanteinde.AdventOfCode2021\\wwwroot\\sample-data\\", solution.StepOneFileName()));
+    var input = await File.ReadAllTextAsync(Path.Combine($"..\\..\\..\\..\\Sandervanteinde.AdventOfCode2021\\wwwroot\\sample-data\\", solution.StepOneFileName()));
     var result = solution.GetStepOneResult(input);
     Console.WriteLine(result);
     await new Clipboard().SetTextAsync(result);
@@ -25,7 +25,7 @@ if (args.Contains("--run-latest"))
     Console.Read();
 
     Console.WriteLine("Step two:");
-    input = await File.ReadAllTextAsync(Path.Combine($"C:\\Git\\advent-of-code\\Sandervanteinde.AdventOfCode2021\\wwwroot\\sample-data\\", solution.StepTwoFileName()));
+    input = await File.ReadAllTextAsync(Path.Combine($"..\\..\\..\\..\\Sandervanteinde.AdventOfCode2021\\wwwroot\\sample-data\\", solution.StepTwoFileName()));
     result = solution.GetStepTwoResult(input);
     Console.WriteLine(result);
     await new Clipboard().SetTextAsync(result);
