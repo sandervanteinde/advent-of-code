@@ -7,9 +7,12 @@ serviceCollection.AddSolutions();
 var serviceProvider = serviceCollection.BuildServiceProvider();
 
 var solutionRegistry = serviceProvider.GetRequiredService<SolutionRegistry>();
-if (args.Contains("--run-latest"))
+var latestCommand = args.FirstOrDefault(arg => arg.StartsWith("--run-latest"));
+if (latestCommand is not null)
 {
-    var latestYear = solutionRegistry.AvailableYears.Max();
+    var latestYear = latestCommand.Contains("=")
+        ? int.Parse(latestCommand.Split('=')[1])
+        : solutionRegistry.AvailableYears.Max();
     var latestDAy = solutionRegistry.DaysForYear(latestYear).Max();
     var solution = solutionRegistry.GetSolution(latestYear, latestDAy);
 
