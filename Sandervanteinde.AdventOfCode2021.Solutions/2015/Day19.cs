@@ -32,6 +32,7 @@ internal partial class Day19 : BaseSolution
 
     public override object DetermineStepTwoResult(FileReader reader)
     {
+        return "Not solved :-(";
         var input = ParsePuzzleInput(reader);
         var currentMolecule = input.Text;
         var replacements = 0;
@@ -87,6 +88,7 @@ internal partial class Day19 : BaseSolution
 
     private static PuzzleInput ParsePuzzleInput(FileReader reader)
     {
+
         string puzzleInput = null;
         var conversions = new LinkedList<Conversion>();
         var regex = new Regex(@"([a-zA-Z]+) => ([A-Za-z]+)");
