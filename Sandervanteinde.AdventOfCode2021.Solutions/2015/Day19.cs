@@ -1,7 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
 namespace Sandervanteinde.AdventOfCode2021.Solutions._2015;
-
 internal partial class Day19 : BaseSolution
 {
     public Day19()
