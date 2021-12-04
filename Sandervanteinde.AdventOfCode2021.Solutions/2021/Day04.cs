@@ -49,7 +49,6 @@ internal partial class Day04 : BaseSolution
 
     private static (IEnumerable<int> numbers, IEnumerable<BingoCard> cards) ParseInput(FileReader reader)
     {
-        var lines = reader.ReadLineByLine();
         var textReader = new StringReader(reader.Input);
         var numbers = textReader.ReadLine()!.Split(',').Select(int.Parse).ToArray();
         textReader.ReadLine();
