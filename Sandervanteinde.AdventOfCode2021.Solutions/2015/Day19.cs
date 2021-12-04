@@ -87,8 +87,7 @@ internal partial class Day19 : BaseSolution
 
     private static PuzzleInput ParsePuzzleInput(FileReader reader)
     {
-
-        string puzzleInput = null;
+        string? puzzleInput = null;
         var conversions = new LinkedList<Conversion>();
         var regex = new Regex(@"([a-zA-Z]+) => ([A-Za-z]+)");
         foreach (var line in reader.ReadLineByLine())
@@ -115,7 +114,7 @@ internal partial class Day19 : BaseSolution
         return new PuzzleInput
         {
             Conversions = conversions,
-            Text = puzzleInput
+            Text = puzzleInput ?? throw new InvalidOperationException("Expected line to be set")
         };
     }
 }

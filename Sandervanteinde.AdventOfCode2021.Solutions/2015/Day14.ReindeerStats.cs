@@ -4,7 +4,7 @@ internal partial class Day14
 {
     private class ReindeerStats
     {
-        public string ReindeerName { get; init; }
+        public string ReindeerName { get; init; } = null!;
         public int SpeedInKms { get; init; }
         public int FlyDurationInSeconds { get; init; }
         public int RestTimeInSeconds { get; init; }

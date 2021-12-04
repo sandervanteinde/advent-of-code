@@ -4,7 +4,7 @@ internal partial class Day15
 {
     private class Ingredient
     {
-        public string Product { get; init; }
+        public string Product { get; init; } = null!;
         public int Capacity { get; init; }
         public int Durability { get; init; }
         public int Flavor { get; init; }

@@ -10,7 +10,7 @@ public partial class NavMenu
         public int Year { get; set; }
         public bool IsExpanded { get; set; }
 
-        public IEnumerable<IAdventOfCodeSolution> Solutions { get; set; }
+        public IEnumerable<IAdventOfCodeSolution> Solutions { get; set; } = Array.Empty<IAdventOfCodeSolution>();
     }
 
     [Inject]

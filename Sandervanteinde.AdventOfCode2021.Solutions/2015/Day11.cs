@@ -41,12 +41,6 @@ internal partial class Day11 : BaseSolution
             IncrementCharAt(^1);
         }
 
-        void PutCharsAtEndAndIncrementPrevious(params char[] newChars)
-        {
-            IncrementCharAt(new Index(newChars.Length + 1, true));
-            Array.Copy(newChars, 0, chars, chars.Length - newChars.Length, newChars.Length);
-        }
-
         void IncrementCharAt(Index index)
         {
             if (chars[index] == 'z')

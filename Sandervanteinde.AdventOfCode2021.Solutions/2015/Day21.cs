@@ -29,7 +29,7 @@ internal partial class Day21 : BaseSolution
             }
         }
 
-        return null;
+        throw new InvalidOperationException("A result could not be determined");
     }
 
     private static bool IsDragonSlain(IEnumerable<Item> items, int hitpoints, int damage, int armor)
@@ -137,7 +137,7 @@ internal partial class Day21 : BaseSolution
             }
         }
 
-        return null;
+        throw new InvalidOperationException("A result could not be determined");
     }
 
     private static (IList<Weapon> weapons, IList<ArmorItem> armors, IList<Ring> rings) GetStoreItems()

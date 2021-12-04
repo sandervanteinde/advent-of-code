@@ -26,7 +26,7 @@ internal class Day02 : BaseSolution
             total += (wrappingPaperRequired + slack);
         }
 
-        return total.ToString();
+        return total;
     }
 
     public override object DetermineStepTwoResult(FileReader reader)
@@ -43,7 +43,7 @@ internal class Day02 : BaseSolution
             total += ribbonForBow + ribbonForWrap;
         }
 
-        return total.ToString();
+        return total;
     }
 
     private static IEnumerable<(uint length, uint width, uint height)> GetPresentDimensions(FileReader reader)

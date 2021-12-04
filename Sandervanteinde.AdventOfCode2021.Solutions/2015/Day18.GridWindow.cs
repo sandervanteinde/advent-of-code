@@ -85,7 +85,7 @@ internal partial class Day18
             }
         }
 
-        public static IEnumerable<GridWindow<T>> EnumerateGrid<T>(T[,] grid)
+        public static IEnumerable<GridWindow<T>> EnumerateGrid(T[,] grid)
         {
             var yLength = grid.GetLength(1);
             var xLength = grid.GetLength(0);

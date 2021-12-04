@@ -13,7 +13,7 @@ internal class Day01 : BaseSolution
         var asLookup = reader.ReadCharByChar().ToLookup(c => c);
         var leftBracketCount = asLookup['('].Count();
         var rightBracketCount = asLookup[')'].Count();
-        return (leftBracketCount - rightBracketCount).ToString();
+        return leftBracketCount - rightBracketCount;
     }
 
     public override object DetermineStepTwoResult(FileReader reader)
@@ -31,7 +31,7 @@ internal class Day01 : BaseSolution
 
             if (currentFloor == -1)
             {
-                return (i + 1).ToString();
+                return i + 1;
             }
         }
 

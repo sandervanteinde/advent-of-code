@@ -41,11 +41,11 @@ while (true)
     {
         Console.WriteLine("Write the year");
         Console.Write("--> ");
-        var year = int.Parse(Console.ReadLine());
+        var year = int.Parse(Console.ReadLine() ?? throw new InvalidOperationException("Expected input"));
 
         Console.WriteLine("Write the test number");
         Console.Write("--> ");
-        var testNumber = int.Parse(Console.ReadLine());
+        var testNumber = int.Parse(Console.ReadLine() ?? throw new InvalidOperationException("Expected input"));
 
         var solution = solutionRegistry.GetSolution(year, testNumber);
         if (solution == null)

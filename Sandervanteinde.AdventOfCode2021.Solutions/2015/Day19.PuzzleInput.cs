@@ -4,7 +4,7 @@ internal partial class Day19
 {
     private class PuzzleInput
     {
-        public string Text { get; init; }
-        public IEnumerable<Conversion> Conversions { get; init; }
+        public string Text { get; init; } = null!;
+        public IEnumerable<Conversion> Conversions { get; init; } = Array.Empty<Conversion>();
     }
 }

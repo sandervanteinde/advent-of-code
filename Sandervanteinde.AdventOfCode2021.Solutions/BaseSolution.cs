@@ -20,12 +20,12 @@ internal abstract class BaseSolution : IAdventOfCodeSolution
 
     public string GetStepOneResult(string input)
     {
-        return DetermineStepOneResult(new(input)).ToString()!;
+        return DetermineStepOneResult(new(input))?.ToString() ?? throw new InvalidOperationException("A result was expected");
     }
 
     public string GetStepTwoResult(string input)
     {
-        return DetermineStepTwoResult(new(input)).ToString()!;
+        return DetermineStepTwoResult(new(input))?.ToString() ?? throw new InvalidOperationException("A result was expected");
     }
 
     public abstract object DetermineStepOneResult(FileReader reader);

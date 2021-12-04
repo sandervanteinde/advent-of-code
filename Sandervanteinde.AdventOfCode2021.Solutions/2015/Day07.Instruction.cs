@@ -5,6 +5,6 @@ internal partial class Day07
     private class Instruction
     {
         public IOperand Operand { get; init; } = null!;
-        public string Target { get; init; }
+        public string Target { get; init; } = null!;
     }
 }
