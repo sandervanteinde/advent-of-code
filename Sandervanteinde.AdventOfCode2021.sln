@@ -5,9 +5,11 @@ VisualStudioVersion = 17.0.31912.275
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sandervanteinde.AdventOfCode2021", "Sandervanteinde.AdventOfCode2021\Sandervanteinde.AdventOfCode2021.csproj", "{D58B2418-E470-46ED-9F0D-07DF057213C4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sandervanteinde.AdventOfCode2021.Solutions", "Sandervanteinde.AdventOfCode2021.Solutions\Sandervanteinde.AdventOfCode2021.Solutions.csproj", "{28B4B248-23E0-451A-AAAB-476BD14253CB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sandervanteinde.AdventOfCode2021.Solutions", "Sandervanteinde.AdventOfCode2021.Solutions\Sandervanteinde.AdventOfCode2021.Solutions.csproj", "{28B4B248-23E0-451A-AAAB-476BD14253CB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sandervanteinde.AdventOfCode2021.Console", "Sandervanteinde.AdventOfCode2021.Console\Sandervanteinde.AdventOfCode2021.Console.csproj", "{5982E669-BEE9-4AB6-8770-A85CCE2BD850}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sandervanteinde.AdventOfCode2021.Console", "Sandervanteinde.AdventOfCode2021.Console\Sandervanteinde.AdventOfCode2021.Console.csproj", "{5982E669-BEE9-4AB6-8770-A85CCE2BD850}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sandervanteinde.AdventOfCode2021.Solutions.Tests", "Sandervanteinde.AdventOfCode2021.Solutions.Tests\Sandervanteinde.AdventOfCode2021.Solutions.Tests.csproj", "{4F69F9D5-D55D-40A5-A904-45ECE1A81526}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{5982E669-BEE9-4AB6-8770-A85CCE2BD850}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5982E669-BEE9-4AB6-8770-A85CCE2BD850}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5982E669-BEE9-4AB6-8770-A85CCE2BD850}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F69F9D5-D55D-40A5-A904-45ECE1A81526}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F69F9D5-D55D-40A5-A904-45ECE1A81526}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F69F9D5-D55D-40A5-A904-45ECE1A81526}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F69F9D5-D55D-40A5-A904-45ECE1A81526}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
