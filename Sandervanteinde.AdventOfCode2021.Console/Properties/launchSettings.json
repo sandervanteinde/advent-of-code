@@ -7,9 +7,9 @@
       "commandName": "Project",
       "commandLineArgs": "--run-latest"
     },
-    "Latest-2015": {
+    "Latest-2016": {
       "commandName": "Project",
-      "commandLineArgs": "--run-latest=2015"
+      "commandLineArgs": "--run-latest=2016"
     }
   }
 }
