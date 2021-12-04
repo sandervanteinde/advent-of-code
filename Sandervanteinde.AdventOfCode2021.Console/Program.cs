@@ -8,13 +8,16 @@ var serviceProvider = serviceCollection.BuildServiceProvider();
 
 var solutionRegistry = serviceProvider.GetRequiredService<SolutionRegistry>();
 var latestCommand = args.FirstOrDefault(arg => arg.StartsWith("--run-latest"));
+var dayCommand = args.FirstOrDefault(arg => arg.StartsWith("--day="));
 if (latestCommand is not null)
 {
-    var latestYear = latestCommand.Contains("=")
+    var year = latestCommand.Contains("=")
         ? int.Parse(latestCommand.Split('=')[1])
         : solutionRegistry.AvailableYears.Max();
-    var latestDAy = solutionRegistry.DaysForYear(latestYear).Max();
-    var solution = solutionRegistry.GetSolution(latestYear, latestDAy);
+    var day = dayCommand is null
+        ? solutionRegistry.DaysForYear(year).Max()
+        : int.Parse(dayCommand.Split('=')[1]);
+    var solution = solutionRegistry.GetSolution(year, day);
 
     Console.WriteLine($"Answers for Solution {solution.Year} - {solution.Day}");
     Console.WriteLine("Step one:");

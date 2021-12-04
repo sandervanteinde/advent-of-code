@@ -31,58 +31,50 @@ internal partial class Day19 : BaseSolution
 
     public override object DetermineStepTwoResult(FileReader reader)
     {
-        return "Not solved :-(";
         var input = ParsePuzzleInput(reader);
-        var currentMolecule = input.Text;
-        var replacements = 0;
-        var visited = new HashSet<string>();
+        var conversions = input.Conversions.ToList();
+        var rand = new Random();
+        var target = input.Text;
+        var mutations = 0;
 
-        return AttemptDecipher(currentMolecule, 0, visited)!.Value;
-
-        while (currentMolecule != "e")
+        while (target != "e")
         {
-            foreach (var conversion in input.Conversions)
+            var tmp = target;
+            foreach (var conversion in conversions)
             {
-                var index = currentMolecule.IndexOf(conversion.To);
+                var index = target.IndexOf(conversion.To);
                 if (index >= 0)
                 {
-                    var regex = new Regex(conversion.To);
-                    currentMolecule = regex.Replace(currentMolecule, conversion.From, 1, index);
-                    replacements++;
-                    break;
+                    target = $"{target[..index]}{conversion.From}{target[(conversion.To.Length + index)..]}";
+                    mutations++;
                 }
             }
-        }
-        return 0;
 
-        int? AttemptDecipher(string original, int count, HashSet<string> attempted)
-        {
-            foreach (var conversion in input.Conversions)
+            if (tmp == target)
             {
-                var index = original.IndexOf(conversion.To);
-                while (index >= 0)
-                {
-                    var regex = new Regex(conversion.To);
-                    var newModule = regex.Replace(original, conversion.From, 1, index);
-                    if (newModule == "e")
-                    {
-                        return count + 1;
-                    }
-                    if (attempted.Add(newModule))
-                    {
-                        var amount = AttemptDecipher(newModule, count + 1, attempted);
-                        if (amount is not null)
-                        {
-                            return amount;
-                        }
-                    }
-
-                    index = original.IndexOf(conversion.To, index + 1);
-                }
+                target = input.Text;
+                mutations = 0;
+                Shuffle();
             }
-            return null;
         }
+        return mutations;
 
+        void Shuffle()
+        {
+            for (var i = 0; i < 100; i++)
+            {
+                var i1 = rand.Next(conversions.Count);
+                var i2 = rand.Next(conversions.Count);
+                if (i1 == i2)
+                {
+                    continue;
+                }
+
+                var tmp = conversions[i1];
+                conversions[i1] = conversions[i2];
+                conversions[i2] = tmp;
+            }
+        }
     }
 
     private static PuzzleInput ParsePuzzleInput(FileReader reader)
