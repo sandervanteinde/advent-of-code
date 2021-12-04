@@ -8,12 +8,23 @@ internal partial class Day22
 
         protected override GameStats OnCast(GameStats stats, ref IEnumerable<Effect> effects)
         {
+            if (Log)
+            {
+                Console.WriteLine("Applied poison effect");
+            }
             effects = effects.Concat(new Effect[] { new(PoisonEffect, 6) });
             return stats;
         }
 
         private static GameStats PoisonEffect(GameStats state, int turn)
         {
+            if (Log)
+            {
+                if (turn >= 0)
+                {
+                    Console.WriteLine("Poison deals 3 damage");
+                }
+            }
             return turn switch
             {
                 >= 0 => state with { DragonHealth = state.DragonHealth - 3 },

@@ -5,6 +5,7 @@ internal partial class Day22
     private abstract class Spell
     {
         public abstract int Mana { get; }
+        internal static bool Log { get; set; }
 
         public GameStats CastSpell(GameStats stats, ref IEnumerable<Effect> effects)
         {

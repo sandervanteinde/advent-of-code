@@ -8,6 +8,10 @@ internal partial class Day22
 
         protected override GameStats OnCast(GameStats stats, ref IEnumerable<Effect> effects)
         {
+            if (Log)
+            {
+                Console.WriteLine("Draining 2 health from dragon");
+            }
             return stats with
             {
                 DragonHealth = stats.DragonHealth - 2,

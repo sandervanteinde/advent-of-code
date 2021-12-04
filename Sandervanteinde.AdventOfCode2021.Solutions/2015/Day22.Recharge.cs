@@ -16,7 +16,7 @@ internal partial class Day22
         {
             return turn switch
             {
-                >= 0 => stats with { PlayerMana = stats.PlayerMana + 229 },
+                >= 0 => stats with { PlayerMana = stats.PlayerMana + 101 },
                 _ => stats
             };
         }
