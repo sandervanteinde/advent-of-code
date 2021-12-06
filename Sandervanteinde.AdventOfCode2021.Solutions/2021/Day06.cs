@@ -1,6 +1,6 @@
 ﻿namespace Sandervanteinde.AdventOfCode2021.Solutions._2021;
 
-internal class Day06 : BaseSolution
+internal partial class Day06 : BaseSolution
 {
     public Day06()
         : base("Lanternfish", 2021, 6)
@@ -47,18 +47,7 @@ internal class Day06 : BaseSolution
         }
     }
 
-    public class LanternFish
-    {
-        public int State { get; }
-        public int TurnMade { get; }
-        public LanternFish(int initialSate, int turnMade)
-        {
-            State = initialSate;
-            TurnMade = turnMade;
-        }
-    }
-
-    public IEnumerable<LanternFish> ParseToFish(FileReader reader)
+    public static IEnumerable<LanternFish> ParseToFish(FileReader reader)
     {
         return reader.Input.Split(",").Select(val => new LanternFish(int.Parse(val), 0));
     }
