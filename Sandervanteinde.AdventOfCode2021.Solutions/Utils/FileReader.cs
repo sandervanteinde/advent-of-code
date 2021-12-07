@@ -18,6 +18,12 @@ internal class FileReader
         return test;
     }
 
+    public IEnumerable<int> ReadCommaSeperatedNumbers()
+    {
+        return Input.Split(new char[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries)
+            .Select(int.Parse);
+    }
+
     public IEnumerable<Match> MatchLineByLine(Regex regex)
     {
         foreach (var line in ReadLineByLine())
