@@ -4,6 +4,16 @@ namespace Sandervanteinde.AdventOfCode2021.Solutions._2021;
 
 internal partial class Day08 : BaseSolution
 {
+    /// <summary>
+    /// All flags which represent a single side
+    /// </summary>
+    private readonly SevenSegmentSide[] uniqueSides = new[] { SevenSegmentSide.TopLeft, SevenSegmentSide.Top, SevenSegmentSide.TopRight, SevenSegmentSide.Middle, SevenSegmentSide.BottomLeft, SevenSegmentSide.Bottom, SevenSegmentSide.BottomRight };
+
+    /// <summary>
+    /// The sides representing the number on which the index of that side resides.
+    /// </summary>
+    private readonly SevenSegmentSide[] sidesPerNumber = new[] { SevenSegmentSide.Zero, SevenSegmentSide.One, SevenSegmentSide.Two, SevenSegmentSide.Three, SevenSegmentSide.Four, SevenSegmentSide.Five, SevenSegmentSide.Six, SevenSegmentSide.Seven, SevenSegmentSide.Eight, SevenSegmentSide.Nine };
+
     public Day08()
         : base("Seven Segment Search", 2021, 8)
     {
@@ -24,53 +34,41 @@ internal partial class Day08 : BaseSolution
         var totalSum = 0;
         foreach (var line in DecodeLines(reader))
         {
-            totalSum += (line.OutputValues[0] * 1000 + line.OutputValues[1] * 100 + line.OutputValues[2] * 10 + line.OutputValues[3]);
+            totalSum += line.OutputValues[0] * 1000 + line.OutputValues[1] * 100 + line.OutputValues[2] * 10 + line.OutputValues[3];
         }
         return totalSum;
     }
 
     private IEnumerable<DecodedLine> DecodeLines(FileReader reader)
     {
-        var mapping = new Dictionary<string, int>
-        {
-            ["abcef"] = 0,
-            ["cf"] = 1,
-            ["acdeg"] = 2,
-            ["acdfg"] = 3,
-            ["bcdf"] = 4,
-            ["abdfg"] = 5,
-            ["acf"] = 7,
-            ["abcdefg"] = 8,
-            ["abcdfg"] = 9
-        };
-
         var regex = new Regex(@"^([a-g ]+) \| ([a-g ]+)$");
         foreach (var match in reader.MatchLineByLine(regex))
         {
             var inputs = match.Groups[1].Value;
             var outputs = match.Groups[2].Value;
-            yield return CreateMapping(inputs.Split(' '), outputs.Split(' '));
+            yield return CreateDecodedLine(inputs.Split(' '), outputs.Split(' '));
         }
 
-        DecodedLine CreateMapping(string[] inputs, string[] outputs)
+        DecodedLine CreateDecodedLine(string[] inputs, string[] outputs)
         {
-            var result = new Dictionary<string, int>();
             var allValuesAsNumbers = inputs.Concat(outputs).ToArray();
             var possibilitiesForchars = new Dictionary<char, SevenSegmentSide>(Enumerable.Range('a', 7).Select(i => new KeyValuePair<char, SevenSegmentSide>((char)i, SevenSegmentSide.All)));
 
+            // From these values we know which sides are correct.
             foreach (var item in allValuesAsNumbers.Where(subStr => subStr.Length is 2 or 3 or 4))
             {
                 switch (item.Length)
                 {
                     case 2:
-                        SetPossibilities(item, SevenSegmentSide.BottomRight | SevenSegmentSide.TopRight);
+                        SetPossibilities(item, SevenSegmentSide.One);
                         break;
                     case 3:
-                        SetPossibilities(item, SevenSegmentSide.BottomRight | SevenSegmentSide.TopRight | SevenSegmentSide.Top);
+                        SetPossibilities(item, SevenSegmentSide.Seven);
                         break;
                     case 4:
-                        SetPossibilities(item, SevenSegmentSide.TopLeft | SevenSegmentSide.TopRight | SevenSegmentSide.Middle | SevenSegmentSide.BottomRight);
+                        SetPossibilities(item, SevenSegmentSide.Four);
                         break;
+                        // eight is irrelevant, it has all sides and will not clear anything.
                 }
             }
 
@@ -80,26 +78,32 @@ internal partial class Day08 : BaseSolution
             ExcludeFromResult(SevenSegmentSide.Top, 1);
 
             var charsPerSide = new Dictionary<char, SevenSegmentSide>();
-            if (!CharPerSides(new(possibilitiesForchars), charsPerSide, out var decodedLine))
+            if (!DetermineDecodedLine(new(possibilitiesForchars), charsPerSide, out var decodedLine))
             {
                 throw new InvalidOperationException("Failed to find chars per side");
             }
             return decodedLine;
 
-            bool CharPerSides(Stack<KeyValuePair<char, SevenSegmentSide>> remainingValues, Dictionary<char, SevenSegmentSide> currentValues, out DecodedLine decodedLine)
+            bool DetermineDecodedLine(Stack<KeyValuePair<char, SevenSegmentSide>> remainingValues, Dictionary<char, SevenSegmentSide> currentValues, out DecodedLine decodedLine)
             {
+                // if all values are determined to their respective side, verify if it fits with our input
                 if (remainingValues.Count == 0)
                 {
                     return IsValid(currentValues, out decodedLine);
                 }
 
+                // take the next value that needs to be assessed
                 var currentValue = remainingValues.Pop();
                 foreach (var uniqueSide in uniqueSides)
                 {
+                    // Can this value fit in one of the unique sides and is that side unused
                     if ((uniqueSide & currentValue.Value) == uniqueSide && !currentValues.Any(c => c.Value == uniqueSide))
                     {
+                        // lets try that
                         currentValues.Add(currentValue.Key, uniqueSide);
-                        if (CharPerSides(remainingValues, currentValues, out decodedLine))
+
+                        // And set the next value
+                        if (DetermineDecodedLine(remainingValues, currentValues, out decodedLine))
                         {
                             return true;
                         }
@@ -111,8 +115,7 @@ internal partial class Day08 : BaseSolution
                 return false;
             }
 
-            return null;
-
+            // Verifies if the given mapping will work for the provided input
             bool IsValid(Dictionary<char, SevenSegmentSide> pairs, out DecodedLine decodedline)
             {
                 decodedline = null!;
@@ -187,53 +190,7 @@ internal partial class Day08 : BaseSolution
                 }
             }
         }
-
-        int[] Decode(string completeString) => completeString.Split(' ')
-            .Select(number => number switch
-            {
-                { Length: 2 } => 1,
-                { Length: 4 } => 4,
-                { Length: 7 } => 8,
-                { Length: 3 } => 7,
-                _ => -1
-            })
-            .Where(number => number != -1)
-            .ToArray();
     }
 
-    private readonly SevenSegmentSide[] uniqueSides = new[] { SevenSegmentSide.TopLeft, SevenSegmentSide.Top, SevenSegmentSide.TopRight, SevenSegmentSide.Middle, SevenSegmentSide.BottomLeft, SevenSegmentSide.Bottom, SevenSegmentSide.BottomRight };
-    private readonly SevenSegmentSide[] sidesPerNumber = new[] { SevenSegmentSide.Zero, SevenSegmentSide.One, SevenSegmentSide.Two, SevenSegmentSide.Three, SevenSegmentSide.Four, SevenSegmentSide.Five, SevenSegmentSide.Six, SevenSegmentSide.Seven, SevenSegmentSide.Eight, SevenSegmentSide.Nine };
 
-    [Flags]
-    private enum SevenSegmentSide
-    {
-        None = 0,
-        TopLeft = 0b0000001,
-        Top = 0b0000010,
-        TopRight = 0b0000100,
-        Middle = 0b0001000,
-        BottomLeft = 0b0010000,
-        Bottom = 0b0100000,
-        BottomRight = 0b1000000,
-
-        All = 0b1111111,
-        Right = TopRight | BottomRight,
-
-        Zero = All & ~Middle,
-        One = Right,
-        Two = Top | TopRight | Middle | BottomLeft | Bottom,
-        Three = Top | TopRight | Middle | BottomRight | Bottom,
-        Four = TopLeft | TopRight | Middle | BottomRight,
-        Five = Top | TopLeft | Middle | BottomRight | Bottom,
-        Six = All & ~TopRight,
-        Seven = Top | TopRight | BottomRight,
-        Eight = All,
-        Nine = All & ~BottomLeft
-    };
-
-    private class DecodedLine
-    {
-        public int[] InputValues { get; init; }
-        public int[] OutputValues { get; init; }
-    }
 }
