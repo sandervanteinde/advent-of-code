@@ -37,6 +37,47 @@ internal class FileReader
         }
     }
 
+    public T[,] ReadAsGrid<T>(Func<char, T> mapper)
+    {
+        var lines = new List<List<T>>();
+        foreach (var line in ReadLineByLine())
+        {
+            var parsedLine = new List<T>(line.Length);
+            foreach (var c in line)
+            {
+                parsedLine.Add(mapper(c));
+            }
+            lines.Add(parsedLine);
+        }
+
+        var grid = new T[lines.First().Count, lines.Count];
+        for (var y = 0; y < lines.Count; y++)
+        {
+            var line = lines[y];
+            for (var x = 0; x < line.Count; x++)
+            {
+                grid[x, y] = line[x];
+            }
+        }
+        return grid;
+    }
+
+    public GridWindow<int>[,] ReadAsIntegerGrid()
+    {
+        var integerGrid = ReadAsGrid(c => c - 48);
+        var xLength = integerGrid.GetLength(0);
+        var yLength = integerGrid.GetLength(1);
+        var grid = new GridWindow<int>[xLength, yLength];
+        for (var y = 0; y < yLength; y++)
+        {
+            for (var x = 0; x < xLength; x++)
+            {
+                grid[x, y] = new GridWindow<int>(integerGrid, x, y);
+            }
+        }
+        return grid;
+    }
+
     public IEnumerable<char> ReadCharByChar()
     {
         return Input;
