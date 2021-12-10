@@ -40,14 +40,4 @@ internal partial class Day07 : BaseSolution
              .Select(horizontalPosition => crabs.Sum(target => distanceCalculator(Math.Abs(horizontalPosition - target))))
              .Min(x => x);
     }
-
-    private int StepOneDistance(int diff)
-    {
-        return diff;
-    }
-
-    private int StepTwoDistance(int diff, Dictionary<int, int> distances)
-    {
-        return distances[diff];
-    }
 }
