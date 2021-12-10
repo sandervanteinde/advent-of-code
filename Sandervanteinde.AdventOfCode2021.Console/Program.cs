@@ -57,21 +57,12 @@ while (true)
             return 1;
         }
 
-        Console.WriteLine("Paste the file input or file location");
-        Console.Write("--> ");
-        var fileOrContents = Console.ReadLine()!;
-
-        if (File.Exists(fileOrContents))
-        {
-            fileOrContents = File.ReadAllText(fileOrContents);
-        }
-
         Console.WriteLine("Step one or step two");
         var oneOrTwo = int.Parse(Console.ReadLine()!);
         var result = oneOrTwo switch
         {
-            1 => solution.GetStepOneResult(fileOrContents),
-            2 => solution.GetStepTwoResult(fileOrContents),
+            1 => solution.GetStepOneResult(File.ReadAllText(Path.Combine($"..\\..\\..\\..\\Sandervanteinde.AdventOfCode2021\\wwwroot\\sample-data\\", solution.StepOneFileName()))),
+            2 => solution.GetStepTwoResult(File.ReadAllText(Path.Combine($"..\\..\\..\\..\\Sandervanteinde.AdventOfCode2021\\wwwroot\\sample-data\\", solution.StepTwoFileName()))),
             _ => throw new InvalidOperationException("Invalid file")
         };
 
