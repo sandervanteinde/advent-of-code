@@ -37,7 +37,7 @@ internal class FileReader
         }
     }
 
-    public T[,] ReadAsGrid<T>(Func<char, T> mapper)
+    public GridWindow<T>[,] ReadAsGrid<T>(Func<char, T> mapper)
     {
         var lines = new List<List<T>>();
         foreach (var line in ReadLineByLine())
@@ -59,23 +59,22 @@ internal class FileReader
                 grid[x, y] = line[x];
             }
         }
-        return grid;
-    }
-
-    public GridWindow<int>[,] ReadAsIntegerGrid()
-    {
-        var integerGrid = ReadAsGrid(c => c - 48);
-        var xLength = integerGrid.GetLength(0);
-        var yLength = integerGrid.GetLength(1);
-        var grid = new GridWindow<int>[xLength, yLength];
+        var xLength = grid.GetLength(0);
+        var yLength = grid.GetLength(1);
+        var gridWindows = new GridWindow<T>[xLength, yLength];
         for (var y = 0; y < yLength; y++)
         {
             for (var x = 0; x < xLength; x++)
             {
-                grid[x, y] = new GridWindow<int>(integerGrid, x, y);
+                gridWindows[x, y] = new GridWindow<T>(grid, x, y);
             }
         }
-        return grid;
+        return gridWindows;
+    }
+
+    public GridWindow<int>[,] ReadAsIntegerGrid()
+    {
+        return ReadAsGrid(c => c - 48);
     }
 
     public IEnumerable<char> ReadCharByChar()

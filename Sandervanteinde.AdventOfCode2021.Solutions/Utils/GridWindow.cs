@@ -132,4 +132,9 @@ public class GridWindow<T> : IDisposable
         }
     }
 
+    public override string? ToString()
+    {
+        return Value?.ToString();
+    }
+
 }
