@@ -1,22 +1,27 @@
 ﻿@inherits LayoutComponentBase
-
-<MatAppBarContainer>
-    <MatAppBar Style="z-index: 3;" Fixed="true">
-        <MatAppBarSection>
-            <MatIconButton OnClick="ToggleOpen" Icon="menu"></MatIconButton>
-            <MatAppBarTitle>Advent of Code - Sander van 't Einde</MatAppBarTitle>
-        </MatAppBarSection>
-    </MatAppBar>
-    <MatAppBarContent>
-        <MatDrawerContainer Style="width: 90vw; height: calc(100vh - 64px);" >
-            <MatDrawer Style="box-shadow: 0px 5px 17px 3px #000000; z-index: 1;"  @bind-Opened="IsDrawerOpen">
-                <NavMenu/>
-            </MatDrawer>
-            <MatDrawerContent>
-                <main>
-                    @Body
-                </main>
-            </MatDrawerContent>
-        </MatDrawerContainer>
-    </MatAppBarContent>
-</MatAppBarContainer>
+<Layout Style="min-height: 100vh; ">
+    <Sider>
+        <div class="logo" />
+        <Menu Accordion Theme="MenuTheme.Dark" DefaultOpenKeys="InitialMenuOpen" Mode="MenuMode.Inline">
+            @foreach(var year in Registry.AvailableYears)
+            {
+                <SubMenu Title="@(year.ToString())" Key="@(year.ToString())">
+                    @foreach(var day in Registry.DaysForYear(year))
+                    {
+                        var solution = Registry.GetSolution(year, day);
+                        <MenuItem Key="@($"{year} {day}")" RouterLink="@($"solution/{solution.Year}/{solution.Day}")" RouterMatch="NavLinkMatch.All">
+                            Day @day - @solution.Title
+                        </MenuItem>
+                    }
+                </SubMenu>
+            }
+        </Menu>
+    </Sider>
+    <Layout Class="site-layout" >
+        <Header Class="site-layout-background" Style=" padding: 0 ;" ></Header>
+        <Content Style="margin:0 16px;" >
+            @Body
+        </Content>
+        <Footer Style="text-align:center ">Ant Design ©2018 Created by Ant UED</Footer>
+    </Layout>
+</Layout>

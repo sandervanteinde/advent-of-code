@@ -2,7 +2,7 @@
 
 internal partial class Day11
 {
-    private class Octopus
+    public class Octopus
     {
         public int Value { get; private set; }
 

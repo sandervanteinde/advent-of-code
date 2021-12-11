@@ -1,11 +1,16 @@
-﻿namespace Sandervanteinde.AdventOfCode2021.Shared;
+﻿using Microsoft.AspNetCore.Components;
+using Sandervanteinde.AdventOfCode2021.Solutions;
+
+namespace Sandervanteinde.AdventOfCode2021.Shared;
 
 public partial class MainLayout
 {
-    public bool IsDrawerOpen { get; set; } = true;
+    [Inject]
+    public SolutionRegistry Registry { get; set; } = null!;
+    public string[] InitialMenuOpen { get; private set; }
 
-    public void ToggleOpen()
+    protected override void OnInitialized()
     {
-        IsDrawerOpen = !IsDrawerOpen;
+        InitialMenuOpen = new[] { Registry.AvailableYears.Max().ToString() };
     }
 }

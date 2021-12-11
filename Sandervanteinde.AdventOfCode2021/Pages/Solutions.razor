@@ -11,21 +11,21 @@
 <h2>Day @Solution.Day - @Solution.Title</h2>
 
 <p>
-    <MatButtonLink Href="@($"https://adventofcode.com/{Solution.Year}/day/{Solution.Day}")" Target="_blank">
+    <Button OnClick="NavigateToAdventOfCode">
         Advent of Code
-    </MatButtonLink>
-    <MatButtonLink Href="@($"https://github.com/sandervanteinde/advent-of-code/blob/main/Sandervanteinde.AdventOfCode2021.Solutions/{Solution.Year}/Day{Solution.Day:X2}.cs")" Target="_blank">
+    </Button>
+    <Button OnClick="NavigateToGithub">
         View Code
-    </MatButtonLink>
+    </Button>
 </p>
 
 <EditForm Model="StepOne">
     <p>
-        <MatTextField @bind-Value="StepOne" Label="Input" TextArea="true" FullWidth="true" />
+        <TextArea @bind-Value="StepOne"/>
     </p>
     <p>
-        <MatButton OnClick="CalculateStepOne">Calculate Step One</MatButton>
-        <MatButton OnClick="CalculateStepTwo">Calculate Step Two</MatButton>
+        <Button OnClick="CalculateStepOne">Calculate Step One</Button>
+        <Button OnClick="CalculateStepTwo">Calculate Step Two</Button>
     </p>
 </EditForm>
 
@@ -33,7 +33,7 @@
 {
     <p>
         <EditForm Model="Result">
-            <MatTextField @bind-Value="Result" Label="Result" TextArea="true" ReadOnly="true" FullWidth="true" />
+            <TextArea @bind-Value="Result" Label="Result" TextArea="true" ReadOnly="true" FullWidth="true" />
         </EditForm>
     </p>
 }
@@ -44,6 +44,9 @@
 
     [Inject]
     public HttpClient Client { get; set; } = null!;
+
+    [Inject]
+    public IJSRuntime jsRuntime { get; set; } = null!;
 
     public IAdventOfCodeSolution? Solution { get; set; } = null;
 
@@ -87,5 +90,15 @@
         {
             Result = $"An exception occured:{Environment.NewLine}{ex.Message}";
         } 
+    }
+
+    private async Task NavigateToGithub()
+    {
+        await jsRuntime.InvokeVoidAsync("open", new[] { $"https://github.com/sandervanteinde/advent-of-code/blob/main/Sandervanteinde.AdventOfCode2021.Solutions/{Solution.Year}/Day{Solution.Day:00}.cs", "_blank" });
+    }
+
+    private async Task NavigateToAdventOfCode()
+    {
+        await jsRuntime.InvokeVoidAsync("open", new[] { $"https://github.com/sandervanteinde/advent-of-code/blob/main/Sandervanteinde.AdventOfCode2021.Solutions/{Solution.Year}/Day{Solution.Day:00}.cs", "_blank" });
     }
 }
