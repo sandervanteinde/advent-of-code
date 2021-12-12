@@ -33,7 +33,34 @@ internal class Day01 : BaseSolution
 
     public override object DetermineStepTwoResult(FileReader reader)
     {
-        throw new NotImplementedException("Not yet implemented");
+        var directions = reader.Input
+            .Split(", ")
+            .Select(value => new
+            {
+                Direction = value[0],
+                Amount = int.Parse(value[1..])
+            })
+            .ToArray();
+
+        var availableDirections = new List<Func<Point, int, Point>> { North, East, South, West };
+        var currentDirection = availableDirections[0];
+        var location = new Point();
+        var visited = new HashSet<Point>(new[] { location });
+
+        foreach (var direction in directions)
+        {
+            currentDirection = availableDirections[((availableDirections.IndexOf(currentDirection) + (direction.Direction == 'R' ? 1 : -1) + 4) % 4)];
+            for (var i = 0; i < direction.Amount; i++)
+            {
+                location = currentDirection(location, 1);
+                if (!visited.Add(location))
+                {
+                    return location.DistanceFromOrigin();
+                }
+            }
+        }
+
+        throw new InvalidOperationException("Did not find result");
     }
 
 
