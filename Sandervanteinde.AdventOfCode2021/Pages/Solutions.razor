@@ -31,7 +31,7 @@
 
 @if(Result != string.Empty)
 {
-    <p>
+    <p style="font-family: monospace;">
         <EditForm Model="Result">
             <TextArea @bind-Value="Result" Label="Result" TextArea="true" ReadOnly="true" FullWidth="true" />
         </EditForm>
