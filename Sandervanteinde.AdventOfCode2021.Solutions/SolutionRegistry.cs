@@ -1,16 +1,26 @@
-﻿namespace Sandervanteinde.AdventOfCode2021.Solutions;
+﻿using Sandervanteinde.AdventOfCode2021.Solutions.ProjectEuler;
+
+namespace Sandervanteinde.AdventOfCode2021.Solutions;
 
 public class SolutionRegistry
 {
     private readonly List<IAdventOfCodeSolution> _solutions = new();
+    private readonly List<IProjectEulerSolution> _projectEuler = new();
     public IEnumerable<int> AvailableYears => _solutions
         .Select(sln => sln.Year)
         .Distinct()
         .OrderBy(year => year);
 
+    public IReadOnlyCollection<IProjectEulerSolution> ProjectEuler => _projectEuler.AsReadOnly();
+
     internal void RegisterSolution(IAdventOfCodeSolution solution)
     {
         _solutions.Add(solution);
+    }
+
+    internal void RegisterSolution(IProjectEulerSolution eulerSolution)
+    {
+        _projectEuler.Add(eulerSolution);
     }
 
     public IEnumerable<int> DaysForYear(int year)

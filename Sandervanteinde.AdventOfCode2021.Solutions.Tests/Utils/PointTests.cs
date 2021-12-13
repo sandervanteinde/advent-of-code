@@ -3,7 +3,6 @@ using Sandervanteinde.AdventOfCode2021.Solutions.Utils;
 using Xunit;
 
 namespace Sandervanteinde.AdventOfCode2021.Solutions.Tests.Utils;
-
 public class PointTests
 {
     [Fact]

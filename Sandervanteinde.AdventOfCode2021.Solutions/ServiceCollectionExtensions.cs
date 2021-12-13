@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Sandervanteinde.AdventOfCode2021.Solutions.ProjectEuler;
 
 namespace Sandervanteinde.AdventOfCode2021.Solutions;
 
@@ -11,10 +12,21 @@ public static class ServiceCollectionExtensions
             .Where(type => type.IsAssignableTo(solutionType) && type is { IsAbstract: false, IsInterface: false })
             .ToArray();
 
+        var projectEulerInterface = typeof(IProjectEulerSolution);
+        var projectEulerSolutions = typeof(ServiceCollectionExtensions).Assembly.GetTypes()
+            .Where(type => type.IsAssignableTo(projectEulerInterface) && type is { IsAbstract: false, IsInterface: false })
+            .ToArray();
+
         var registry = new SolutionRegistry();
         foreach (var solution in solutions)
         {
             var instance = (IAdventOfCodeSolution)Activator.CreateInstance(solution)!;
+            registry.RegisterSolution(instance);
+        }
+
+        foreach (var projectEuler in projectEulerSolutions)
+        {
+            var instance = (IProjectEulerSolution)Activator.CreateInstance(projectEuler)!;
             registry.RegisterSolution(instance);
         }
 

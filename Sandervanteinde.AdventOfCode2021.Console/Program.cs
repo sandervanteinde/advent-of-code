@@ -9,6 +9,18 @@ var serviceProvider = serviceCollection.BuildServiceProvider();
 var solutionRegistry = serviceProvider.GetRequiredService<SolutionRegistry>();
 var latestCommand = args.FirstOrDefault(arg => arg.StartsWith("--run-latest"));
 var dayCommand = args.FirstOrDefault(arg => arg.StartsWith("--day="));
+var euler = args.FirstOrDefault(Arg => Arg.StartsWith("--project-euler"));
+if (euler is not null)
+{
+    var latest = solutionRegistry.ProjectEuler.MaxBy(x => x.Id)
+        ?? throw new InvalidOperationException();
+    Console.WriteLine(latest.Title);
+    Console.WriteLine("Answer: ");
+    var sln = latest.GetSolution();
+    Console.WriteLine(sln);
+    await new Clipboard().SetTextAsync(sln.ToString() ?? "");
+    return 0;
+}
 if (latestCommand is not null)
 {
     var year = latestCommand.Contains("=")

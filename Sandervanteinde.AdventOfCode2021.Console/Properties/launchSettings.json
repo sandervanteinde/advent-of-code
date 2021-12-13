@@ -10,6 +10,10 @@
     "Latest-2016": {
       "commandName": "Project",
       "commandLineArgs": "--run-latest=2016"
+    },
+    "Latest-Euler": {
+      "commandName": "Project",
+      "commandLineArgs": "--project-euler"
     }
   }
 }
