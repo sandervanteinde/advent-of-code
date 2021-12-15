@@ -59,17 +59,7 @@ internal class FileReader
                 grid[x, y] = line[x];
             }
         }
-        var xLength = grid.GetLength(0);
-        var yLength = grid.GetLength(1);
-        var gridWindows = new GridWindow<T>[xLength, yLength];
-        for (var y = 0; y < yLength; y++)
-        {
-            for (var x = 0; x < xLength; x++)
-            {
-                gridWindows[x, y] = new GridWindow<T>(grid, x, y);
-            }
-        }
-        return gridWindows;
+        return grid.ToGridwindows();
     }
 
     public GridWindow<int>[,] ReadAsIntegerGrid()
