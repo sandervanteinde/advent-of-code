@@ -68,15 +68,14 @@ internal partial class Day16 : BaseSolution
             {
                 operatorPackage.Add(ReadPackage(reader));
             }
+            return operatorPackage;
         }
-        else
+
+        var subpacketLength = (int)reader.ReadAsNumber(15);
+        var innerReader = new BitReader(reader.Read(subpacketLength).ToArray());
+        while (innerReader.HasMore)
         {
-            var subpacketLength = (int)reader.ReadAsNumber(15);
-            var innerReader = new BitReader(reader.Read(subpacketLength).ToArray());
-            while (innerReader.HasMore)
-            {
-                operatorPackage.Add(ReadPackage(innerReader));
-            }
+            operatorPackage.Add(ReadPackage(innerReader));
         }
         return operatorPackage;
     }
