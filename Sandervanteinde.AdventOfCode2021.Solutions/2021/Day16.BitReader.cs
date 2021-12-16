@@ -30,10 +30,9 @@ internal partial class Day16
         {
             var span = Read(amountOfBits);
             var result = 0L;
-            var startNumber = 0b1 << (amountOfBits - 1);
             for (var i = 0; i < amountOfBits; i++)
             {
-                result = result << 1;
+                result <<= 1;
                 if (span[i])
                 {
                     result |= 1;
