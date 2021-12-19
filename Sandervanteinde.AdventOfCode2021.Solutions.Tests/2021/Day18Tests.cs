@@ -6,7 +6,6 @@ using Xunit;
 using static Sandervanteinde.AdventOfCode2021.Solutions._2021.Day18;
 
 namespace Sandervanteinde.AdventOfCode2021.Solutions.Tests._2021;
-
 public class Day18Tests
 {
     private readonly Day18 _sut;

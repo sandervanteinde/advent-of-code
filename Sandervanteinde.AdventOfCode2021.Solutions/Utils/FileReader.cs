@@ -12,9 +12,9 @@ internal class FileReader
         Input = input;
     }
 
-    public IEnumerable<string> ReadLineByLine()
+    public IEnumerable<string> ReadLineByLine(StringSplitOptions options = StringSplitOptions.RemoveEmptyEntries)
     {
-        var test = Input.Split(new char[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+        var test = Input.Split(new char[] { '\n', '\r' }, options);
         return test;
     }
 
