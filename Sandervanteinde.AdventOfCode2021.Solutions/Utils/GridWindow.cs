@@ -60,11 +60,11 @@ public class GridWindow<T> : IDisposable
         return adjacents.AsSpan(0, amountOfAdjacents.Value);
     }
 
-    public Span<(int x, int y, T value)> Surroundings()
+    public Span<(int x, int y, T value)> Surroundings(bool includeSelf = false)
     {
         if (!amountOfSurroundings.HasValue)
         {
-            var array = pool.Rent(8);
+            var array = pool.Rent(9);
             var amount = 0;
             if (X > 0)
             {
@@ -83,6 +83,10 @@ public class GridWindow<T> : IDisposable
             if (Y > 0)
             {
                 array[amount++] = (X, Y - 1, grid[X, Y - 1]);
+            }
+            if (includeSelf)
+            {
+                array[amount++] = (X, Y, Value);
             }
             if ((Y + 1) < grid.GetLength(1))
             {
