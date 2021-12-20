@@ -1,9 +1,8 @@
-﻿using System.Numerics;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
 namespace Sandervanteinde.AdventOfCode2021.Solutions._2021;
 
-internal class Day19 : BaseSolution
+internal partial class Day19 : BaseSolution
 {
     public Day19()
         : base(@"Beacon Scanner", 2021, 19)
@@ -14,41 +13,71 @@ internal class Day19 : BaseSolution
     public override object DetermineStepOneResult(FileReader reader)
     {
         var parsed = ParseScanners(reader).ToArray();
-        var visitedScanners = new HashSet<Scanner>();
-        for (var i = 0; i < parsed.Length - 1; i++)
+        var scannersToScan = new Queue<Scanner>(new[] { parsed[0] });
+        var visited = new HashSet<Scanner>() { parsed[0] };
+        var beaconLocations = new HashSet<Point3D>(parsed[0].Vectors);
+        while (scannersToScan.Count > 0)
         {
-            var scanner = parsed[i];
-            if (visitedScanners.Contains(scanner))
+            var scanner = scannersToScan.Dequeue();
+            foreach (var otherScanner in parsed)
             {
-                continue;
-            }
-            for (var j = i + 1; j < parsed.Length; j++)
-            {
-                var otherSanner = parsed[j];
-                if (visitedScanners.Contains(otherSanner))
+                if (visited.Contains(otherScanner))
                 {
                     continue;
                 }
 
-                if (scanner.HasOverlappingVectorsWith(otherSanner, out var matrix))
+                if (otherScanner.HasOverlappingVectorsWith(scanner, out var matrix, out var translated))
                 {
-
+                    visited.Add(otherScanner);
+                    var scannerAsOrigin = new Scanner(otherScanner.Id, translated);
+                    beaconLocations.UnionWith(translated);
+                    scannersToScan.Enqueue(scannerAsOrigin);
                 }
 
             }
         }
-        return -1;
+
+        return beaconLocations.Count;
     }
 
     public override object DetermineStepTwoResult(FileReader reader)
     {
-        throw new NotImplementedException();
+        var parsed = ParseScanners(reader).ToArray();
+        var scannersToScan = new Queue<Scanner>(new[] { parsed[0] });
+        var visited = new HashSet<Scanner>() { parsed[0] };
+        var locations = new Dictionary<Scanner, Point3D>
+        {
+            {  parsed[0], new Point3D() }
+        };
+        while (scannersToScan.Count > 0)
+        {
+            var scanner = scannersToScan.Dequeue();
+            foreach (var otherScanner in parsed)
+            {
+                if (visited.Contains(otherScanner))
+                {
+                    continue;
+                }
+
+                if (otherScanner.HasOverlappingVectorsWith(scanner, out var matrix, out var translated))
+                {
+                    visited.Add(otherScanner);
+                    var scannerAsOrigin = new Scanner(otherScanner.Id, translated);
+                    scannersToScan.Enqueue(scannerAsOrigin);
+                    locations.Add(scannerAsOrigin, matrix.Translation);
+                }
+
+            }
+        }
+
+        return locations.SelectMany(location => locations, (test, test2) => new { From = test.Value, To = test2.Value })
+            .Max(x => Math.Abs(x.From.X - x.To.X) + Math.Abs(x.From.Y - x.To.Y) + Math.Abs(x.From.Z - x.To.Z));
     }
 
-    private IEnumerable<Scanner> ParseScanners(FileReader reader)
+    private static IEnumerable<Scanner> ParseScanners(FileReader reader)
     {
         var regex = new Regex(@"--- scanner (\d+) ---");
-        var points = new LinkedList<Vector3>();
+        var points = new LinkedList<Point3D>();
         var currentID = -1;
         foreach (var line in reader.ReadLineByLine())
         {
@@ -65,86 +94,9 @@ internal class Day19 : BaseSolution
             }
 
             var split = line.Split(',');
-            points.AddLast(new Vector3(int.Parse(split[0]), int.Parse(split[1]), int.Parse(split[2])));
+            points.AddLast(new Point3D(int.Parse(split[0]), int.Parse(split[1]), int.Parse(split[2])));
         }
 
         yield return new Scanner(currentID, points.ToArray());
-    }
-
-    public class Scanner
-    {
-        public int Id { get; }
-        public HashSet<Vector3> Vectors { get; }
-
-        private static readonly Lazy<Matrix4x4[]> rotationMatrices;
-
-        static Scanner()
-        {
-            rotationMatrices = new(() => EnumerateRotations().ToArray());
-        }
-        public Scanner(int id, Vector3[] vectors)
-        {
-            Id = id;
-            Vectors = new(vectors);
-        }
-
-        public bool HasOverlappingVectorsWith(Scanner other, out Matrix4x4 matrix)
-        {
-            foreach (var origin in Vectors)
-            {
-                var translateToOrigin = Matrix4x4.CreateTranslation(-origin);
-                foreach (var point in other.Vectors)
-                {
-                    foreach (var rotation in rotationMatrices.Value)
-                    {
-                        var translate = Matrix4x4.CreateTranslation(origin - Vector3.Transform(point, rotation));
-                        var containsOtherCount = other.Vectors
-                            .Where(vector =>
-                            {
-                                var transformed = Vector3.Transform(vector, translate);
-                                transformed = transformed with
-                                {
-                                    X = MathF.Round(transformed.X),
-                                    Y = MathF.Round(transformed.Y),
-                                    Z = MathF.Round(transformed.Z)
-                                };
-                                return Vectors.Contains(transformed);
-                            })
-                            .Count();
-                        if (containsOtherCount == 0)
-                        {
-                            throw new InvalidOperationException("It should always match at least one");
-                        }
-                        if (containsOtherCount >= 12)
-                        {
-                            matrix = translate;
-                            return true;
-                        }
-                    }
-                }
-            }
-            matrix = default;
-            return false;
-        }
-
-        private static IEnumerable<Matrix4x4> EnumerateRotations()
-        {
-            for (var x = 0; x < 4; x++)
-            {
-                for (var y = 0; y < 4; y++)
-                {
-                    for (var z = 0; z < 4; z++)
-                    {
-                        var matrix = Matrix4x4.CreateFromYawPitchRoll(
-                            (MathF.PI / 2) * x,
-                            (MathF.PI / 2) * y,
-                            (MathF.PI / 2) * z
-                        );
-                        yield return matrix;
-                    }
-                }
-            }
-        }
-
     }
 }

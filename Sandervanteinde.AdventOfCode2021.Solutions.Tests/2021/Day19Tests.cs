@@ -157,4 +157,11 @@ public class Day19Tests
         _sut.DetermineStepOneResult(_reader)
             .Should().Be(79);
     }
+
+    [Fact]
+    public void StepTwo_SHouldWorkWithexample()
+    {
+        _sut.DetermineStepTwoResult(_reader)
+            .Should().Be(3621);
+    }
 }
