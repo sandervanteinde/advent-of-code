@@ -8,47 +8,8 @@ using static Sandervanteinde.AdventOfCode2021.Solutions._2021.Day23;
 
 namespace Sandervanteinde.AdventOfCode2021.Solutions.Tests._2021;
 
-public class Day23Tests
+public partial class Day23Tests
 {
-    public class ColumnBuilder
-    {
-        public char FirstPosition { get; set; } = '.';
-        public char SecondPosition { get; set; } = '.';
-    }
-    public class GameBoardBuilder
-    {
-        public ColumnBuilder ColumnOne = new();
-        public ColumnBuilder ColumnTwo = new();
-        public ColumnBuilder ColumnThree = new();
-        public ColumnBuilder ColumnFour = new();
-        public ColumnBuilder LeftColumn = new();
-        public ColumnBuilder RightColumn = new();
-        public char BetweenOneAndTwo { get; set; } = '.';
-        public char BetweenTwoAndThree { get; set; } = '.';
-        public char BetweenThreeAndFour { get; set; } = '.';
-
-        public char[] ToArray()
-        {
-            return new char[]
-            {
-                LeftColumn.SecondPosition,
-                LeftColumn.FirstPosition,
-                BetweenOneAndTwo,
-                BetweenTwoAndThree,
-                BetweenThreeAndFour,
-                RightColumn.FirstPosition,
-                RightColumn.SecondPosition,
-                ColumnOne.FirstPosition,
-                ColumnTwo.FirstPosition,
-                ColumnThree.FirstPosition,
-                ColumnFour.FirstPosition,
-                ColumnOne.SecondPosition,
-                ColumnTwo.SecondPosition,
-                ColumnThree.SecondPosition,
-                ColumnFour.SecondPosition
-            };
-        }
-    }
     private readonly Day23 _sut;
     private readonly FileReader _reader;
 
@@ -62,7 +23,7 @@ public class Day23Tests
   #########");
     }
 
-    // [Fact]
+    [Fact]
     public void StepOne_ShouldWorkWithExample()
     {
         _sut.DetermineStepOneResult(_reader)
@@ -70,7 +31,14 @@ public class Day23Tests
     }
 
     [Fact]
-    public void FollowingExampleSteps()
+    public void StepTwo_ShouldWorkWithExample()
+    {
+        _sut.DetermineStepTwoResult(_reader)
+            .Should().Be(44169);
+    }
+
+    [Fact]
+    public void FollowingStepOneExampleSteps()
     {
         var exampleBoard = new GameBoardBuilder
         {
@@ -111,11 +79,139 @@ public class Day23Tests
 
         void PerformAndAdd(Func<char[], (char[], long)> fn)
         {
+            var old = GameBoard.AsString(exampleBoard);
             var (newBoard, score) = fn(exampleBoard);
+            var @new = GameBoard.AsString(newBoard);
             sum += score;
 
             // check if this was one of the options
             var options = GameBoard.AllOptions(exampleBoard)
+                .Should()
+                .ContainEquivalentOf((newBoard, score));
+
+            exampleBoard = newBoard;
+        }
+    }
+
+    [Fact]
+    public void FollowingSteptwoExampleSteps()
+    {
+        var exampleBoard = new char[]
+        {
+            '.', '.', '.', '.', '.', '.', '.',
+                    'B','D', 'D', 'A',
+                    'C', 'C', 'B', 'D',
+                    'B', 'B', 'A', 'C',
+                    'D', 'A', 'C', 'A'
+        };
+
+        long sum = 0;
+        PerformAndAdd(b => GameBoardLarge.MoveColumnToRight(b, 4));
+        PerformAndAdd(b => GameBoardLarge.MoveColumnToLeft(b, 4));
+        PerformAndAdd(b => GameBoardLarge.MoveMiddleItemLeft(b, 4));
+        PerformAndAdd(b => GameBoardLarge.MoveMiddleItemLeft(b, 3));
+        PerformAndAdd(b => GameBoardLarge.MoveMiddleItemLeft(b, 2));
+        long expectedSum = 2000 + 9;
+        sum.Should().Be(expectedSum);
+
+        PerformAndAdd(b => GameBoardLarge.MoveColumnToRight(b, 3));
+        PerformAndAdd(b => GameBoardLarge.MoveMiddleItemRight(b, 4));
+        expectedSum += 1000 + 40;
+        sum.Should().Be(expectedSum);
+
+        PerformAndAdd(b => GameBoardLarge.MoveColumnToRight(b, 3));
+        expectedSum += 30;
+        sum.Should().Be(expectedSum);
+
+        PerformAndAdd(b => GameBoardLarge.MoveColumnToLeft(b, 3));
+        PerformAndAdd(b => GameBoardLarge.MoveMiddleItemLeft(b, 3));
+        PerformAndAdd(b => GameBoardLarge.MoveMiddleItemLeft(b, 2));
+        expectedSum += 9;
+        sum.Should().Be(expectedSum);
+
+        PerformAndAdd(b => GameBoardLarge.MoveColumnToRight(b, 2));
+        PerformAndAdd(b => GameBoardLarge.MoveItemInFromLeft(b, 3));
+        expectedSum += 600;
+        sum.Should().Be(expectedSum);
+
+        PerformAndAdd(b => GameBoardLarge.MoveColumnToRight(b, 2));
+        PerformAndAdd(b => GameBoardLarge.MoveItemInFromLeft(b, 3));
+        expectedSum += 600;
+        sum.Should().Be(expectedSum);
+
+        PerformAndAdd(b => GameBoardLarge.MoveColumnToRight(b, 2));
+        expectedSum += 40;
+        sum.Should().Be(expectedSum);
+
+        PerformAndAdd(b => GameBoardLarge.MoveColumnToLeft(b, 2));
+        expectedSum += 5000;
+        sum.Should().Be(expectedSum);
+
+        PerformAndAdd(b => GameBoardLarge.MoveItemInFromRight(b, 2));
+        PerformAndAdd(b => GameBoardLarge.MoveItemInFromRight(b, 2));
+        PerformAndAdd(b => GameBoardLarge.MoveItemInFromRight(b, 2));
+        expectedSum += 180;
+        sum.Should().Be(expectedSum);
+
+        PerformAndAdd(b => GameBoardLarge.MoveColumnToLeft(b, 4));
+        PerformAndAdd(b => GameBoardLarge.MoveItemInFromRight(b, 3));
+        expectedSum += 600;
+        sum.Should().Be(expectedSum);
+
+        PerformAndAdd(b => GameBoardLarge.MoveColumnToRight(b, 4));
+        expectedSum += 5;
+        sum.Should().Be(expectedSum);
+
+        PerformAndAdd(b => GameBoardLarge.MoveItemInFromLeft(b, 4));
+        expectedSum += 9000;
+        sum.Should().Be(expectedSum);
+
+        PerformAndAdd(b => GameBoardLarge.MoveColumnToRight(b, 1));
+        PerformAndAdd(b => GameBoardLarge.MoveItemInFromLeft(b, 2));
+        expectedSum += 40;
+        sum.Should().Be(expectedSum);
+
+        PerformAndAdd(b => GameBoardLarge.MoveColumnToRight(b, 1));
+        PerformAndAdd(b => GameBoardLarge.MoveItemInFromLeft(b, 4));
+        expectedSum += 11000;
+        sum.Should().Be(expectedSum);
+
+        PerformAndAdd(b => GameBoardLarge.MoveColumnToRight(b, 1));
+        expectedSum += 4000;
+        sum.Should().Be(expectedSum);
+
+        PerformAndAdd(b => GameBoardLarge.MoveItemInFromLeft(b, 1));
+        expectedSum += 4;
+        sum.Should().Be(expectedSum);
+
+        PerformAndAdd(b => GameBoardLarge.MoveItemInFromLeft(b, 4));
+        expectedSum += 7000;
+        sum.Should().Be(expectedSum);
+
+        PerformAndAdd(b => GameBoardLarge.MoveItemInFromLeft(b, 1));
+        expectedSum += 4;
+        sum.Should().Be(expectedSum);
+
+        PerformAndAdd(b => GameBoardLarge.MoveItemInFromRight(b, 1));
+        expectedSum += 8;
+        sum.Should().Be(expectedSum);
+
+        PerformAndAdd(b => GameBoardLarge.MoveItemInFromRight(b, 4));
+        expectedSum += 3000;
+        sum.Should().Be(expectedSum);
+
+        sum.Should().Be(44169);
+        GameBoardLarge.IsCorrect(exampleBoard).Should().BeTrue();
+
+        void PerformAndAdd(Func<char[], (char[], long)> fn)
+        {
+            var old = GameBoardLarge.AsString(exampleBoard);
+            var (newBoard, score) = fn(exampleBoard);
+            var @new = GameBoardLarge.AsString(newBoard);
+            sum += score;
+
+            // check if this was one of the options
+            var options = GameBoardLarge.AllOptions(exampleBoard)
                 .Should()
                 .ContainEquivalentOf((newBoard, score));
 
@@ -138,9 +234,19 @@ public class Day23Tests
         {
             new TestScenario
             {
+                Start = new GameBoardBuilder { ColumnOne = { FirstPosition = 'A' }, LeftColumn = { FirstPosition = 'B', SecondPosition = 'C' } },
+                LaneToMove = 1,
+                Expected = null,
+                ExpectedScore = 0
+            }
+        },
+        new object[]
+        {
+            new TestScenario
+            {
                 Start = new GameBoardBuilder { LeftColumn = { FirstPosition = 'A', SecondPosition = 'A'}, BetweenOneAndTwo = 'A', BetweenTwoAndThree = 'A', BetweenThreeAndFour = 'A', ColumnFour = new() { SecondPosition = 'A' } },
                 LaneToMove = 4,
-                Expected = new GameBoardBuilder { LeftColumn = { FirstPosition = 'A', SecondPosition = 'A'}, BetweenOneAndTwo = 'A', BetweenTwoAndThree = 'A', BetweenThreeAndFour = 'A', ColumnFour = new() { SecondPosition = 'A' } }
+                Expected = null
             }
         },
         new object[]
@@ -182,16 +288,6 @@ public class Day23Tests
                 Expected = new GameBoardBuilder { BetweenOneAndTwo = 'B' },
                 ExpectedScore = 30
             }
-        },
-        new object[]
-        {
-            new TestScenario
-            {
-                Start = new GameBoardBuilder { ColumnOne = { FirstPosition = 'A' }, LeftColumn = { FirstPosition = 'B', SecondPosition = 'C' } },
-                LaneToMove = 1,
-                Expected = new GameBoardBuilder { ColumnOne = { FirstPosition = 'A' }, LeftColumn = { FirstPosition = 'B', SecondPosition = 'C' } },
-                ExpectedScore = 0
-            }
         }
     };
 
@@ -202,7 +298,7 @@ public class Day23Tests
         var start = testScenario.Start.ToArray();
         var result = GameBoard.MoveColumnToLeft(start, testScenario.LaneToMove);
 
-        result.Should().BeEquivalentTo((testScenario.Expected.ToArray(), testScenario.ExpectedScore));
+        result.Should().BeEquivalentTo((testScenario.Expected?.ToArray() ?? Array.Empty<char>(), testScenario.ExpectedScore));
     }
 
     public static IEnumerable<object[]> MoveRightScenarios => new object[][]
@@ -213,7 +309,7 @@ public class Day23Tests
             {
                 Start = new() { ColumnOne = new() { FirstPosition = 'B' }, LeftColumn =  { FirstPosition = 'C', SecondPosition = 'B' }, BetweenOneAndTwo = 'A', BetweenTwoAndThree = 'D', BetweenThreeAndFour = 'C', RightColumn = new() { FirstPosition = 'A', SecondPosition = 'D' } },
                 LaneToMove = 1,
-                Expected = new() { ColumnOne = new() { FirstPosition = 'B' }, LeftColumn =  { FirstPosition = 'C', SecondPosition = 'B' }, BetweenOneAndTwo = 'A', BetweenTwoAndThree = 'D', BetweenThreeAndFour = 'C', RightColumn = new() { FirstPosition = 'A', SecondPosition = 'D' } },
+                Expected = null,
                 ExpectedScore = 0
             }
         },
@@ -246,7 +342,7 @@ public class Day23Tests
         var start = testScenario.Start.ToArray();
         var result = GameBoard.MoveColumnToRight(start, testScenario.LaneToMove);
 
-        result.Should().BeEquivalentTo((testScenario.Expected.ToArray(), testScenario.ExpectedScore));
+        result.Should().BeEquivalentTo((testScenario.Expected?.ToArray() ?? Array.Empty<char>(), testScenario.ExpectedScore));
     }
 
     public static IEnumerable<object[]> MoveItemInFromLeftScenarios = new object[][]
@@ -258,7 +354,7 @@ public class Day23Tests
                 Start = new() { LeftColumn =  { SecondPosition = 'C' }, ColumnThree = { SecondPosition = 'C' } },
                 LaneToMove = 3,
                 Expected = new() { ColumnThree =  { FirstPosition = 'C', SecondPosition = 'C' } },
-                ExpectedScore = 800
+                ExpectedScore = 700
             }
         },
         new object[]

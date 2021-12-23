@@ -4,14 +4,12 @@ namespace Sandervanteinde.AdventOfCode2021.Solutions._2021;
 
 internal partial class Day23
 {
-    public static class GameBoard
+    public static class GameBoardLarge
     {
+        private static readonly char[] expectedResult = new[] { 'A', 'A', 'A', 'A', 'B', 'B', 'B', 'B', 'C', 'C', 'C', 'C', 'D', 'D', 'D', 'D' };
         internal static bool IsCorrect(char[] items)
         {
-            return items[7] == 'A' && items[8] == 'A'
-                && items[9] == 'B' && items[10] == 'B'
-                && items[11] == 'C' && items[12] == 'C'
-                && items[13] == 'D' && items[14] == 'D';
+            return items.AsSpan(7).SequenceEqual(expectedResult);
         }
 
         public const char EMPTY = '.';
@@ -33,26 +31,20 @@ internal partial class Day23
                 .Append('.')
                 .Append(items[5])
                 .Append(items[6])
-                .AppendLine("#")
-                .Append("###")
-                .Append(items[7])
-                .Append('#')
-                .Append(items[9])
-                .Append('#')
-                .Append(items[11])
-                .Append('#')
-                .Append(items[13])
-                .AppendLine("###")
-                .Append("  #")
-                .Append(items[8])
-                .Append('#')
-                .Append(items[10])
-                .Append('#')
-                .Append(items[12])
-                .Append('#')
-                .Append(items[14])
-                .AppendLine("#")
-                .AppendLine("  #########");
+                .AppendLine("#");
+            for (var i = 0; i < 4; i++)
+            {
+                sb.Append(i is 0 ? "###" : "  #")
+                    .Append(items[i + 7])
+                    .Append('#')
+                    .Append(items[i + 11])
+                    .Append('#')
+                    .Append(items[i + 15])
+                    .Append('#')
+                    .Append(items[i + 19])
+                    .AppendLine(i is 0 ? "###" : "#");
+            }
+            sb.AppendLine("  #########");
             return sb.ToString();
         }
 
@@ -87,13 +79,9 @@ internal partial class Day23
                     }
                 }
 
-                if (!column.IsEmpty)
+                if (!IsColumnEmpty(column))
                 {
-                    if (column[0] == EMPTY
-                        && (column[1] == letterForColumn || column[1] == EMPTY)
-                        && (column[2] == letterForColumn || column[2] == EMPTY)
-                        && column[3] == letterForColumn
-                    )
+                    if (column[0] == EMPTY && column[1] == letterForColumn)
                     {
                         continue;
                     }
@@ -217,10 +205,10 @@ internal partial class Day23
             var asArray = items.ToArray();
             asArray[indexOfItemToRemove] = EMPTY;
             var depth = 0;
-            // attempt second then first position
-            for (var i = 1; i >= 0; i--)
+            // attempt fourth, then third, then second then first position
+            for (var i = 3; i >= 0; i--)
             {
-                var arrayIndex = column * 2 + 5 + i;
+                var arrayIndex = column * 4 + 3 + i;
                 var item = asArray[arrayIndex];
                 if (item == EMPTY)
                 {
@@ -256,7 +244,8 @@ internal partial class Day23
             {
                 return (Array.Empty<char>(), 0);
             }
-            if (!EmptyOrContainsOnly(items, itemToRemove))
+
+            if (!EmptyOrContainsOnly(insertColumn, itemToRemove))
             {
                 return (Array.Empty<char>(), 0);
             }
@@ -265,9 +254,9 @@ internal partial class Day23
             asArray[indexOfItemToRemove] = EMPTY;
             var depth = 0;
             // attempt second then first position
-            for (var i = 1; i >= 0; i--)
+            for (var i = 3; i >= 0; i--)
             {
-                var arrayIndex = column * 2 + 5 + i;
+                var arrayIndex = column * 4 + 3 + i;
                 var item = asArray[arrayIndex];
                 if (item == EMPTY)
                 {
@@ -289,7 +278,7 @@ internal partial class Day23
         public static (char[] board, long score) MoveColumnToLeft(ReadOnlySpan<char> items, int column)
         {
             var extractColumn = ColumnByNumber(items, column);
-            if (extractColumn.IsEmpty)
+            if (IsColumnEmpty(extractColumn))
             {
                 return (Array.Empty<char>(), 0);
             }
@@ -298,17 +287,21 @@ internal partial class Day23
 
         private static (char[] board, long score) MoveColumnToLeft(ReadOnlySpan<char> items, ReadOnlySpan<char> extractColumn, int column)
         {
-            var moveIndex = extractColumn[0] != EMPTY
-                ? 0
-                : extractColumn[1] != EMPTY
-                ? 1
-                : -1;
+            var moveIndex = -1;
+            for (var i = 0; i < 4; i++)
+            {
+                if (extractColumn[i] != EMPTY)
+                {
+                    moveIndex = i;
+                    break;
+                }
+            }
             if (moveIndex == -1)
             {
                 return (Array.Empty<char>(), 0);
             }
             var extractValue = extractColumn[moveIndex];
-            var extractEnergyCost = StepValue(extractValue, moveIndex == 0 ? 2 : 3);
+            var extractEnergyCost = StepValue(extractValue, 2 + moveIndex);
             var insertIndex = column;
             var boardAsArray = items.ToArray();
             if (boardAsArray.Take(insertIndex + 1).All(x => x != EMPTY))
@@ -316,7 +309,7 @@ internal partial class Day23
                 return (Array.Empty<char>(), 0);
             }
 
-            boardAsArray[column * 2 + 5 + moveIndex] = EMPTY;
+            boardAsArray[column * 4 + 3 + moveIndex] = EMPTY;
 
             InsertAt(extractValue, insertIndex);
 
@@ -343,29 +336,37 @@ internal partial class Day23
 
         private static ReadOnlySpan<char> ColumnByNumber(ReadOnlySpan<char> items, int columnNr)
         {
-            return items.Slice(columnNr * 2 + 5, 2);
+            return items.Slice(columnNr * 4 + 3, 4);
         }
 
         private static bool EmptyOrContainsOnly(in ReadOnlySpan<char> column, char c)
         {
             return (column[0] == c || column[0] == EMPTY)
-                && (column[1] == c || column[1] == EMPTY);
+                && (column[1] == c || column[1] == EMPTY)
+                && (column[2] == c || column[2] == EMPTY)
+                && (column[3] == c || column[3] == EMPTY);
         }
 
         public static bool IsColumnFull(ReadOnlySpan<char> items)
         {
-            return items[0] != EMPTY && items[1] != EMPTY;
+            return items[0] != EMPTY
+                && items[1] != EMPTY
+                && items[2] != EMPTY
+                && items[3] != EMPTY;
         }
 
         public static bool IsColumnEmpty(ReadOnlySpan<char> items)
         {
-            return items[0] == EMPTY && items[1] == EMPTY;
+            return items[0] == EMPTY
+                && items[1] == EMPTY
+                && items[2] == EMPTY
+                && items[3] == EMPTY;
         }
 
         public static (char[] board, long score) MoveColumnToRight(ReadOnlySpan<char> items, int column)
         {
             var extractColumn = ColumnByNumber(items, column);
-            if (extractColumn.IsEmpty)
+            if (IsColumnEmpty(extractColumn))
             {
                 return (Array.Empty<char>(), 0);
             }
@@ -374,11 +375,22 @@ internal partial class Day23
 
         private static (char[] board, long score) MoveColumnToRight(ReadOnlySpan<char> items, ReadOnlySpan<char> extractColumn, int column)
         {
+            var moveIndex = -1;
+            for (var i = 0; i < 4; i++)
+            {
+                if (extractColumn[i] != EMPTY)
+                {
+                    moveIndex = i;
+                    break;
+                }
+            }
+            if (moveIndex == -1)
+            {
+                return (Array.Empty<char>(), 0);
+            }
             var boardAsArray = items.ToArray();
-            var extractValue = extractColumn[0] == EMPTY
-                ? extractColumn[1]
-                : extractColumn[0];
-            var extractEnergyCost = StepValue(extractValue, extractValue == extractColumn[0] ? 2 : 3);
+            var extractValue = extractColumn[moveIndex];
+            var extractEnergyCost = StepValue(extractValue, moveIndex + 2);
             var insertIndex = column + 1;
             var areAllEmpty = boardAsArray
                 .Take(7)
@@ -389,7 +401,7 @@ internal partial class Day23
                 return (Array.Empty<char>(), 0);
             }
 
-            boardAsArray[column * 2 + 5 + (extractValue == extractColumn[0] ? 0 : 1)] = EMPTY;
+            boardAsArray[column * 4 + 3 + moveIndex] = EMPTY;
 
             InsertAt(extractValue, insertIndex);
 
