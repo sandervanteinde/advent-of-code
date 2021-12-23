@@ -89,28 +89,50 @@ internal partial class Day23
                     if (result.score != 0)
                     {
                         list.Add(result);
+                        for (var j = i - 1; j >= 0; j--)
+                        {
+                            if (result.board[j] != EMPTY)
+                            {
+                                break;
+                            }
+                            var copy = result.board.ToArray();
+                            copy[j] = copy[i];
+                            copy[i] = EMPTY;
+                            list.Add((copy, result.score + StepValue(copy[j], (i - j) * 2 - (j is 0 ? 1 : 0))));
+                        }
                     }
                     result = MoveColumnToRight(items, column, i);
                     if (result.score != 0)
                     {
                         list.Add(result);
+                        for (var j = i + 2; j <= 6; j++)
+                        {
+                            if (result.board[j] != EMPTY)
+                            {
+                                break;
+                            }
+                            var copy = result.board.ToArray();
+                            copy[j] = copy[i + 1];
+                            copy[i + 1] = EMPTY;
+                            list.Add((copy, result.score + StepValue(copy[j], (j - i - 1) * 2 - (j is 6 ? 1 : 0))));
+                        }
                     }
                 }
             }
 
-            for (var i = 2; i <= 4; i++)
-            {
-                result = MoveMiddleItemLeft(items, i);
-                if (result.score != 0)
-                {
-                    list.Add(result);
-                }
-                result = MoveMiddleItemRight(items, i);
-                if (result.score != 0)
-                {
-                    list.Add(result);
-                }
-            }
+            //for (var i = 2; i <= 4; i++)
+            //{
+            //    result = MoveMiddleItemLeft(items, i);
+            //    if (result.score != 0)
+            //    {
+            //        list.Add(result);
+            //    }
+            //    result = MoveMiddleItemRight(items, i);
+            //    if (result.score != 0)
+            //    {
+            //        list.Add(result);
+            //    }
+            //}
             return list;
         }
 
@@ -303,12 +325,12 @@ internal partial class Day23
             var extractValue = extractColumn[moveIndex];
             var extractEnergyCost = StepValue(extractValue, 2 + moveIndex);
             var insertIndex = column;
-            var boardAsArray = items.ToArray();
-            if (boardAsArray.Take(insertIndex + 1).All(x => x != EMPTY))
+            if (items[insertIndex] != EMPTY)
             {
                 return (Array.Empty<char>(), 0);
             }
 
+            var boardAsArray = items.ToArray();
             boardAsArray[column * 4 + 3 + moveIndex] = EMPTY;
 
             InsertAt(extractValue, insertIndex);
@@ -388,19 +410,15 @@ internal partial class Day23
             {
                 return (Array.Empty<char>(), 0);
             }
-            var boardAsArray = items.ToArray();
-            var extractValue = extractColumn[moveIndex];
-            var extractEnergyCost = StepValue(extractValue, moveIndex + 2);
+
             var insertIndex = column + 1;
-            var areAllEmpty = boardAsArray
-                .Take(7)
-                .Skip(insertIndex)
-                .All(x => x != EMPTY);
-            if (areAllEmpty)
+            if (items[insertIndex] != EMPTY)
             {
                 return (Array.Empty<char>(), 0);
             }
-
+            var boardAsArray = items.ToArray();
+            var extractValue = extractColumn[moveIndex];
+            var extractEnergyCost = StepValue(extractValue, moveIndex + 2);
             boardAsArray[column * 4 + 3 + moveIndex] = EMPTY;
 
             InsertAt(extractValue, insertIndex);
