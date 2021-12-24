@@ -2,7 +2,7 @@
 
 internal static class EnumerableExtensions
 {
-    public static HashSet<T> ToHashSet<T>(this IEnumerable<T> enumerable)
+    public static Queue<T> ToQueue<T>(this IEnumerable<T> enumerable)
     {
         return new(enumerable);
     }
