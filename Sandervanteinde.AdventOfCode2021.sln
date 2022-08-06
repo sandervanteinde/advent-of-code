@@ -9,7 +9,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sandervanteinde.AdventOfCod
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sandervanteinde.AdventOfCode2021.Console", "Sandervanteinde.AdventOfCode2021.Console\Sandervanteinde.AdventOfCode2021.Console.csproj", "{5982E669-BEE9-4AB6-8770-A85CCE2BD850}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sandervanteinde.AdventOfCode2021.Solutions.Tests", "Sandervanteinde.AdventOfCode2021.Solutions.Tests\Sandervanteinde.AdventOfCode2021.Solutions.Tests.csproj", "{4F69F9D5-D55D-40A5-A904-45ECE1A81526}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sandervanteinde.AdventOfCode2021.Solutions.Tests", "Sandervanteinde.AdventOfCode2021.Solutions.Tests\Sandervanteinde.AdventOfCode2021.Solutions.Tests.csproj", "{4F69F9D5-D55D-40A5-A904-45ECE1A81526}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5E2A5E03-CCE0-49B3-AD8C-2C6E170358EB}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -4,6 +4,10 @@ internal partial class Day23
 {
     public readonly struct Column
     {
+        public Column()
+        {
+        }
+
         public char FirstPosition { get; init; } = GameBoard.EMPTY;
         public char SecondPosition { get; init; } = GameBoard.EMPTY;
 
