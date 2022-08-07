@@ -1,6 +1,6 @@
 ﻿namespace Sandervanteinde.AdventOfCode2021.Solutions;
 
-internal abstract class BaseSolution : IAdventOfCodeSolution
+public abstract class BaseSolution : IAdventOfCodeSolution
 {
     public string Title { get; }
     public int Day { get; }

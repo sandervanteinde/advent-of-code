@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 
 namespace Sandervanteinde.AdventOfCode2021.Solutions.Utils;
 
-internal class FileReader
+public class FileReader
 {
     public string Input { get; }
 
@@ -18,6 +18,34 @@ internal class FileReader
         return test;
     }
 
+    public void ReadAndProcessLineByLine(Func<string, CancellationTokenSource, bool> processedFn)
+    {
+        var items = (string[])ReadLineByLine();
+        var source = new CancellationTokenSource();
+        var token = source.Token;
+        var nextItemList = new List<string>();
+
+        while (items.Length > 0)
+        {
+            foreach (var item in items)
+            {
+                if (token.IsCancellationRequested)
+                {
+                    return;
+                }
+
+                if (!processedFn(item, source))
+                {
+                    nextItemList.Add(item);
+                }
+            }
+
+            items = nextItemList.ToArray();
+            nextItemList.Clear();
+        }
+
+    }
+
     public IEnumerable<int> ReadCommaSeperatedNumbers()
     {
         return Input.Split(new char[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries)
@@ -29,11 +57,9 @@ internal class FileReader
         foreach (var line in ReadLineByLine())
         {
             var match = regex.Match(line);
-            if (!match.Success)
-            {
-                throw new InvalidOperationException($"Expected each line to match regex '{regex}', but '{line}' did not match.");
-            }
-            yield return match;
+            yield return match.Success
+                ? match
+                : throw new InvalidOperationException($"Expected each line to match regex '{regex}', but '{line}' did not match.");
         }
     }
 
