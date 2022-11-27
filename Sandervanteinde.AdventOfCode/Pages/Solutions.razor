@@ -1,0 +1,104 @@
+﻿@page "/solution/{year:int}/{day:int}"
+
+
+@if (Solution is null)
+{
+    <p>The solution was not found.</p>
+    return;
+}
+
+<PageTitle>@Solution.Title - @Solution.Year Day @Solution.Day Advent of Code</PageTitle>
+<h2>Day @Solution.Day - @Solution.Title</h2>
+
+<p>
+    <Button OnClick="NavigateToAdventOfCode">
+        Advent of Code
+    </Button>
+    <Button OnClick="NavigateToGithub">
+        View Code
+    </Button>
+</p>
+
+<EditForm Model="StepOne">
+    <p>
+        <TextArea @bind-Value="StepOne"/>
+    </p>
+    <p>
+        <Button OnClick="CalculateStepOne">Calculate Step One</Button>
+        <Button OnClick="CalculateStepTwo">Calculate Step Two</Button>
+    </p>
+</EditForm>
+
+@if(Result != string.Empty)
+{
+    <p style="font-family: monospace;">
+        <EditForm Model="Result">
+            <TextArea @bind-Value="Result" Label="Result" TextArea="true" ReadOnly="true" FullWidth="true" />
+        </EditForm>
+    </p>
+}
+
+@code {
+    [Inject]
+    public SolutionRegistry Registry { get; set; } = null!;
+
+    [Inject]
+    public HttpClient Client { get; set; } = null!;
+
+    [Inject]
+    public IJSRuntime jsRuntime { get; set; } = null!;
+
+    public IAdventOfCodeSolution? Solution { get; set; } = null;
+
+    [Parameter]
+    public int Year { get; set; }
+
+    [Parameter]
+    public int Day { get; set; }
+
+    public string StepOne { get; private set; } = string.Empty;
+
+    public string Result { get; private set; } = string.Empty;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        Result = string.Empty;
+        var solution = Registry.GetSolution(Year, Day);
+        Solution = solution;
+
+        if(Solution is not null)
+        {
+            StepOne = await Client.GetStringAsync($"sample-data/{Solution.StepOneFileName()}?cacheBust={DateTime.Now.Ticks}");
+        }
+    }
+
+    private void CalculateStepOne() => SetResult(() => Solution!.GetStepOneResult(StepOne));
+
+    private void CalculateStepTwo() => SetResult(() => Solution!.GetStepTwoResult(StepOne));
+
+    private void SetResult(Func<string> resultSelector)
+    {
+        try
+        {
+            Result = resultSelector();
+        }
+        catch (PlatformNotSupportedException)
+        {
+            Result = "This solution requires technology that is not available in Blazor WASM";
+        }
+        catch(Exception ex)
+        {
+            Result = $"An exception occured:{Environment.NewLine}{ex.Message}";
+        } 
+    }
+
+    private async Task NavigateToGithub()
+    {
+        await jsRuntime.InvokeVoidAsync("open", new[] { $"https://github.com/sandervanteinde/advent-of-code/blob/main/Sandervanteinde.AdventOfCode.Solutions/{Solution.Year}/Day{Solution.Day:00}.cs", "_blank" });
+    }
+
+    private async Task NavigateToAdventOfCode()
+    {
+        await jsRuntime.InvokeVoidAsync("open", new[] { $"https://github.com/sandervanteinde/advent-of-code/blob/main/Sandervanteinde.AdventOfCode.Solutions/{Solution.Year}/Day{Solution.Day:00}.cs", "_blank" });
+    }
+}

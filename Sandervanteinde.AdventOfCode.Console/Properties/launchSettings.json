@@ -1,0 +1,23 @@
+{
+  "profiles": {
+    "Sandervanteinde.AdventOfCode.Console": {
+      "commandName": "Project"
+    },
+    "Latest": {
+      "commandName": "Project",
+      "commandLineArgs": "--run-latest"
+    },
+    "Latest-2016": {
+      "commandName": "Project",
+      "commandLineArgs": "--run-latest=2016"
+    },
+    "Latest-Euler": {
+      "commandName": "Project",
+      "commandLineArgs": "--project-euler"
+    },
+    "2021-19": {
+      "commandName": "Project",
+      "commandLineArgs": "--run-latest=2021 --day=19"
+    }
+  }
+}
