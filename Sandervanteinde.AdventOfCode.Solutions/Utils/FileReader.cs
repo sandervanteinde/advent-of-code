@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Text;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 
 namespace Sandervanteinde.AdventOfCode.Solutions.Utils;
@@ -16,6 +17,11 @@ public class FileReader
     {
         var test = Input.Split(new char[] { '\n', '\r' }, options);
         return test;
+    }
+
+    public SpanLineEnumerator ReadAsSpanLineByLine()
+    {
+        return Input.AsSpan().EnumerateLines();
     }
 
     public void ReadAndProcessLineByLine(Func<string, CancellationTokenSource, bool> processedFn)
