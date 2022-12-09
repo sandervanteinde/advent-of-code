@@ -71,4 +71,14 @@ public record struct Point
             };
         }
     }
+
+    /// <summary>
+    /// Checks if <paramref name="other"/> is next to this point.
+    /// It is considered adjacent when it is diagonally, horizontally or vertically one space further.
+    /// When on top it is also true.
+    /// </summary>
+    public bool IsAdjacentOrOnTop(Point other)
+    {
+        return Math.Sqrt(Math.Pow(Math.Abs(other.X - X), 2) + Math.Pow(Math.Abs(other.Y - Y), 2)) <= 1.415;
+    }
 }
