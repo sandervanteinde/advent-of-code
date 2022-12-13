@@ -5,13 +5,14 @@ namespace Sandervanteinde.AdventOfCode.Solutions.Utils;
 public class GridWindow<T> : IDisposable
 {
     private static readonly ArrayPool<(int x, int y, T value)> pool = ArrayPool<(int x, int y, T value)>.Shared;
-    private readonly T[,] grid;
+    private readonly GridWindow<T>[,] grid;
+    private readonly T[,] values;
     public object? Tag { get; set; }
 
     public int X { get; }
     public int Y { get; }
 
-    public T Value => grid[X, Y];
+    public T Value => values[X, Y];
 
     public bool IsCorner => X is 0 && (Y == 0 || Y == grid.GetLength(1) - 1)
         || X == grid.GetLength(0) - 1 && (Y == 0 || Y == grid.GetLength(1) - 1);
@@ -22,11 +23,34 @@ public class GridWindow<T> : IDisposable
     private (int x, int y, T value)[] adjacents = Array.Empty<(int x, int y, T value)>();
     private int? amountOfAdjacents = null;
 
-    public GridWindow(T[,] grid, int x, int y)
+    public GridWindow(GridWindow<T>[,] grid, T[,] values, int x, int y)
     {
         this.grid = grid;
+        this.values = values;
         X = x;
         Y = y;
+    }
+
+    public IEnumerable<GridWindow<T>> AdjacentWindows()
+    {
+        if (X > 0)
+        {
+            yield return grid[X - 1, Y];
+        }
+
+        if (Y > 0)
+        {
+            yield return grid[X, Y - 1];
+        }
+        if (Y + 1 < grid.GetLength(1))
+        {
+            yield return grid[X, Y + 1];
+        }
+
+        if (X + 1 < grid.GetLength(0))
+        {
+            yield return grid[X + 1, Y];
+        }
     }
 
     public Span<(int x, int y, T value)> AdjacentNonDiagonals()
@@ -37,21 +61,21 @@ public class GridWindow<T> : IDisposable
             var amount = 0;
             if (X > 0)
             {
-                array[amount++] = (X - 1, Y, grid[X - 1, Y]);
+                array[amount++] = (X - 1, Y, grid[X - 1, Y].Value);
             }
 
             if (Y > 0)
             {
-                array[amount++] = (X, Y - 1, grid[X, Y - 1]);
+                array[amount++] = (X, Y - 1, grid[X, Y - 1].Value);
             }
             if (Y + 1 < grid.GetLength(1))
             {
-                array[amount++] = (X, Y + 1, grid[X, Y + 1]);
+                array[amount++] = (X, Y + 1, grid[X, Y + 1].Value);
             }
 
             if (X + 1 < grid.GetLength(0))
             {
-                array[amount++] = (X + 1, Y, grid[X + 1, Y]);
+                array[amount++] = (X + 1, Y, grid[X + 1, Y].Value);
             }
 
             adjacents = array;
@@ -68,21 +92,21 @@ public class GridWindow<T> : IDisposable
             var amount = 0;
             if (X > 0)
             {
-                array[amount++] = (X - 1, Y, grid[X - 1, Y]);
+                array[amount++] = (X - 1, Y, grid[X - 1, Y].Value);
 
                 if (Y > 0)
                 {
-                    array[amount++] = (X - 1, Y - 1, grid[X - 1, Y - 1]);
+                    array[amount++] = (X - 1, Y - 1, grid[X - 1, Y - 1].Value);
                 }
                 if (Y + 1 < grid.GetLength(1))
                 {
-                    array[amount++] = (X - 1, Y + 1, grid[X - 1, Y + 1]);
+                    array[amount++] = (X - 1, Y + 1, grid[X - 1, Y + 1].Value);
                 }
             }
 
             if (Y > 0)
             {
-                array[amount++] = (X, Y - 1, grid[X, Y - 1]);
+                array[amount++] = (X, Y - 1, grid[X, Y - 1].Value);
             }
             if (includeSelf)
             {
@@ -90,20 +114,20 @@ public class GridWindow<T> : IDisposable
             }
             if (Y + 1 < grid.GetLength(1))
             {
-                array[amount++] = (X, Y + 1, grid[X, Y + 1]);
+                array[amount++] = (X, Y + 1, grid[X, Y + 1].Value);
             }
 
             if (X + 1 < grid.GetLength(0))
             {
-                array[amount++] = (X + 1, Y, grid[X + 1, Y]);
+                array[amount++] = (X + 1, Y, grid[X + 1, Y].Value);
 
                 if (Y > 0)
                 {
-                    array[amount++] = (X + 1, Y - 1, grid[X + 1, Y - 1]);
+                    array[amount++] = (X + 1, Y - 1, grid[X + 1, Y - 1].Value);
                 }
                 if (Y + 1 < grid.GetLength(1))
                 {
-                    array[amount++] = (X + 1, Y + 1, grid[X + 1, Y + 1]);
+                    array[amount++] = (X + 1, Y + 1, grid[X + 1, Y + 1].Value);
                 }
             }
 
@@ -126,11 +150,12 @@ public class GridWindow<T> : IDisposable
     {
         var yLength = grid.GetLength(1);
         var xLength = grid.GetLength(0);
+        var windows = grid.ToGridwindows();
         for (var y = 0; y < yLength; y++)
         {
             for (var x = 0; x < xLength; x++)
             {
-                using var window = new GridWindow<T>(grid, x, y);
+                using var window = new GridWindow<T>(windows, grid, x, y);
                 yield return window;
             }
         }

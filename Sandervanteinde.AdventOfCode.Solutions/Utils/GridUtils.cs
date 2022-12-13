@@ -24,7 +24,7 @@ internal static class GridUtils
         {
             for (var x = 0; x < xLength; x++)
             {
-                gridWindows[x, y] = new GridWindow<T>(grid, x, y);
+                gridWindows[x, y] = new GridWindow<T>(gridWindows, grid, x, y);
             }
         }
         return gridWindows;
