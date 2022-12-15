@@ -1,6 +1,8 @@
-﻿namespace Sandervanteinde.AdventOfCode.Solutions.Utils;
+﻿using System.Numerics;
 
-public record struct Point
+namespace Sandervanteinde.AdventOfCode.Solutions.Utils;
+
+public record struct Point : IAdditionOperators<Point, Point, Point>
 {
     public int X { get; init; }
     public int Y { get; init; }
@@ -34,6 +36,11 @@ public record struct Point
                 yield return new Point { X = x, Y = y };
             }
         }
+    }
+
+    public static int ManhattanDistance(Point left, Point right)
+    {
+        return Math.Abs(left.X - right.X) + Math.Abs(left.Y - right.Y);
     }
 
     public static IEnumerable<Point> BetweenInclusive(Point start, Point end)
@@ -80,5 +87,14 @@ public record struct Point
     public bool IsAdjacentOrOnTop(Point other)
     {
         return Math.Sqrt(Math.Pow(Math.Abs(other.X - X), 2) + Math.Pow(Math.Abs(other.Y - Y), 2)) <= 1.415;
+    }
+
+    public static Point operator +(Point left, Point right)
+    {
+        return left with
+        {
+            X = left.X + right.X,
+            Y = left.Y + right.Y
+        };
     }
 }
