@@ -94,9 +94,9 @@ internal class Day14 : BaseSolution
             next = TryFall(sandPoint);
         }
         return next.Match<OneOf<Point, VoidReached, IsAtFeed>>(
-            p => throw new NotSupportedException("When a point is returned we should not be in this state."),
+            _ => throw new NotSupportedException("When a point is returned we should not be in this state."),
             voidReached => voidReached,
-            cantFall => sandPoint
+            _ => sandPoint
         );
 
         OneOf<Point, VoidReached, CantFall> TryFall(Point previous)

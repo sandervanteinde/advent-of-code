@@ -1,7 +1,4 @@
-﻿using Sandervanteinde.AdventOfCode.Solutions;
-using Sandervanteinde.AdventOfCode.Solutions.Utils;
-
-namespace Sandervanteinde.AdventOfCode.Solutions._2021;
+﻿namespace Sandervanteinde.AdventOfCode.Solutions._2021;
 internal partial class Day07 : BaseSolution
 {
     public Day07()

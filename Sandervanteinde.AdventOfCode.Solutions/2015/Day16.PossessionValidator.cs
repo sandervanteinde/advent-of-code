@@ -6,6 +6,6 @@ internal partial class Day16
     {
 
         public string Name { get; init; } = string.Empty;
-        public Predicate<int> Amount { get; init; } = i => false;
+        public Predicate<int> Amount { get; init; } = _ => false;
     }
 }

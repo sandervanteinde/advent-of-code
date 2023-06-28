@@ -1,6 +1,4 @@
 ﻿using System.Text.RegularExpressions;
-using Sandervanteinde.AdventOfCode.Solutions;
-using Sandervanteinde.AdventOfCode.Solutions.Utils;
 
 namespace Sandervanteinde.AdventOfCode.Solutions._2015;
 
@@ -24,7 +22,7 @@ internal partial class Day14 : BaseSolution
         var reindeers = ParseReindeerStats(reader).ToArray();
         var points = reindeers.ToDictionary(
             reindeer => reindeer,
-            reindeer => 0 // points
+            _ => 0 // points
         );
 
         for (var i = 1; i <= EVALUATION_TIME; i++)

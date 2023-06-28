@@ -1,6 +1,4 @@
 ﻿using System.Text.RegularExpressions;
-using Sandervanteinde.AdventOfCode.Solutions;
-using Sandervanteinde.AdventOfCode.Solutions.Utils;
 
 namespace Sandervanteinde.AdventOfCode.Solutions._2015;
 internal partial class Day19 : BaseSolution

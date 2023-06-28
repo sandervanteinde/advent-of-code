@@ -1,6 +1,4 @@
-﻿using Sandervanteinde.AdventOfCode.Solutions.Utils;
-
-namespace Sandervanteinde.AdventOfCode.Solutions;
+﻿namespace Sandervanteinde.AdventOfCode.Solutions;
 
 public abstract class BaseSolution : IAdventOfCodeSolution
 {

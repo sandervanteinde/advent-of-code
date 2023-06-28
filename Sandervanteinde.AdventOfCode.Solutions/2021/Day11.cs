@@ -1,6 +1,4 @@
-﻿using Sandervanteinde.AdventOfCode.Solutions;
-using Sandervanteinde.AdventOfCode.Solutions.Extensions;
-using Sandervanteinde.AdventOfCode.Solutions.Utils;
+﻿using Sandervanteinde.AdventOfCode.Solutions.Extensions;
 
 namespace Sandervanteinde.AdventOfCode.Solutions._2021;
 

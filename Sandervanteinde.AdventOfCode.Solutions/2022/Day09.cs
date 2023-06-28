@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Sandervanteinde.AdventOfCode.Solutions._2022;
+﻿namespace Sandervanteinde.AdventOfCode.Solutions._2022;
 public class Day09 : BaseSolution
 {
     public Day09()
@@ -34,7 +28,8 @@ public class Day09 : BaseSolution
                     'L' => ownPoint with { X = ownPoint.X - 1 },
                     'R' => ownPoint with { X = ownPoint.X + 1 },
                     'U' => ownPoint with { Y = ownPoint.Y + 1 },
-                    'D' => ownPoint with { Y = ownPoint.Y - 1 }
+                    'D' => ownPoint with { Y = ownPoint.Y - 1 },
+                    _ => throw new NotSupportedException()
                 };
 
                 if (!ownPoint.IsAdjacentOrOnTop(tailPoint))
@@ -69,7 +64,8 @@ public class Day09 : BaseSolution
                     'L' => ownPoint with { X = ownPoint.X - 1 },
                     'R' => ownPoint with { X = ownPoint.X + 1 },
                     'U' => ownPoint with { Y = ownPoint.Y + 1 },
-                    'D' => ownPoint with { Y = ownPoint.Y - 1 }
+                    'D' => ownPoint with { Y = ownPoint.Y - 1 },
+                    _ => throw new NotSupportedException()
                 };
 
 

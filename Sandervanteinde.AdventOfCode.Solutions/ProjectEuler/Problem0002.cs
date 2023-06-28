@@ -1,6 +1,4 @@
-﻿using Sandervanteinde.AdventOfCode.Solutions.Utils;
-
-namespace Sandervanteinde.AdventOfCode.Solutions.ProjectEuler;
+﻿namespace Sandervanteinde.AdventOfCode.Solutions.ProjectEuler;
 
 internal class Problem0002 : IProjectEulerSolution
 {

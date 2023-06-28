@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Sandervanteinde.AdventOfCode.Solutions._2022;
+﻿namespace Sandervanteinde.AdventOfCode.Solutions._2022;
 internal class Day05 : BaseSolution
 {
     public Day05()

@@ -1,7 +1,4 @@
-﻿using Sandervanteinde.AdventOfCode.Solutions;
-using Sandervanteinde.AdventOfCode.Solutions.Utils;
-
-namespace Sandervanteinde.AdventOfCode.Solutions._2021;
+﻿namespace Sandervanteinde.AdventOfCode.Solutions._2021;
 
 internal partial class Day04 : BaseSolution
 {
@@ -88,7 +85,7 @@ internal partial class Day04 : BaseSolution
             yield return new BingoCard(rows, columns);
 
             int[][] EmptyBingoCard() => Enumerable.Range(0, 5)
-                    .Select(item => Enumerable.Range(0, 5).ToArray())
+                    .Select(_ => Enumerable.Range(0, 5).ToArray())
                     .ToArray();
         }
     }

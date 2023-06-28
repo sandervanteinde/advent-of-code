@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Sandervanteinde.AdventOfCode.Solutions.Utils;
+﻿namespace Sandervanteinde.AdventOfCode.Solutions.Utils;
 public static class CharReadOnlySpanExtensions
 {
     public static SplitResult SplitAtFirstOccurenceOf(this ReadOnlySpan<char> input, char c)

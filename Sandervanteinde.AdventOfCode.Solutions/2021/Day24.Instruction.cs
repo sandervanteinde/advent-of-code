@@ -92,7 +92,7 @@ internal partial class Day24
             Func<ComputerValues, long> AsLong()
             {
                 var asLong = long.Parse(str);
-                return values => asLong;
+                return _ => asLong;
             }
         }
     }

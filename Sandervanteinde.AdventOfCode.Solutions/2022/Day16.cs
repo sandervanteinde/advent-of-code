@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics;
 using System.Text.RegularExpressions;
-using Sandervanteinde.AdventOfCode.Solutions.Utils;
 
 namespace Sandervanteinde.AdventOfCode.Solutions._2022;
 
@@ -104,7 +103,7 @@ internal partial class Day16 : BaseSolution
 
     private class State
     {
-        private HashSet<int> _visited = new();
+        private readonly HashSet<int> _visited = new();
         public IReadOnlyList<Valve> Valves { get; }
         public int Minute { get; internal set; }
         public int CurrentFlowRate { get; set; }

@@ -45,7 +45,8 @@ public class Day12 : BaseSolution
             ["cpy", var firstArg, var secondArg] => new CopyOperation { Source = firstArg, Target = secondArg },
             ["inc", var incArgument] => new IncrementOperation { Target = incArgument },
             ["dec", var decArgument] => new DecrementOperation { Target = decArgument },
-            ["jnz", var address, var jumpValue] => new JumpOperation { Address = address, JumpCount = int.Parse(jumpValue) }
+            ["jnz", var address, var jumpValue] => new JumpOperation { Address = address, JumpCount = int.Parse(jumpValue) },
+            _ => throw new NotSupportedException()
         };
     }
 }

@@ -1,6 +1,4 @@
 ﻿using System.Text.RegularExpressions;
-using Sandervanteinde.AdventOfCode.Solutions;
-using Sandervanteinde.AdventOfCode.Solutions.Utils;
 
 namespace Sandervanteinde.AdventOfCode.Solutions._2015;
 
@@ -57,7 +55,7 @@ internal partial class Day23 : BaseSolution
                 "hlf" => new HalfInstruction(),
                 "tpl" => new TripleInstruction(),
                 "inc" => new IncrementInstruction(match.Groups[2].Value[0]),
-                "jmp" => new JumpInstruction(int.Parse(match.Groups[2].Value), cmp => true),
+                "jmp" => new JumpInstruction(int.Parse(match.Groups[2].Value), _ => true),
                 "jie" => DetermineInstruction(match.Groups[2].Value, false),
                 "jio" => DetermineInstruction(match.Groups[2].Value, true),
                 _ => throw new NotSupportedException()

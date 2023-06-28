@@ -1,6 +1,4 @@
 ﻿using System.Collections;
-using Sandervanteinde.AdventOfCode.Solutions;
-using Sandervanteinde.AdventOfCode.Solutions.Utils;
 
 namespace Sandervanteinde.AdventOfCode.Solutions._2021;
 

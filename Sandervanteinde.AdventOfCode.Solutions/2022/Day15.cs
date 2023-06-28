@@ -1,13 +1,11 @@
-﻿using System.Diagnostics;
-using System.Text.RegularExpressions;
-using OneOf.Types;
+﻿using System.Text.RegularExpressions;
 
 namespace Sandervanteinde.AdventOfCode.Solutions._2022;
 
 internal partial class Day15 : BaseSolution
 {
     [GeneratedRegex(@"Sensor at x=(-?\d+), y=(-?\d+): closest beacon is at x=(-?\d+), y=(-?\d+)")]
-    public partial Regex BeaconRegex();
+    private partial Regex BeaconRegex();
 
     public Day15()
         : base("Beacon Exclusion Zone", 2022, 15)
@@ -16,7 +14,7 @@ internal partial class Day15 : BaseSolution
     }
     public override object DetermineStepOneResult(FileReader reader)
     {
-        const int ROW_TO_CALC = 2000000;
+        const int rowToCalc = 2000000;
         var sensors = ParseInput(reader);
 
         var pointsThatCannotBe = new HashSet<int>();
@@ -24,7 +22,7 @@ internal partial class Day15 : BaseSolution
         {
             var manhattanDistance = sensor.ManhattanDistance;
 
-            var distanceFromLine = manhattanDistance - Math.Abs(sensor.Location.Y - ROW_TO_CALC);
+            var distanceFromLine = manhattanDistance - Math.Abs(sensor.Location.Y - rowToCalc);
             if (distanceFromLine < 0)
             {
                 continue;
@@ -36,7 +34,7 @@ internal partial class Day15 : BaseSolution
             }
         }
 
-        foreach(var sensor in sensors.SelectMany(sensor => new[] { sensor.Location, sensor.ClosestBeacon }).Where(sensor => sensor.Y == ROW_TO_CALC))
+        foreach(var sensor in sensors.SelectMany(sensor => new[] { sensor.Location, sensor.ClosestBeacon }).Where(sensor => sensor.Y == rowToCalc))
         {
             pointsThatCannotBe.Remove(sensor.X);
             // pointsThatCannotBe.Remove(sensor.ClosestBeacon);
@@ -99,7 +97,7 @@ internal partial class Day15 : BaseSolution
 
     private class Sensor
     {
-        private Lazy<int> _manhattanDistance = new Lazy<int>();
+        private readonly Lazy<int> _manhattanDistance;
         public required Point Location { get; init; }
         public required Point ClosestBeacon { get; init; }
         public int ManhattanDistance => _manhattanDistance.Value;

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 
 namespace Sandervanteinde.AdventOfCode.Solutions._2022;
 
@@ -24,7 +20,8 @@ internal class Day10 : BaseSolution
             _ = line switch
             {
                 ['a', 'd', 'd', 'x', ' ', ..var amount] => AddX(int.Parse(amount)),
-                "noop" => Noop()
+                "noop" => Noop(),
+                _ => throw new NotSupportedException()
             };
         }
 
@@ -64,7 +61,8 @@ internal class Day10 : BaseSolution
             _ = line switch
             {
                 ['a', 'd', 'd', 'x', ' ', .. var amount] => AddX(int.Parse(amount)),
-                "noop" => Noop()
+                "noop" => Noop(),
+                _ => throw new NotSupportedException()
             };
         }
 

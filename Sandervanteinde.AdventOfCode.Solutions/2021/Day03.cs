@@ -1,7 +1,4 @@
-﻿using Sandervanteinde.AdventOfCode.Solutions;
-using Sandervanteinde.AdventOfCode.Solutions.Utils;
-
-namespace Sandervanteinde.AdventOfCode.Solutions._2021;
+﻿namespace Sandervanteinde.AdventOfCode.Solutions._2021;
 
 internal class Day03 : BaseSolution
 {
@@ -13,7 +10,7 @@ internal class Day03 : BaseSolution
     }
     public override object DetermineStepOneResult(FileReader reader)
     {
-        var list = Enumerable.Repeat(0, BITS).Select(i => new OnOrOff { On = 0, Off = 0 }).ToList();
+        var list = Enumerable.Repeat(0, BITS).Select(_ => new OnOrOff { On = 0, Off = 0 }).ToList();
         var bitValues = Enumerable.Repeat(0, BITS).Select((_, index) => (int)(Math.Pow(2, index))).ToList();
         foreach (var bits in ParseInput(reader))
         {
@@ -43,7 +40,7 @@ internal class Day03 : BaseSolution
 
     public override object DetermineStepTwoResult(FileReader reader)
     {
-        var list = Enumerable.Repeat(0, BITS).Select(i => new OnOrOff { On = 0, Off = 0 }).ToList();
+        var list = Enumerable.Repeat(0, BITS).Select(_ => new OnOrOff { On = 0, Off = 0 }).ToList();
         var bitValues = Enumerable.Repeat(0, BITS).Select((_, index) => (int)(Math.Pow(2, index))).Reverse().ToList();
         var oxygenGeneratorRating = ParseInput(reader).ToList();
         var co2ScrubberRating = new List<int>(oxygenGeneratorRating);

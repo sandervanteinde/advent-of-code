@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-namespace Sandervanteinde.AdventOfCode.Solutions._2016;
+﻿namespace Sandervanteinde.AdventOfCode.Solutions._2016;
 
 public class Day11 : BaseSolution
 {
@@ -77,7 +75,7 @@ file class Office
 file class Floor
 {
     public required int FloorNumber { get; init; }
-    private List<Machine> _machines = new();
+    private readonly List<Machine> _machines = new();
 
     public void AddMachine(Machine machine)
     {

@@ -1,7 +1,4 @@
-﻿using System.Diagnostics;
-using Sandervanteinde.AdventOfCode.Solutions.Utils;
-
-namespace Sandervanteinde.AdventOfCode.Solutions._2022;
+﻿namespace Sandervanteinde.AdventOfCode.Solutions._2022;
 
 internal class Day04 : BaseSolution
 {

@@ -1,6 +1,4 @@
 ﻿using System.Text.RegularExpressions;
-using Sandervanteinde.AdventOfCode.Solutions;
-using Sandervanteinde.AdventOfCode.Solutions.Utils;
 
 namespace Sandervanteinde.AdventOfCode.Solutions._2021;
 
@@ -72,7 +70,7 @@ internal partial class Day19 : BaseSolution
             }
         }
 
-        return locations.SelectMany(location => locations, (test, test2) => new { From = test.Value, To = test2.Value })
+        return locations.SelectMany(_ => locations, (test, test2) => new { From = test.Value, To = test2.Value })
             .Max(x => Math.Abs(x.From.X - x.To.X) + Math.Abs(x.From.Y - x.To.Y) + Math.Abs(x.From.Z - x.To.Z));
     }
 

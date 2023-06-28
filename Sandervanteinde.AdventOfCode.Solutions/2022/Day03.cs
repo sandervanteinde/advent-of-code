@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Sandervanteinde.AdventOfCode.Solutions._2022;
+﻿namespace Sandervanteinde.AdventOfCode.Solutions._2022;
 internal class Day03 : BaseSolution
 {
     public Day03()
@@ -57,7 +50,8 @@ internal class Day03 : BaseSolution
     }
     private static int ValueOfChar(char c) => c switch
     {
-        >= 'a' and <= 'z' => ((int)c) - 96,
-        >= 'A' and <= 'Z' => ((int)c) - 38
+        >= 'a' and <= 'z' => c - 96,
+        >= 'A' and <= 'Z' => c - 38,
+        _ => throw new NotSupportedException()
     };
 }

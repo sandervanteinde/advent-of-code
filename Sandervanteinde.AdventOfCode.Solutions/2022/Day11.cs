@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Sandervanteinde.AdventOfCode.Solutions._2022;
+﻿namespace Sandervanteinde.AdventOfCode.Solutions._2022;
 
 public class Day11 : BaseSolution
 {
@@ -25,9 +17,9 @@ public class Day11 : BaseSolution
         {
             foreach(var monkey in monkeys)
             {
-                foreach(var (itemTHrown, targetMonkey) in monkey.Inspect())
+                foreach(var (itemThrown, targetMonkey) in monkey.Inspect())
                 {
-                    monkeys[targetMonkey].Items.Add(itemTHrown);
+                    monkeys[targetMonkey].Items.Add(itemThrown);
                 }
             }
         }
@@ -47,7 +39,7 @@ public class Day11 : BaseSolution
         {
             foreach(var monkey in monkeys)
             {
-                item.AddDivisableTracker(monkey.Divisor);
+                item.AddDividableTracker(monkey.Divisor);
             }
         }
 
@@ -55,9 +47,9 @@ public class Day11 : BaseSolution
         {
             foreach (var monkey in monkeys)
             {
-                foreach (var (itemTHrown, targetMonkey) in monkey.Inspect())
+                foreach (var (itemThrown, targetMonkey) in monkey.Inspect())
                 {
-                    monkeys[targetMonkey].Items.Add(itemTHrown);
+                    monkeys[targetMonkey].Items.Add(itemThrown);
                 }
             }
         }
@@ -71,10 +63,9 @@ public class Day11 : BaseSolution
 
     private static Monkey[] ParseMonkeys(FileReader reader)
     {
-        int monkeyId = 0;
         List<int> monkeyItems = new List<int>();
         Func<int, int> monkeyOperation = x => x;
-        Predicate<int> monkeyTest = x => false;
+        Predicate<int> monkeyTest = _ => false;
         int trueMonkey = 0, falseMonkey = 0;
         List<Monkey> monkeys = new();
 
@@ -82,8 +73,7 @@ public class Day11 : BaseSolution
         {
             switch (line)
             {
-                case ['M', 'o', 'n', 'k', 'e', 'y', ' ', var id, ':']:
-                    monkeyId = (int)(id - 48);
+                case ['M', 'o', 'n', 'k', 'e', 'y', ' ', _, ':']:
                     break;
                 case [' ', ' ', 'S', 't', 'a', 'r', 't', 'i', 'n', 'g', ' ', 'i', 't', 'e', 'm', 's', ':', ' ', .. var items ]:
                     monkeyItems.AddRange(items.ToString().Split(", ").Select(int.Parse));
@@ -91,8 +81,9 @@ public class Day11 : BaseSolution
                 case [' ', ' ', 'O', 'p', 'e', 'r', 'a', 't', 'i', 'o', 'n', ':', ' ', 'n', 'e', 'w', ' ', '=', ' ', 'o', 'l', 'd', ' ', .. var op]:
                     monkeyOperation = op switch
                     {
-                        ['+', ' ', .. var plusAmount] => monkeyOperation = CreateAddOperation(plusAmount),
-                        ['*', ' ', .. var multiAmount] => monkeyOperation = CreateMultiplyOperation(multiAmount)
+                        ['+', ' ', .. var plusAmount] => CreateAddOperation(plusAmount),
+                        ['*', ' ', .. var multiAmount] => CreateMultiplyOperation(multiAmount),
+                        _ => throw new NotSupportedException()
                     };
                     break;
                 case [' ', ' ', 'T', 'e', 's', 't', ':', ' ', 'd', 'i', 'v', 'i', 's', 'i', 'b', 'l', 'e', ' ', 'b', 'y', ' ', .. var divisibleByAmount]:
@@ -125,14 +116,12 @@ public class Day11 : BaseSolution
             monkeys.Add(new Monkey
             {
                 FalseMonkey = falseMonkey,
-                Id = monkeyId,
                 Items = monkeyItems,
                 Operation = monkeyOperation,
                 Test = monkeyTest,
                 TrueMonkey = trueMonkey,
             });
             falseMonkey = 0;
-            monkeyId = 0;
             monkeyItems = new();
         }
 
@@ -166,7 +155,7 @@ public class Day11 : BaseSolution
     {
         int monkeyId = 0;
         List<MonkeyItem> monkeyItems = new List<MonkeyItem>();
-        Action<MonkeyItem> monkeyOperation = x => { };
+        Action<MonkeyItem> monkeyOperation = _ => { };
         int trueMonkey = 0, falseMonkey = 0;
         var divisor = 0;
         List<Monkey2> monkeys = new();
@@ -176,7 +165,7 @@ public class Day11 : BaseSolution
             switch (line)
             {
                 case ['M', 'o', 'n', 'k', 'e', 'y', ' ', var id, ':']:
-                    monkeyId = (int)(id - 48);
+                    monkeyId = id - 48;
                     break;
                 case [' ', ' ', 'S', 't', 'a', 'r', 't', 'i', 'n', 'g', ' ', 'i', 't', 'e', 'm', 's', ':', ' ', .. var items]:
                     monkeyItems.AddRange(items.ToString().Split(", ").Select(value => new MonkeyItem(int.Parse(value))));
@@ -184,8 +173,9 @@ public class Day11 : BaseSolution
                 case [' ', ' ', 'O', 'p', 'e', 'r', 'a', 't', 'i', 'o', 'n', ':', ' ', 'n', 'e', 'w', ' ', '=', ' ', 'o', 'l', 'd', ' ', .. var op]:
                     monkeyOperation = op switch
                     {
-                        ['+', ' ', .. var plusAmount] => monkeyOperation = CreateAddOperation(plusAmount),
-                        ['*', ' ', .. var multiAmount] => monkeyOperation = CreateMultiplyOperation(multiAmount)
+                        ['+', ' ', .. var plusAmount] => CreateAddOperation(plusAmount),
+                        ['*', ' ', .. var multiAmount] => CreateMultiplyOperation(multiAmount),
+                        _ => throw new NotSupportedException()
                     };
                     break;
                 case [' ', ' ', 'T', 'e', 's', 't', ':', ' ', 'd', 'i', 'v', 'i', 's', 'i', 'b', 'l', 'e', ' ', 'b', 'y', ' ', .. var divisibleByAmount]:
@@ -248,17 +238,10 @@ public class Day11 : BaseSolution
             int integerAmount = int.Parse(amount);
             return x => x.Multiply(integerAmount);
         }
-
-        static Predicate<int> CreateModuloTest(ReadOnlySpan<char> amount)
-        {
-            var integerAmount = int.Parse(amount);
-            return x => x % integerAmount == 0;
-        }
     }
 
     private class Monkey
     {
-        public required int Id { get; init; }
         public required List<int> Items { get; init; }
         public required Func<int, int> Operation { get; init; }
         public required Predicate<int> Test { get; init; }
@@ -291,51 +274,51 @@ public class Day11 : BaseSolution
         }
     }
 
-    public class MonkeyItem
+    private class MonkeyItem
     {
-        private readonly int value;
-        private List<int> _divisers = new List<int>();
-        private List<int> _currentRemainders = new List<int>();
-        private List<bool> _results = new List<bool>();
+        private readonly int _value;
+        private readonly List<int> _dividers = new List<int>();
+        private readonly List<int> _currentRemainders = new List<int>();
+        private readonly List<bool> _results = new List<bool>();
 
         public MonkeyItem(int value)
         {
-            this.value = value;
+            this._value = value;
         }
 
-        public void AddDivisableTracker(int amount)
+        public void AddDividableTracker(int amount)
         {
-            _divisers.Add(amount);
-            _results.Add(value % amount == 0);
-            _currentRemainders.Add(value % amount);
+            _dividers.Add(amount);
+            _results.Add(_value % amount == 0);
+            _currentRemainders.Add(_value % amount);
         }
 
         public void Add(int amount)
         {
-            for(var i = 0; i < _divisers.Count; i++)
+            for(var i = 0; i < _dividers.Count; i++)
             {
                 var newRemainder = _currentRemainders[i] + amount;
-                _currentRemainders[i] = newRemainder % _divisers[i];
+                _currentRemainders[i] = newRemainder % _dividers[i];
                 _results[i] = _currentRemainders[i] == 0;
             }
         }
 
         public void Multiply(int amount)
         {
-            for (var i = 0; i < _divisers.Count; i++)
+            for (var i = 0; i < _dividers.Count; i++)
             {
                 var newRemainder = _currentRemainders[i] * amount;
-                _currentRemainders[i] = newRemainder % _divisers[i];
+                _currentRemainders[i] = newRemainder % _dividers[i];
                 _results[i] = _currentRemainders[i] == 0;
             }
         }
 
         public void MultiplySelf()
         {
-            for (var i = 0; i < _divisers.Count; i++)
+            for (var i = 0; i < _dividers.Count; i++)
             {
                 var newRemainder = _currentRemainders[i] * _currentRemainders[i];
-                _currentRemainders[i] = newRemainder % _divisers[i];
+                _currentRemainders[i] = newRemainder % _dividers[i];
                 _results[i] = _currentRemainders[i] == 0;
             }
         }
@@ -350,7 +333,6 @@ public class Day11 : BaseSolution
         public required Action<MonkeyItem> Operation { get; init; }
         public required int TrueMonkey { get; init; }
         public required int FalseMonkey { get; init; }
-        public static bool HasWorryDivision { get; set; } = true;
         public required int Divisor { get; init; }
 
         public int InspectCount { get; private set; }

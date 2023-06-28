@@ -1,8 +1,4 @@
-﻿using System.Buffers;
-using Sandervanteinde.AdventOfCode.Solutions;
-using Sandervanteinde.AdventOfCode.Solutions.Utils;
-
-namespace Sandervanteinde.AdventOfCode.Solutions._2015;
+﻿namespace Sandervanteinde.AdventOfCode.Solutions._2015;
 
 internal partial class Day18 : BaseSolution
 {

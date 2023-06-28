@@ -7,7 +7,7 @@ using static Sandervanteinde.AdventOfCode.Solutions._2022.Day13;
 namespace Sandervanteinde.AdventOfCode.Solutions.Tests._2022;
 public class Day13Tests
 {
-    private Comparer _sut;
+    private readonly Comparer _sut;
 
     public Day13Tests()
     {

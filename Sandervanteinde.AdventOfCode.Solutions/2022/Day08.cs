@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Sandervanteinde.AdventOfCode.Solutions.Extensions;
+﻿using Sandervanteinde.AdventOfCode.Solutions.Extensions;
 
 namespace Sandervanteinde.AdventOfCode.Solutions._2022;
 internal class Day08 : BaseSolution

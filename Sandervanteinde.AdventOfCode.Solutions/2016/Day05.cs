@@ -1,8 +1,6 @@
 ﻿using System.Buffers;
 using System.Security.Cryptography;
 using System.Text;
-using Sandervanteinde.AdventOfCode.Solutions;
-using Sandervanteinde.AdventOfCode.Solutions.Utils;
 
 namespace Sandervanteinde.AdventOfCode.Solutions._2016;
 

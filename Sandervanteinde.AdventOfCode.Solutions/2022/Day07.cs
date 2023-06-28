@@ -1,7 +1,4 @@
-﻿using System.Diagnostics;
-using System.Reflection.Metadata;
-
-namespace Sandervanteinde.AdventOfCode.Solutions._2022;
+﻿namespace Sandervanteinde.AdventOfCode.Solutions._2022;
 
 internal class Day07 : BaseSolution
 {
@@ -76,9 +73,9 @@ internal class Day07 : BaseSolution
     private class Directory
     {
         public Directory? Parent { get; init; }
-        private Dictionary<string, ulong> _files = new();
+        private readonly Dictionary<string, ulong> _files = new();
         public IReadOnlyDictionary<string, ulong> Files => _files;
-        private Dictionary<string, Directory> _directories = new();
+        private readonly Dictionary<string, Directory> _directories = new();
         public IReadOnlyDictionary<string, Directory> Directories => _directories;
 
         public ulong OwnSize { get; private set; }

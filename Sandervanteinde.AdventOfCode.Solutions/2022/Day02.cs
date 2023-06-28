@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Sandervanteinde.AdventOfCode.Solutions._2022;
+﻿namespace Sandervanteinde.AdventOfCode.Solutions._2022;
 
 public class Day02 : BaseSolution
 {
@@ -40,7 +34,8 @@ public class Day02 : BaseSolution
                 "B Z" => SCISSORS + WIN,
                 "C X" => ROCK + WIN,
                 "C Y" => PAPER + LOSS,
-                "C Z" => SCISSORS + DRAW 
+                "C Z" => SCISSORS + DRAW,
+                _ => throw new NotSupportedException()
             };
         }
         return score;
@@ -76,7 +71,8 @@ public class Day02 : BaseSolution
                 "B Z" => WIN + SCISSORS,
                 "C X" => LOSS + PAPER,
                 "C Y" => DRAW + SCISSORS,
-                "C Z" =>  WIN + ROCK
+                "C Z" =>  WIN + ROCK,
+                _ => throw new NotSupportedException()
             };
         }
         return score;
