@@ -1,4 +1,6 @@
-﻿namespace Sandervanteinde.AdventOfCode.Solutions.Extensions;
+﻿using System.Numerics;
+
+namespace Sandervanteinde.AdventOfCode.Solutions.Extensions;
 
 internal static class EnumerableExtensions
 {
@@ -7,9 +9,10 @@ internal static class EnumerableExtensions
         return new(enumerable);
     }
 
-    public static long Product(this IEnumerable<long> values)
+    public static T Product<T>(this IEnumerable<T> values)
+        where T : INumber<T>
     {
-        var i = 1L;
+        var i = T.One;
         checked
         {
             foreach (var value in values)

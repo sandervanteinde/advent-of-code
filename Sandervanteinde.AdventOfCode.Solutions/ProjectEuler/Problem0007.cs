@@ -1,4 +1,6 @@
-﻿namespace Sandervanteinde.AdventOfCode.Solutions.ProjectEuler;
+﻿using System.Text;
+
+namespace Sandervanteinde.AdventOfCode.Solutions.ProjectEuler;
 
 public class Problem0007 : IProjectEulerSolution
 {
