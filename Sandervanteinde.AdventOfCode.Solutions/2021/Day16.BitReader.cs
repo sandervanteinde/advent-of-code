@@ -5,14 +5,14 @@ internal partial class Day16
     public class BitReader
     {
         private readonly bool[] bits;
-        private int index = 0;
-
-        public bool HasMore => index < bits.Length;
+        private int index;
 
         public BitReader(IEnumerable<bool> bits)
         {
             this.bits = bits.ToArray();
         }
+
+        public bool HasMore => index < bits.Length;
 
         public bool ReadNext()
         {
@@ -30,14 +30,17 @@ internal partial class Day16
         {
             var span = Read(amountOfBits);
             var result = 0L;
+
             for (var i = 0; i < amountOfBits; i++)
             {
                 result <<= 1;
+
                 if (span[i])
                 {
                     result |= 1;
                 }
             }
+
             return result;
         }
     }

@@ -16,7 +16,8 @@ public class Day07Tests
         // arrange
         var address = new Ipv7Address(ipv7);
 
-
-        address.SupportsSsl().Should().Be(supportsSsl);
+        address.SupportsSsl()
+            .Should()
+            .Be(supportsSsl);
     }
 }

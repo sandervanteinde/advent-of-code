@@ -12,7 +12,8 @@ internal partial class Day22
             {
                 Console.WriteLine("Applied poison effect");
             }
-            effects = effects.Concat(new Effect[] { new(PoisonEffect, 6) });
+
+            effects = effects.Concat(new Effect[] { new(PoisonEffect, turns: 6) });
             return stats;
         }
 
@@ -25,6 +26,7 @@ internal partial class Day22
                     Console.WriteLine("Poison deals 3 damage");
                 }
             }
+
             return turn switch
             {
                 >= 0 => state with { DragonHealth = state.DragonHealth - 3 },
@@ -41,6 +43,7 @@ internal partial class Day22
                     return false;
                 }
             }
+
             return true;
         }
     }

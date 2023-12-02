@@ -12,10 +12,8 @@ internal partial class Day22
             {
                 Console.WriteLine("Dealing 4 damage with magic missile");
             }
-            return stats with
-            {
-                DragonHealth = stats.DragonHealth - 4
-            };
+
+            return stats with { DragonHealth = stats.DragonHealth - 4 };
         }
     }
 }

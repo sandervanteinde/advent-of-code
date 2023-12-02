@@ -1,14 +1,14 @@
 ﻿using FluentAssertions;
-using Sandervanteinde.AdventOfCode.Solutions.Utils;
 using Sandervanteinde.AdventOfCode.Solutions._2021;
+using Sandervanteinde.AdventOfCode.Solutions.Utils;
 using Xunit;
 
 namespace Sandervanteinde.AdventOfCode.Solutions.Tests._2021;
 
 public class Day17Tests
 {
-    private readonly Day17 _sut;
     private readonly FileReader _reader;
+    private readonly Day17 _sut;
 
     public Day17Tests()
     {
@@ -20,13 +20,15 @@ public class Day17Tests
     public void StepOne_ShouldWorkWithExample()
     {
         _sut.DetermineStepOneResult(_reader)
-            .Should().Be(45);
+            .Should()
+            .Be(expected: 45);
     }
 
     [Fact]
     public void StepTwo_ShouldWorkWithExample()
     {
         _sut.DetermineStepTwoResult(_reader)
-            .Should().Be(112);
+            .Should()
+            .Be(expected: 112);
     }
 }

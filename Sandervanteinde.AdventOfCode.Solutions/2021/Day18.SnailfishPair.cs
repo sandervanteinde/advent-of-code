@@ -16,6 +16,7 @@ internal partial class Day18
                 left.Parent = this;
             }
         }
+
         public SnailfishBase Right
         {
             get => right;
@@ -28,11 +29,7 @@ internal partial class Day18
 
         public override SnailfishBase Clone()
         {
-            return new SnailfishPair
-            {
-                Left = left.Clone(),
-                Right = right.Clone()
-            };
+            return new SnailfishPair { Left = left.Clone(), Right = right.Clone() };
         }
 
         public override bool AttemptExplode(int depth = 1)
@@ -44,30 +41,41 @@ internal partial class Day18
                     throw new InvalidOperationException("Invalid parent");
                 }
 
-                var leftValue = left is Snailfish leftFish ? leftFish.Value : throw new InvalidOperationException("Expected left fish at explode to be a value");
-                var rightValue = right is Snailfish rightFish ? rightFish.Value : throw new InvalidOperationException("Expected left fish at explode to be a value");
+                var leftValue = left is Snailfish leftFish
+                    ? leftFish.Value
+                    : throw new InvalidOperationException("Expected left fish at explode to be a value");
+                var rightValue = right is Snailfish rightFish
+                    ? rightFish.Value
+                    : throw new InvalidOperationException("Expected left fish at explode to be a value");
                 var closestLeft = FindClosestLeft();
+
                 if (closestLeft is not null)
                 {
                     closestLeft.Value += leftValue;
                 }
+
                 var closestRight = FindClosestRight();
+
                 if (closestRight is not null)
                 {
                     closestRight.Value += rightValue;
                 }
+
                 if (Parent.left == this)
                 {
-                    Parent.Left = new Snailfish(0);
+                    Parent.Left = new Snailfish(value: 0);
                     return true;
                 }
+
                 if (Parent.right == this)
                 {
-                    Parent.Right = new Snailfish(0);
+                    Parent.Right = new Snailfish(value: 0);
                     return true;
                 }
+
                 throw new InvalidOperationException("Invalid parent");
             }
+
             return left.AttemptExplode(depth + 1) || right.AttemptExplode(depth + 1);
         }
 
@@ -80,15 +88,18 @@ internal partial class Day18
         {
             var parent = Parent;
             var child = this;
+
             while (parent is not null)
             {
                 if (parent.left != child)
                 {
                     var rootToGoRight = parent.left;
+
                     while (rootToGoRight is not Snailfish)
                     {
                         rootToGoRight = ((SnailfishPair)rootToGoRight).right;
                     }
+
                     return (Snailfish)rootToGoRight;
                 }
 
@@ -111,15 +122,18 @@ internal partial class Day18
         {
             var parent = Parent;
             var child = this;
+
             while (parent is not null)
             {
                 if (parent.right != child)
                 {
                     var rootToGoLeft = parent.right;
+
                     while (rootToGoLeft is not Snailfish)
                     {
                         rootToGoLeft = ((SnailfishPair)rootToGoLeft).left;
                     }
+
                     return (Snailfish)rootToGoLeft;
                 }
 
@@ -132,7 +146,7 @@ internal partial class Day18
 
         public override long Magnitude()
         {
-            return 3 * Left.Magnitude() + 2 * Right.Magnitude();
+            return (3 * Left.Magnitude()) + (2 * Right.Magnitude());
         }
 
         public override string ToString()

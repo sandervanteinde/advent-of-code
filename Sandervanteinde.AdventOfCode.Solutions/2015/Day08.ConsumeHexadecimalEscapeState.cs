@@ -7,13 +7,16 @@ internal partial class Day08
     private class ConsumeHexadecimalEscapeState : IState
     {
         private char? firstDigit;
+
         public void Next(StringParser parser, OpMode mode)
         {
             if (mode is OpMode.Write)
             {
                 throw new InvalidOperationException();
             }
+
             var next = parser.ConsumeNextChar();
+
             if (firstDigit is null)
             {
                 firstDigit = next;

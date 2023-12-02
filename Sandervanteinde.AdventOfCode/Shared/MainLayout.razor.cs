@@ -1,3 +1,1 @@
 ﻿namespace Sandervanteinde.AdventOfCode.Shared;
-
-

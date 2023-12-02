@@ -5,8 +5,9 @@ namespace Sandervanteinde.AdventOfCode.Solutions._2015;
 internal class Day25 : BaseSolution
 {
     public Day25()
-        : base("Let It Snow", 2015, 25)
-    { }
+        : base("Let It Snow", year: 2015, day: 25)
+    {
+    }
 
     public override object DetermineStepOneResult(FileReader reader)
     {
@@ -14,6 +15,7 @@ internal class Day25 : BaseSolution
         var id = DetermineId(row, column);
 
         var initValue = 20151125L;
+
         for (var i = 1; i < id; i++)
         {
             initValue = DetermineNextValue(initValue);
@@ -34,14 +36,17 @@ internal class Day25 : BaseSolution
     public static long DetermineId(long row, long column)
     {
         var id = 1L;
+
         for (var i = 0; i < row; i++)
         {
             id += i;
         }
+
         for (var i = 1; i < column; i++)
         {
-            id += (row + i);
+            id += row + i;
         }
+
         return id;
     }
 
@@ -54,11 +59,12 @@ internal class Day25 : BaseSolution
     {
         var regex = new Regex(@"row (\d+), column (\d+)");
         var match = regex.Match(reader.Input);
+
         if (!match.Success)
         {
             throw new InvalidOperationException("Invalid input");
         }
 
-        return (long.Parse(match.Groups[1].Value), long.Parse(match.Groups[2].Value));
+        return (long.Parse(match.Groups[groupnum: 1].Value), long.Parse(match.Groups[groupnum: 2].Value));
     }
 }

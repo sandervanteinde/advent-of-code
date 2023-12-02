@@ -1,12 +1,12 @@
 ﻿@inherits LayoutComponentBase
 <Layout Style="min-height: 100vh; ">
     <Sider Collapsible="true" Breakpoint="BreakpointType.Md" CollapsedWidth="0">
-        <div class="logo" />
+        <div class="logo"/>
         <Menu Accordion Theme="MenuTheme.Dark" DefaultOpenKeys="InitialMenuOpen" Mode="MenuMode.Inline">
-            @foreach(var year in Registry.AvailableYears)
+            @foreach (var year in Registry.AvailableYears)
             {
                 <SubMenu Title="@(year.ToString())" Key="@(year.ToString())">
-                    @foreach(var day in Registry.DaysForYear(year))
+                    @foreach (var day in Registry.DaysForYear(year))
                     {
                         var solution = Registry.GetSolution(year, day);
                         <MenuItem Key="@($"{year} {day}")" RouterLink="@($"solution/{solution.Year}/{solution.Day}")" RouterMatch="NavLinkMatch.All">
@@ -17,9 +17,9 @@
             }
         </Menu>
     </Sider>
-    <Layout Class="site-layout" >
-        <Header Class="site-layout-background" Style=" padding: 0 ;" ></Header>
-        <Content Style="margin:0 16px;" >
+    <Layout Class="site-layout">
+        <Header Class="site-layout-background" Style=" padding: 0 ;"></Header>
+        <Content Style="margin:0 16px;">
             <main>
                 @Body
             </main>
@@ -28,13 +28,17 @@
     </Layout>
 </Layout>
 
-                         @code {
-        [Inject]
-        public SolutionRegistry Registry { get; set; } = null!;
-        public string[] InitialMenuOpen { get; private set; }
+@code {
+    [Inject] public SolutionRegistry Registry { get; set; } = null!;
+    public string[] InitialMenuOpen { get; private set; }
 
-        protected override void OnInitialized()
+    protected override void OnInitialized()
+    {
+        InitialMenuOpen = new[]
         {
-            InitialMenuOpen = new[] { Registry.AvailableYears.Max().ToString() };
-        }
-                            }
+            Registry.AvailableYears.Max()
+                .ToString()
+        };
+    }
+
+}

@@ -1,10 +1,10 @@
 ﻿namespace Sandervanteinde.AdventOfCode.Solutions._2021;
-internal partial class Day07 : BaseSolution
+
+internal class Day07 : BaseSolution
 {
     public Day07()
-        : base("The Treachery of Whales", 2021, 7)
+        : base("The Treachery of Whales", year: 2021, day: 7)
     {
-
     }
 
     public override object DetermineStepOneResult(FileReader reader)
@@ -23,11 +23,13 @@ internal partial class Day07 : BaseSolution
         var maxDiff = highestNum - lowestNum;
         var distance = 0;
         var distancePerDiff = new Dictionary<int, int>(maxDiff + 1);
+
         for (var i = 0; i <= maxDiff; i++)
         {
             distance += i;
             distancePerDiff[i] = distance;
         }
+
         return DetermineResult(horizontalPositions, diff => distancePerDiff[diff]);
     }
 
@@ -36,8 +38,8 @@ internal partial class Day07 : BaseSolution
         var lowestNum = crabs.Min();
         var highestNum = crabs.Max();
         var maxDiff = highestNum - lowestNum;
-        return Enumerable.Range(0, maxDiff)
-             .Select(horizontalPosition => crabs.Sum(target => distanceCalculator(Math.Abs(horizontalPosition - target))))
-             .Min(x => x);
+        return Enumerable.Range(start: 0, maxDiff)
+            .Select(horizontalPosition => crabs.Sum(target => distanceCalculator(Math.Abs(horizontalPosition - target))))
+            .Min(x => x);
     }
 }

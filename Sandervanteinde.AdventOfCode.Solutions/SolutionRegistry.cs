@@ -4,8 +4,9 @@ namespace Sandervanteinde.AdventOfCode.Solutions;
 
 public class SolutionRegistry
 {
-    private readonly List<IAdventOfCodeSolution> _solutions = new();
     private readonly List<IProjectEulerSolution> _projectEuler = new();
+    private readonly List<IAdventOfCodeSolution> _solutions = new();
+
     public IEnumerable<int> AvailableYears => _solutions
         .Select(sln => sln.Year)
         .Distinct()

@@ -14,9 +14,9 @@ public readonly record struct Point3D(int X, int Y, int Z)
     public static Point3D operator +(Point3D left, Point3D right)
     {
         return new Point3D(
-         left.X + right.X,
-         left.Y + right.Y,
-         left.Z + right.Z
+            left.X + right.X,
+            left.Y + right.Y,
+            left.Z + right.Z
         );
     }
 

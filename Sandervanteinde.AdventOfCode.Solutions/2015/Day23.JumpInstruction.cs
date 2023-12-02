@@ -16,13 +16,14 @@ internal partial class Day23
         public void PerformInstruction(Computer computer)
         {
             var indexOfCurrent = computer.Instructions.IndexOf(this);
+
             if (shouldJump(computer))
             {
                 computer.ApplyIndexOffset(offset);
             }
             else
             {
-                computer.ApplyIndexOffset(1);
+                computer.ApplyIndexOffset(offset: 1);
             }
         }
 

@@ -8,7 +8,7 @@ internal partial class Day22
 
         protected override GameStats OnCast(GameStats stats, ref IEnumerable<Effect> effects)
         {
-            effects = effects.Concat(new Effect[] { new(RechargeEffect, 5) });
+            effects = effects.Concat(new Effect[] { new(RechargeEffect, turns: 5) });
             return stats;
         }
 
@@ -30,6 +30,7 @@ internal partial class Day22
                     return false;
                 }
             }
+
             return true;
         }
     }

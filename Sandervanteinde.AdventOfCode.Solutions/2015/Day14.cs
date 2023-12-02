@@ -5,10 +5,10 @@ namespace Sandervanteinde.AdventOfCode.Solutions._2015;
 internal partial class Day14 : BaseSolution
 {
     private const int EVALUATION_TIME = 2503;
-    public Day14()
-        : base("Reindeer Olympics", 2015, 14)
-    {
 
+    public Day14()
+        : base("Reindeer Olympics", year: 2015, day: 14)
+    {
     }
 
     public override object DetermineStepOneResult(FileReader reader)
@@ -19,7 +19,8 @@ internal partial class Day14 : BaseSolution
 
     public override object DetermineStepTwoResult(FileReader reader)
     {
-        var reindeers = ParseReindeerStats(reader).ToArray();
+        var reindeers = ParseReindeerStats(reader)
+            .ToArray();
         var points = reindeers.ToDictionary(
             reindeer => reindeer,
             _ => 0 // points
@@ -33,6 +34,7 @@ internal partial class Day14 : BaseSolution
             );
 
             int? firstDistance = null;
+
             foreach (var kvp in distanceFlown.OrderByDescending(kvp => kvp.Value))
             {
                 if (firstDistance is null || kvp.Value == firstDistance)
@@ -53,12 +55,13 @@ internal partial class Day14 : BaseSolution
     private static IEnumerable<ReindeerStats> ParseReindeerStats(FileReader reader)
     {
         var regex = new Regex(@"([A-Za-z]+) can fly (\d+) km/s for (\d+) seconds, but then must rest for (\d+) seconds.");
+
         foreach (var match in reader.MatchLineByLine(regex))
         {
-            var reindeerName = match.Groups[1].Value;
-            var speedInKms = int.Parse(match.Groups[2].Value);
-            var flyDuration = int.Parse(match.Groups[3].Value);
-            var restTimeInSeconds = int.Parse(match.Groups[4].Value);
+            var reindeerName = match.Groups[groupnum: 1].Value;
+            var speedInKms = int.Parse(match.Groups[groupnum: 2].Value);
+            var flyDuration = int.Parse(match.Groups[groupnum: 3].Value);
+            var restTimeInSeconds = int.Parse(match.Groups[groupnum: 4].Value);
             yield return new ReindeerStats
             {
                 ReindeerName = reindeerName,

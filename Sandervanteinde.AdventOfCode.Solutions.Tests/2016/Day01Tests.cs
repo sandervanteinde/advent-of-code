@@ -15,6 +15,7 @@ public class Day01Tests
 
         var result = sut.DetermineStepTwoResult(reader);
 
-        result.Should().Be(4);
+        result.Should()
+            .Be(expected: 4);
     }
 }

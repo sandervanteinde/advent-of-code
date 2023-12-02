@@ -1,10 +1,11 @@
 ﻿using System.Text.RegularExpressions;
 
 namespace Sandervanteinde.AdventOfCode.Solutions._2015;
+
 internal partial class Day19 : BaseSolution
 {
     public Day19()
-        : base("Medicine for Rudolph", 2015, 19)
+        : base("Medicine for Rudolph", year: 2015, day: 19)
     {
     }
 
@@ -12,18 +13,20 @@ internal partial class Day19 : BaseSolution
     {
         var input = ParsePuzzleInput(reader);
         var uniqueMolecules = new HashSet<string>();
+
         foreach (var replacement in input.Conversions)
         {
             var regex = new Regex(replacement.From);
-            var matchIndex = input.Text.IndexOf(replacement.From, 0);
+            var matchIndex = input.Text.IndexOf(replacement.From, startIndex: 0);
+
             while (matchIndex >= 0)
             {
-                var newMolecule = regex.Replace(input.Text, replacement.To, 1, matchIndex);
+                var newMolecule = regex.Replace(input.Text, replacement.To, count: 1, matchIndex);
                 uniqueMolecules.Add(newMolecule);
                 matchIndex = input.Text.IndexOf(replacement.From, matchIndex + 1);
             }
-            input.Text.IndexOf(replacement.From);
 
+            input.Text.IndexOf(replacement.From);
         }
 
         return uniqueMolecules.Count;
@@ -40,9 +43,11 @@ internal partial class Day19 : BaseSolution
         while (target != "e")
         {
             var tmp = target;
+
             foreach (var conversion in conversions)
             {
                 var index = target.IndexOf(conversion.To);
+
                 if (index >= 0)
                 {
                     target = $"{target[..index]}{conversion.From}{target[(conversion.To.Length + index)..]}";
@@ -57,6 +62,7 @@ internal partial class Day19 : BaseSolution
                 Shuffle();
             }
         }
+
         return mutations;
 
         void Shuffle()
@@ -65,6 +71,7 @@ internal partial class Day19 : BaseSolution
             {
                 var i1 = rand.Next(conversions.Count);
                 var i2 = rand.Next(conversions.Count);
+
                 if (i1 == i2)
                 {
                     continue;
@@ -82,16 +89,19 @@ internal partial class Day19 : BaseSolution
         string? puzzleInput = null;
         var conversions = new LinkedList<Conversion>();
         var regex = new Regex(@"([a-zA-Z]+) => ([A-Za-z]+)");
+
         foreach (var line in reader.ReadLineByLine())
         {
             if (string.IsNullOrEmpty(line))
             {
                 continue;
             }
+
             var match = regex.Match(line);
+
             if (match.Success)
             {
-                conversions.AddLast(new Conversion { From = match.Groups[1].Value, To = match.Groups[2].Value });
+                conversions.AddLast(new Conversion { From = match.Groups[groupnum: 1].Value, To = match.Groups[groupnum: 2].Value });
             }
             else if (puzzleInput is null)
             {
@@ -103,10 +113,6 @@ internal partial class Day19 : BaseSolution
             }
         }
 
-        return new PuzzleInput
-        {
-            Conversions = conversions,
-            Text = puzzleInput ?? throw new InvalidOperationException("Expected line to be set")
-        };
+        return new PuzzleInput { Conversions = conversions, Text = puzzleInput ?? throw new InvalidOperationException("Expected line to be set") };
     }
 }

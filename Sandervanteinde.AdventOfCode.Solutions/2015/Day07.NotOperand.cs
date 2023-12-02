@@ -18,7 +18,7 @@ internal partial class Day07
 
         public int GetResult(IReadOnlyDictionary<string, int> values)
         {
-            return ~(left.GetValue(values));
+            return ~left.GetValue(values);
         }
     }
 }

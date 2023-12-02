@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
-using Sandervanteinde.AdventOfCode.Solutions.Utils;
 using Sandervanteinde.AdventOfCode.Solutions._2021;
+using Sandervanteinde.AdventOfCode.Solutions.Utils;
 using Xunit;
 
 namespace Sandervanteinde.AdventOfCode.Solutions.Tests._2021;
@@ -12,7 +12,8 @@ public class Day19Tests
 
     public Day19Tests()
     {
-        _reader = new FileReader(@"--- scanner 0 ---
+        _reader = new FileReader(
+            @"--- scanner 0 ---
 404,-588,-901
 528,-643,409
 -838,591,734
@@ -147,7 +148,8 @@ public class Day19Tests
 839,-516,451
 891,-625,532
 -652,-548,-490
-30,-46,-14");
+30,-46,-14"
+        );
         _sut = new Day19();
     }
 
@@ -155,13 +157,15 @@ public class Day19Tests
     public void StepOne_SHouldWorkWithexample()
     {
         _sut.DetermineStepOneResult(_reader)
-            .Should().Be(79);
+            .Should()
+            .Be(expected: 79);
     }
 
     [Fact]
     public void StepTwo_SHouldWorkWithexample()
     {
         _sut.DetermineStepTwoResult(_reader)
-            .Should().Be(3621);
+            .Should()
+            .Be(expected: 3621);
     }
 }

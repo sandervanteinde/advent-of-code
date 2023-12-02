@@ -5,10 +5,10 @@ namespace Sandervanteinde.AdventOfCode.Solutions._2016;
 internal class Day06 : BaseSolution
 {
     public Day06()
-        : base(@"Signals and Noise", 2016, 6)
+        : base(@"Signals and Noise", year: 2016, day: 6)
     {
-
     }
+
     public override object DetermineStepOneResult(FileReader reader)
     {
         var inputByStringIndex = reader.ReadLineByLine()
@@ -17,6 +17,7 @@ internal class Day06 : BaseSolution
             .OrderBy(x => x.Key);
 
         var sb = new StringBuilder();
+
         foreach (var input in inputByStringIndex)
         {
             var grouped = input.GroupBy(x => x.Char)
@@ -37,6 +38,7 @@ internal class Day06 : BaseSolution
             .OrderBy(x => x.Key);
 
         var sb = new StringBuilder();
+
         foreach (var input in inputByStringIndex)
         {
             var grouped = input.GroupBy(x => x.Char)

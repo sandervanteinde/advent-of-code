@@ -8,11 +8,8 @@ internal partial class Day22
 
         protected override GameStats OnCast(GameStats stats, ref IEnumerable<Effect> effects)
         {
-            effects = effects.Concat(new Effect[] { new(ShieldEffect, 6) });
-            return stats with
-            {
-                PlayerArmor = stats.PlayerArmor + 7
-            };
+            effects = effects.Concat(new Effect[] { new(ShieldEffect, turns: 6) });
+            return stats with { PlayerArmor = stats.PlayerArmor + 7 };
         }
 
         private static GameStats ShieldEffect(GameStats state, int turn)
@@ -33,6 +30,7 @@ internal partial class Day22
                     return false;
                 }
             }
+
             return true;
         }
     }

@@ -1,4 +1,5 @@
 ﻿namespace Sandervanteinde.AdventOfCode.Solutions.Utils;
+
 public static class CharReadOnlySpanExtensions
 {
     public static SplitResult SplitAtFirstOccurenceOf(this ReadOnlySpan<char> input, char c)

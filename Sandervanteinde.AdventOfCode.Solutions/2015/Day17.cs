@@ -3,18 +3,18 @@
 internal class Day17 : BaseSolution
 {
     public Day17()
-        : base("No Such Thing as Too Much", 2015, 17)
+        : base("No Such Thing as Too Much", year: 2015, day: 17)
     {
-
     }
 
     public override object DetermineStepOneResult(FileReader reader)
     {
-        var buckets = ParseBuckets(reader).ToList();
+        var buckets = ParseBuckets(reader)
+            .ToList();
         var filled = 0;
         var countThatMatch = 0;
 
-        IterateRecursively(0);
+        IterateRecursively(startAt: 0);
 
         return countThatMatch;
 
@@ -24,6 +24,7 @@ internal class Day17 : BaseSolution
             {
                 return;
             }
+
             if (filled == 150)
             {
                 countThatMatch++;
@@ -42,14 +43,16 @@ internal class Day17 : BaseSolution
 
     public override object DetermineStepTwoResult(FileReader reader)
     {
-        var buckets = ParseBuckets(reader).ToList();
+        var buckets = ParseBuckets(reader)
+            .ToList();
         var filled = 0;
         var countThatMatchByBuckets = new Dictionary<int, int>();
         var bucketSize = 0;
 
-        IterateRecursively(0);
+        IterateRecursively(startAt: 0);
 
-        return countThatMatchByBuckets.MinBy(kvp => kvp.Key).Value;
+        return countThatMatchByBuckets.MinBy(kvp => kvp.Key)
+            .Value;
 
         void IterateRecursively(int startAt)
         {
@@ -57,6 +60,7 @@ internal class Day17 : BaseSolution
             {
                 return;
             }
+
             if (filled == 150)
             {
                 countThatMatchByBuckets[bucketSize] = countThatMatchByBuckets.TryGetValue(bucketSize, out var existingAmount)
@@ -79,6 +83,7 @@ internal class Day17 : BaseSolution
 
     private static IEnumerable<int> ParseBuckets(FileReader reader)
     {
-        return reader.ReadLineByLine().Select(int.Parse);
+        return reader.ReadLineByLine()
+            .Select(int.Parse);
     }
 }

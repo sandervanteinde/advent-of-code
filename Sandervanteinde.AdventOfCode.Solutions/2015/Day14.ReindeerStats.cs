@@ -17,17 +17,16 @@ internal partial class Day14
 
         public int DistanceTravelledAfter(int seconds)
         {
-
             var positionInLastCycle = seconds % CycleTime;
             var cyclesFlown = seconds / CycleTime;
             var kmsFlownInCycles = cyclesFlown * FlyDurationInSeconds * SpeedInKms;
 
             var secondsFlownInLastCycle =
                 positionInLastCycle > FlyDurationInSeconds
-                ? FlyDurationInSeconds
-                : positionInLastCycle;
+                    ? FlyDurationInSeconds
+                    : positionInLastCycle;
 
-            return kmsFlownInCycles + secondsFlownInLastCycle * SpeedInKms;
+            return kmsFlownInCycles + (secondsFlownInLastCycle * SpeedInKms);
         }
     }
 }

@@ -5,14 +5,13 @@ namespace Sandervanteinde.AdventOfCode.Solutions._2022;
 
 internal partial class Day16 : BaseSolution
 {
+    public Day16()
+        : base("", year: 2022, day: 16)
+    {
+    }
+
     [GeneratedRegex(@"Valve ([A-Z]{2}) has flow rate=(\d+); tunnels? leads? to valves? ([A-Z, ]+)")]
     public static partial Regex ValveRegex();
-
-    public Day16()
-        : base("", 2022, 16)
-    {
-
-    }
 
     public override object DetermineStepOneResult(FileReader reader)
     {
@@ -32,7 +31,8 @@ internal partial class Day16 : BaseSolution
             state.TargetValve = valve;
             state.CurrentFlowRate = currentFlowRate;
             state.TotalFlow = totalFlow;
-            if(minute > 30)
+
+            if (minute > 30)
             {
                 maxFlowRate = Math.Max(totalFlow, maxFlowRate);
                 return;
@@ -54,8 +54,6 @@ internal partial class Day16 : BaseSolution
             {
                 AddNextOptions(leadsTo, minute + 1, currentFlowRate, totalFlow + currentFlowRate);
             }
-
-
         }
     }
 
@@ -68,61 +66,66 @@ internal partial class Day16 : BaseSolution
     {
         var regex = ValveRegex();
         var result = new Dictionary<string, Valve>();
+
         foreach (var line in reader.ReadLineByLine())
         {
             var match = regex.Match(line);
+
             if (match is not { Success: true, Groups: [_, { Value: string sourceValve }, { Value: string flowRateAsString }, _] })
             {
                 throw new NotSupportedException($"The line {line} was not correctly formatted.");
             }
 
-            var valve = new Valve
-            {
-                FlowRate = int.Parse(flowRateAsString),
-                Identifier = sourceValve
-            };
+            var valve = new Valve { FlowRate = int.Parse(flowRateAsString), Identifier = sourceValve };
             result.Add(valve.Identifier, valve);
         }
+
         foreach (var line in reader.ReadLineByLine())
         {
             var match = regex.Match(line);
+
             if (match is not { Success: true, Groups: [_, { Value: string sourceValveIdentifier }, _, { Value: string leadsToAsfullString }] })
             {
                 throw new NotSupportedException($"The line {line} was not correctly formatted.");
             }
 
             var sourceValve = result[sourceValveIdentifier];
-            foreach(var targetValve in leadsToAsfullString.Split(", "))
+
+            foreach (var targetValve in leadsToAsfullString.Split(", "))
             {
                 sourceValve.AddLeadsTo(result[targetValve]);
             }
         }
 
-        return result.Values.ToList().AsReadOnly();
+        return result.Values.ToList()
+            .AsReadOnly();
     }
 
     private class State
     {
         private readonly HashSet<int> _visited = new();
-        public IReadOnlyList<Valve> Valves { get; }
-        public int Minute { get; internal set; }
-        public int CurrentFlowRate { get; set; }
-        public int TotalFlow { get; set; }
-        public Valve TargetValve { get; internal set; }
 
         public State(IReadOnlyList<Valve> valves)
         {
             Valves = valves;
         }
 
+        public IReadOnlyList<Valve> Valves { get; }
+        public int Minute { get; internal set; }
+        public int CurrentFlowRate { get; set; }
+        public int TotalFlow { get; set; }
+        public Valve TargetValve { get; internal set; }
+
         [DebuggerStepThrough]
         public override int GetHashCode()
         {
             var hash = new HashCode();
-            for(var i = 0; i < Valves.Count; i++)
+
+            for (var i = 0; i < Valves.Count; i++)
             {
                 hash.Add(Valves[i].IsOpen);
             }
+
             hash.Add(Minute);
             hash.Add(TargetValve.Identifier);
             hash.Add(CurrentFlowRate);
@@ -140,17 +143,18 @@ internal partial class Day16 : BaseSolution
     private class Valve
     {
         private readonly List<Valve> _leadsToValves = new();
+
+        public Valve()
+        {
+            LeadsToValves = _leadsToValves.AsReadOnly();
+        }
+
         public required string Identifier { get; init; }
         public required int FlowRate { get; init; }
 
         public bool IsOpen { get; set; }
 
         public IReadOnlyList<Valve> LeadsToValves { get; }
-
-        public Valve()
-        {
-            LeadsToValves = _leadsToValves.AsReadOnly();
-        }
 
         public void AddLeadsTo(Valve valve)
         {

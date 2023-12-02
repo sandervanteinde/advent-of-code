@@ -1,7 +1,7 @@
-﻿using FluentAssertions;
-using Sandervanteinde.AdventOfCode.Solutions.Utils;
+﻿using System.Collections.Generic;
+using FluentAssertions;
 using Sandervanteinde.AdventOfCode.Solutions._2021;
-using System.Collections.Generic;
+using Sandervanteinde.AdventOfCode.Solutions.Utils;
 using Xunit;
 
 namespace Sandervanteinde.AdventOfCode.Solutions.Tests._2021;
@@ -13,7 +13,8 @@ public class Day14Tests
 
     public Day14Tests()
     {
-        _reader = new FileReader(@"NNCB
+        _reader = new FileReader(
+            @"NNCB
 
 CH -> B
 HH -> N
@@ -30,7 +31,8 @@ BN -> B
 BB -> N
 BC -> B
 CC -> N
-CN -> C");
+CN -> C"
+        );
 
         _sut = new Day14();
     }
@@ -39,14 +41,16 @@ CN -> C");
     public void StepOne_ShouldWorkWithExample()
     {
         _sut.DetermineStepOneResult(_reader)
-            .Should().Be(1588);
+            .Should()
+            .Be(expected: 1588);
     }
 
     [Fact]
     public void StepTwo_ShouldWorkWithExample()
     {
         _sut.DetermineStepTwoResult(_reader)
-            .Should().Be(2_188_189_693_529);
+            .Should()
+            .Be(expected: 2_188_189_693_529);
     }
 
     [Fact]
@@ -64,16 +68,9 @@ CN -> C");
             { "CB", 'C' },
             { "CC", 'A' }
         };
-        var key = new Day14.LookupKey
-        {
-            Key = "AB",
-            Index = 1
-        };
-        var result = _sut.AddCountsToDictionary(rule, new(), in key, 3);
-        result.Should().BeEquivalentTo(new Dictionary<char, ulong>
-        {
-            ['A'] = 4,
-            ['C'] = 3
-        });
+        var key = new Day14.LookupKey { Key = "AB", Index = 1 };
+        var result = _sut.AddCountsToDictionary(rule, new Dictionary<Day14.LookupKey, Dictionary<char, ulong>>(), in key, maxIndex: 3);
+        result.Should()
+            .BeEquivalentTo(new Dictionary<char, ulong> { [key: 'A'] = 4, [key: 'C'] = 3 });
     }
 }

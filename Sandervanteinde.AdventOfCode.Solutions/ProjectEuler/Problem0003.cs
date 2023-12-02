@@ -8,7 +8,7 @@ internal class Problem0003 : IProjectEulerSolution
 
     public object GetSolution()
     {
-        return Primes.FactorsOf(600851475143)
+        return Primes.FactorsOf(value: 600851475143)
             .Max();
     }
 }

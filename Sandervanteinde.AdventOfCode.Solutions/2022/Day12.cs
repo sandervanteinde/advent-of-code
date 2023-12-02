@@ -5,15 +5,16 @@ namespace Sandervanteinde.AdventOfCode.Solutions._2022;
 internal class Day12 : BaseSolution
 {
     public Day12()
-        : base("Hill Climbing Algorithm", 2022, 12)
+        : base("Hill Climbing Algorithm", year: 2022, day: 12)
     {
-
     }
+
     public override object DetermineStepOneResult(FileReader reader)
     {
         var grid = reader.ReadAsGrid(c => c);
 
-        var startWindow = grid.EnumerateEntries().First(c => c.Value == 'S');
+        var startWindow = grid.EnumerateEntries()
+            .First(c => c.Value == 'S');
         startWindow.Tag = 0;
 
         var queue = new LinkedList<GridWindow<char>>();
@@ -32,13 +33,16 @@ internal class Day12 : BaseSolution
             var window = queue.First.Value;
             queue.RemoveFirst();
             var currentValue = (int)window.Tag!;
+
             foreach (var adjacent in window.AdjacentWindows())
             {
-                if (adjacent.Tag is not null && (int)adjacent.Tag <= (currentValue + 1))
+                if (adjacent.Tag is not null && (int)adjacent.Tag <= currentValue + 1)
                 {
                     continue;
                 }
+
                 var diff = adjacent.Value - window.Value;
+
                 if ((adjacent.Value == 'E' && window.Value == 'z') || (adjacent.Value != 'E' && diff is <= 1))
                 {
                     adjacent.Tag = currentValue + 1;
@@ -46,7 +50,6 @@ internal class Day12 : BaseSolution
                 }
             }
         }
-
 
         return grid.EnumerateEntries()
             .First(c => c.Value == 'E')
@@ -59,17 +62,21 @@ internal class Day12 : BaseSolution
                 queue.AddLast(window);
                 return;
             }
+
             var node = queue.Last;
+
             while ((int)node.Value.Tag > (int)window.Tag)
             {
                 var prev = node;
                 node = node.Previous;
+
                 if (node is null)
                 {
                     node = prev;
                     break;
                 }
             }
+
             queue.AddAfter(node, window);
         }
     }
@@ -78,12 +85,14 @@ internal class Day12 : BaseSolution
     {
         var grid = reader.ReadAsGrid(c => c);
 
-        var startWindow = grid.EnumerateEntries().First(c => c.Value == 'S');
+        var startWindow = grid.EnumerateEntries()
+            .First(c => c.Value == 'S');
         startWindow.Tag = 0;
 
         var queue = new LinkedList<GridWindow<char>>();
 
-        foreach (var window in grid.EnumerateEntries().Where(c => c.Value == 'a'))
+        foreach (var window in grid.EnumerateEntries()
+                     .Where(c => c.Value == 'a'))
         {
             window.Tag = 0;
             queue.AddLast(window);
@@ -94,13 +103,16 @@ internal class Day12 : BaseSolution
             var window = queue.First.Value;
             queue.RemoveFirst();
             var currentValue = (int)window.Tag!;
+
             foreach (var adjacent in window.AdjacentWindows())
             {
-                if (adjacent.Tag is not null && (int)adjacent.Tag <= (currentValue + 1))
+                if (adjacent.Tag is not null && (int)adjacent.Tag <= currentValue + 1)
                 {
                     continue;
                 }
+
                 var diff = adjacent.Value - window.Value;
+
                 if ((adjacent.Value == 'E' && window.Value == 'z') || (adjacent.Value != 'E' && diff is <= 1))
                 {
                     adjacent.Tag = currentValue + 1;
@@ -108,7 +120,6 @@ internal class Day12 : BaseSolution
                 }
             }
         }
-
 
         return grid.EnumerateEntries()
             .First(c => c.Value == 'E')
@@ -121,17 +132,21 @@ internal class Day12 : BaseSolution
                 queue.AddLast(window);
                 return;
             }
+
             var node = queue.Last;
+
             while ((int)node.Value.Tag > (int)window.Tag)
             {
                 var prev = node;
                 node = node.Previous;
+
                 if (node is null)
                 {
                     node = prev;
                     break;
                 }
             }
+
             queue.AddAfter(node, window);
         }
     }

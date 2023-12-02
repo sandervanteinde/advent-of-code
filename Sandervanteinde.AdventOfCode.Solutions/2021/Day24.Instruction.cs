@@ -4,21 +4,13 @@ internal partial class Day24
 {
     public class Instruction
     {
-        public IOperation Operation { get; }
-        public string RawInstruction { get; }
-
         private readonly Func<ComputerValues, long> left;
         private readonly Func<ComputerValues, long>? right;
         private readonly Action<ComputerValues, long> setter;
 
-        public long Right()
-        {
-            return right!(new());
-        }
-
         public Instruction(string instruction)
         {
-            var parsed = instruction.Split(' ');
+            var parsed = instruction.Split(separator: ' ');
             Operation = parsed[0] switch
             {
                 "inp" => new InputOperation(),
@@ -30,9 +22,19 @@ internal partial class Day24
                 _ => throw new InvalidOperationException("Invalid input")
             };
             left = ParseInstruction(parsed[1]);
-            right = parsed.Length == 2 ? null : ParseInstruction(parsed[2]);
+            right = parsed.Length == 2
+                ? null
+                : ParseInstruction(parsed[2]);
             setter = ParseSetter(parsed[1]);
             RawInstruction = instruction;
+        }
+
+        public IOperation Operation { get; }
+        public string RawInstruction { get; }
+
+        public long Right()
+        {
+            return right!(new ComputerValues());
         }
 
         public void PerformInstruction(ComputerValues values, int[] serialNumber, ref int counter)

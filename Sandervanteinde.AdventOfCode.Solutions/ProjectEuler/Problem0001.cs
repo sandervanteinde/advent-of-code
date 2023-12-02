@@ -9,6 +9,7 @@ internal class Problem0001 : IProjectEulerSolution
     public object GetSolution()
     {
         var sum = 0;
+
         for (var i = 0; i < 1000; i++)
         {
             if (i % 3 == 0 || i % 5 == 0)
@@ -16,6 +17,7 @@ internal class Problem0001 : IProjectEulerSolution
                 sum += i;
             }
         }
+
         return sum;
     }
 }

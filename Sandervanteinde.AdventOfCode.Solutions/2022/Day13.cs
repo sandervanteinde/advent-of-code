@@ -2,36 +2,41 @@
 using System.Text.Json.Nodes;
 
 namespace Sandervanteinde.AdventOfCode.Solutions._2022;
+
 internal class Day13 : BaseSolution
 {
     public Day13()
-        : base("Distress Signal", 2022, 13)
+        : base("Distress Signal", year: 2022, day: 13)
     {
-
     }
+
     public override object DetermineStepOneResult(FileReader reader)
     {
         var input = ParseInput(reader);
         var sum = 0;
+
         for (var i = 0; i < input.Length; i++)
         {
             var pairIndex = i + 1;
             var (left, right) = input[i];
+
             if (IsLeftSmallerThanRight(left, right) == Result.Left)
             {
                 sum += pairIndex;
             }
         }
+
         return sum;
     }
 
     public override object DetermineStepTwoResult(FileReader reader)
     {
-        var inputAsEnumerable = ParseInput(reader).SelectMany(item => new JsonArray[] { item.left, item.right });
+        var inputAsEnumerable = ParseInput(reader)
+            .SelectMany(item => new[] { item.left, item.right });
         var list = inputAsEnumerable.ToList();
 
-        var dividerPacketOne = new JsonArray { new JsonArray { JsonValue.Create(2) } };
-        var dividerpacketTwo = new JsonArray { new JsonArray { JsonValue.Create(6) } };
+        var dividerPacketOne = new JsonArray { new JsonArray { JsonValue.Create(value: 2) } };
+        var dividerpacketTwo = new JsonArray { new JsonArray { JsonValue.Create(value: 6) } };
         list.Add(dividerPacketOne);
         list.Add(dividerpacketTwo);
 
@@ -41,9 +46,8 @@ internal class Day13 : BaseSolution
         var packetTwoIndex = list.IndexOf(dividerpacketTwo) + 1;
 
         return packetTwoIndex * packteOneIndex;
-
     }
-    private enum Result { Left = -1, Equal = 0, Right = 1 }
+
     private Result IsLeftSmallerThanRight(JsonArray left, JsonArray right)
     {
         for (var i = 0; i < left.Count; i++)
@@ -52,25 +56,30 @@ internal class Day13 : BaseSolution
             {
                 return Result.Right;
             }
+
             JsonNode? leftItem = left[i], rightItem = right[i];
 
-            var result = ((leftItem, rightItem) switch
+            var result = (leftItem, rightItem) switch
             {
                 (JsonValue leftValue, JsonValue rightValue) => CompareJsonValues(leftValue, rightValue),
                 (JsonArray innerleft, JsonArray innerRight) => IsLeftSmallerThanRight(innerleft, innerRight),
                 (JsonArray innerLeft, JsonValue rightValue) => IsLeftSmallerThanRight(innerLeft, AsArray(rightValue)),
                 (JsonValue leftValue, JsonArray innerRight) => IsLeftSmallerThanRight(AsArray(leftValue), innerRight),
                 _ => throw new NotSupportedException("unknown item pair found.")
-            });
+            };
 
             if (result != Result.Equal)
             {
                 return result;
             }
         }
+
         return Result.Left;
 
-        static JsonArray AsArray(JsonValue value) => new JsonArray { JsonValue.Create(value.GetValue<int>()) };
+        static JsonArray AsArray(JsonValue value)
+        {
+            return new JsonArray() { JsonValue.Create(value.GetValue<int>()) };
+        }
 
         static Result CompareJsonValues(JsonValue left, JsonValue right)
         {
@@ -88,6 +97,7 @@ internal class Day13 : BaseSolution
     {
         var result = new List<(JsonArray, JsonArray)>();
         var enumerator = reader.ReadAsSpanLineByLine();
+
         while (enumerator.MoveNext())
         {
             var line1 = ParseNode(enumerator.Current);
@@ -96,6 +106,7 @@ internal class Day13 : BaseSolution
             enumerator.MoveNext();
             result.Add((line1, line2));
         }
+
         return result.ToArray();
 
         static JsonArray ParseNode(ReadOnlySpan<char> line)
@@ -105,6 +116,8 @@ internal class Day13 : BaseSolution
         }
     }
 
+    private enum Result { Left = -1, Equal = 0, Right = 1 }
+
     internal class Comparer : IComparer<JsonArray>
     {
         public int Compare(JsonArray? x, JsonArray? y)
@@ -113,6 +126,7 @@ internal class Day13 : BaseSolution
             {
                 throw new InvalidOperationException("Null values are not allowed.");
             }
+
             var result = IsLeftSmallerThanRight(x, y);
             return (int)result;
         }
@@ -123,31 +137,39 @@ internal class Day13 : BaseSolution
             {
                 return Result.Equal;
             }
+
             for (var i = 0; i < left.Count; i++)
             {
                 if (right.Count == i)
                 {
                     return Result.Right;
                 }
+
                 JsonNode? leftItem = left[i], rightItem = right[i];
 
-                var result = ((leftItem, rightItem) switch
+                var result = (leftItem, rightItem) switch
                 {
                     (JsonValue leftValue, JsonValue rightValue) => CompareJsonValues(leftValue, rightValue),
                     (JsonArray innerleft, JsonArray innerRight) => IsLeftSmallerThanRight(innerleft, innerRight),
                     (JsonArray innerLeft, JsonValue rightValue) => IsLeftSmallerThanRight(innerLeft, AsArray(rightValue)),
                     (JsonValue leftValue, JsonArray innerRight) => IsLeftSmallerThanRight(AsArray(leftValue), innerRight),
                     _ => throw new NotSupportedException("unknown item pair found.")
-                });
+                };
 
                 if (result != Result.Equal)
                 {
                     return result;
                 }
             }
-            return left.Count == right.Count ? Result.Equal : Result.Left;
 
-            static JsonArray AsArray(JsonValue value) => new JsonArray { JsonValue.Create(value.GetValue<int>()) };
+            return left.Count == right.Count
+                ? Result.Equal
+                : Result.Left;
+
+            static JsonArray AsArray(JsonValue value)
+            {
+                return new JsonArray() { JsonValue.Create(value.GetValue<int>()) };
+            }
 
             static Result CompareJsonValues(JsonValue left, JsonValue right)
             {

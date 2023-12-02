@@ -6,10 +6,10 @@ internal class Area
     public int Top { get; set; }
     public int Right { get; set; }
     public int Bottom { get; set; }
-    public Point TopLeft => new Point { X = Left, Y = Top };
-    public Point TopRight => new Point { X = Right, Y = Top };
-    public Point BottomRight => new Point { X = Right, Y = Bottom };
-    public Point BottomLeft => new Point { X = Left, Y = Bottom };
+    public Point TopLeft => new() { X = Left, Y = Top };
+    public Point TopRight => new() { X = Right, Y = Top };
+    public Point BottomRight => new() { X = Right, Y = Bottom };
+    public Point BottomLeft => new() { X = Left, Y = Bottom };
 
     public void ExpandToFit(Point point)
     {
@@ -45,12 +45,6 @@ internal class Area
 
     public static Area FromTopLeftAndBottomRight(Point topLeft, Point bottomRight)
     {
-        return new Area
-        {
-            Top = topLeft.Y,
-            Left = topLeft.X,
-            Right = bottomRight.X,
-            Bottom = bottomRight.Y
-        };
+        return new Area { Top = topLeft.Y, Left = topLeft.X, Right = bottomRight.X, Bottom = bottomRight.Y };
     }
 }

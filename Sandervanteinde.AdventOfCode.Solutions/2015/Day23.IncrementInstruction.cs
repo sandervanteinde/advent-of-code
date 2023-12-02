@@ -12,6 +12,7 @@ internal partial class Day23
             {
                 throw new InvalidOperationException("Register should be A or B");
             }
+
             this.register = register;
         }
 

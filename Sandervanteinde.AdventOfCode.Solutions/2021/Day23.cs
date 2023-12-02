@@ -2,13 +2,12 @@
 
 internal partial class Day23 : BaseSolution
 {
-    public Day23()
-        : base(@"Amphipod", 2021, 23)
-    {
-
-    }
-
     public const char EMPTY = '.';
+
+    public Day23()
+        : base(@"Amphipod", year: 2021, day: 23)
+    {
+    }
 
     public override object DetermineStepOneResult(FileReader reader)
     {
@@ -18,7 +17,7 @@ internal partial class Day23 : BaseSolution
         var visited = new Dictionary<string, long>();
 
         var iterateCount = 0L;
-        PerformStep(board, 0);
+        PerformStep(board, score: 0);
         return lowestScore;
 
         void PerformStep(char[] board, long score)
@@ -27,12 +26,16 @@ internal partial class Day23 : BaseSolution
             {
                 return;
             }
+
             var id = GameBoard.StringIdentifier(board);
+
             if (visited.TryGetValue(id, out var existingScore) && existingScore <= score)
             {
                 return;
             }
+
             visited[id] = score;
+
             if (++iterateCount % 1000 == 0)
             {
             }
@@ -44,6 +47,7 @@ internal partial class Day23 : BaseSolution
             }
 
             var availableSteps = GameBoard.AllOptions(board);
+
             foreach (var (newBoard, newScore) in availableSteps)
             {
                 PerformStep(newBoard, score + newScore);
@@ -58,7 +62,7 @@ internal partial class Day23 : BaseSolution
         var visited = new Dictionary<string, long>();
 
         var iterateCount = 0L;
-        PerformStep(board, 0);
+        PerformStep(board, score: 0);
         return lowestScore;
 
         void PerformStep(char[] board, long score)
@@ -67,12 +71,16 @@ internal partial class Day23 : BaseSolution
             {
                 return;
             }
+
             var id = GameBoardLarge.StringIdentifier(board);
+
             if (visited.TryGetValue(id, out var existingScore) && existingScore <= score)
             {
                 return;
             }
+
             visited[id] = score;
+
             if (++iterateCount % 1000 == 0)
             {
             }
@@ -83,11 +91,13 @@ internal partial class Day23 : BaseSolution
                 {
                     ;
                 }
+
                 lowestScore = score;
                 return;
             }
 
             var availableSteps = GameBoardLarge.AllOptions(board);
+
             foreach (var (newBoard, newScore) in availableSteps)
             {
                 PerformStep(newBoard, score + newScore);
@@ -97,55 +107,25 @@ internal partial class Day23 : BaseSolution
 
     public static char[] ParseGameBoard(FileReader reader)
     {
-        var lines = reader.ReadLineByLine().ToArray();
-        return new char[]
+        var lines = reader.ReadLineByLine()
+            .ToArray();
+        return new[]
         {
-            lines[1][1],
-            lines[1][2],
-            lines[1][4],
-            lines[1][6],
-            lines[1][8],
-            lines[1][10],
-            lines[1][11],
-            lines[2][3],
-            lines[3][3],
-            lines[2][5],
-            lines[3][5],
-            lines[2][7],
-            lines[3][7],
-            lines[2][9],
-            lines[3][9]
+            lines[1][index: 1], lines[1][index: 2], lines[1][index: 4], lines[1][index: 6], lines[1][index: 8], lines[1][index: 10], lines[1][index: 11],
+            lines[2][index: 3], lines[3][index: 3], lines[2][index: 5], lines[3][index: 5], lines[2][index: 7], lines[3][index: 7], lines[2][index: 9],
+            lines[3][index: 9]
         };
     }
 
     public static char[] ParseLargeGameBoard(FileReader reader)
     {
-        var lines = reader.ReadLineByLine().ToArray();
-        return new char[]
+        var lines = reader.ReadLineByLine()
+            .ToArray();
+        return new[]
         {
-            lines[1][1],
-            lines[1][2],
-            lines[1][4],
-            lines[1][6],
-            lines[1][8],
-            lines[1][10],
-            lines[1][11],
-            lines[2][3],
-            'D',
-            'D',
-            lines[3][3],
-            lines[2][5],
-            'C',
-            'B',
-            lines[3][5],
-            lines[2][7],
-            'B',
-            'A',
-            lines[3][7],
-            lines[2][9],
-            'A',
-            'C',
-            lines[3][9]
+            lines[1][index: 1], lines[1][index: 2], lines[1][index: 4], lines[1][index: 6], lines[1][index: 8], lines[1][index: 10], lines[1][index: 11],
+            lines[2][index: 3], 'D', 'D', lines[3][index: 3], lines[2][index: 5], 'C', 'B', lines[3][index: 5], lines[2][index: 7], 'B', 'A',
+            lines[3][index: 7], lines[2][index: 9], 'A', 'C', lines[3][index: 9]
         };
     }
 }

@@ -18,6 +18,7 @@ public static class ServiceCollectionExtensions
             .ToArray();
 
         var registry = new SolutionRegistry();
+
         foreach (var solution in solutions)
         {
             var instance = (IAdventOfCodeSolution)Activator.CreateInstance(solution)!;

@@ -7,5 +7,4 @@ public partial class Day23Tests
         public char FirstPosition { get; set; } = '.';
         public char SecondPosition { get; set; } = '.';
     }
-
 }

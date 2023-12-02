@@ -5,10 +5,10 @@ namespace Sandervanteinde.AdventOfCode.Solutions._2016;
 internal partial class Day07 : BaseSolution
 {
     public Day07()
-        : base(@"Internet Protocol Version 7", 2016, 7)
+        : base(@"Internet Protocol Version 7", year: 2016, day: 7)
     {
-
     }
+
     public override object DetermineStepOneResult(FileReader reader)
     {
         var regex = new Regex(@"(.)(.)\2\1");

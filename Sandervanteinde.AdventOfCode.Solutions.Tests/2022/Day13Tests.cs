@@ -5,6 +5,7 @@ using Xunit;
 using static Sandervanteinde.AdventOfCode.Solutions._2022.Day13;
 
 namespace Sandervanteinde.AdventOfCode.Solutions.Tests._2022;
+
 public class Day13Tests
 {
     private readonly Comparer _sut;
@@ -24,6 +25,7 @@ public class Day13Tests
 
         var result = _sut.Compare(leftArray, rightArray);
 
-        result.Should().Be(expected);
+        result.Should()
+            .Be(expected);
     }
 }

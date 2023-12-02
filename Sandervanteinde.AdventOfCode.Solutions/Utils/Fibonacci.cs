@@ -4,7 +4,10 @@ internal class Fibonacci
 {
     public static IEnumerable<int> Enumerate(bool startWithDoubleOne = false)
     {
-        int current = 1, next = startWithDoubleOne ? 1 : 2;
+        int current = 1,
+            next = startWithDoubleOne
+                ? 1
+                : 2;
 
         while (true)
         {

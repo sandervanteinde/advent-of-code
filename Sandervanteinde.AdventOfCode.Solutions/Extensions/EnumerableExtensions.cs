@@ -6,13 +6,14 @@ internal static class EnumerableExtensions
 {
     public static Queue<T> ToQueue<T>(this IEnumerable<T> enumerable)
     {
-        return new(enumerable);
+        return new Queue<T>(enumerable);
     }
 
     public static T Product<T>(this IEnumerable<T> values)
         where T : INumber<T>
     {
         var i = T.One;
+
         checked
         {
             foreach (var value in values)

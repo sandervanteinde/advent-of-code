@@ -1,20 +1,22 @@
-﻿using FluentAssertions;
-using Sandervanteinde.AdventOfCode.Solutions.Utils;
+﻿using System;
+using FluentAssertions;
 using Sandervanteinde.AdventOfCode.Solutions._2021;
-using System;
+using Sandervanteinde.AdventOfCode.Solutions.Utils;
 using Xunit;
 using static Sandervanteinde.AdventOfCode.Solutions._2021.Day18;
 
 namespace Sandervanteinde.AdventOfCode.Solutions.Tests._2021;
+
 public class Day18Tests
 {
-    private readonly Day18 _sut;
     private readonly FileReader _reader;
+    private readonly Day18 _sut;
 
     public Day18Tests()
     {
         _sut = new Day18();
-        _reader = new FileReader(@"[[[0,[5,8]],[[1,7],[9,6]]],[[4,[1,2]],[[1,4],2]]]
+        _reader = new FileReader(
+            @"[[[0,[5,8]],[[1,7],[9,6]]],[[4,[1,2]],[[1,4],2]]]
 [[[5,[2,8]],4],[5,[[9,9],0]]]
 [6,[[[6,2],[5,6]],[[7,6],[4,7]]]]
 [[[6,[0,7]],[0,9]],[4,[9,[9,0]]]]
@@ -23,24 +25,25 @@ public class Day18Tests
 [[[[5,4],[7,7]],8],[[8,3],8]]
 [[9,3],[[9,9],[6,[4,9]]]]
 [[2,[[7,7],7]],[[5,8],[[9,3],[0,2]]]]
-[[[[5,2],5],[8,[3,7]]],[[5,[7,5]],[4,4]]]");
+[[[[5,2],5],[8,[3,7]]],[[5,[7,5]],[4,4]]]"
+        );
     }
 
     [Fact]
     public void StepOne_ShouldWorkWithExample()
     {
         _sut.DetermineStepOneResult(_reader)
-            .Should().Be(4140);
+            .Should()
+            .Be(expected: 4140);
     }
-
 
     [Fact]
     public void StepTwo_ShouldWorkWithExample()
     {
         _sut.DetermineStepTwoResult(_reader)
-            .Should().Be(3993);
+            .Should()
+            .Be(expected: 3993);
     }
-
 
     [Theory]
     [InlineData("[[1,2],[[3,4],5]]", 143)]
@@ -52,7 +55,9 @@ public class Day18Tests
     public void Snailfish_Magnitude_ShouldWork(string input, int expectedResult)
     {
         var snailfish = SnailfishBase.Parse(input);
-        snailfish.Magnitude().Should().Be(expectedResult);
+        snailfish.Magnitude()
+            .Should()
+            .Be(expectedResult);
     }
 
     [Fact]
@@ -62,7 +67,10 @@ public class Day18Tests
 
         var parsed = SnailfishBase.Parse(value);
 
-        parsed.Should().BeOfType<Snailfish>().Which.Value.Should().Be(1);
+        parsed.Should()
+            .BeOfType<Snailfish>()
+            .Which.Value.Should()
+            .Be(expected: 1);
     }
 
     [Fact]
@@ -72,12 +80,12 @@ public class Day18Tests
 
         var parsed = SnailfishBase.Parse(value);
 
-        parsed.Should().BeEquivalentTo(new
-        {
-            Left = new { Value = 1 },
-            Right = new { Value = 2 }
-        });
-        TakeAs<SnailfishPair>(parsed).IsHierarchyIntact().Should().BeTrue();
+        parsed.Should()
+            .BeEquivalentTo(new { Left = new { Value = 1 }, Right = new { Value = 2 } });
+        TakeAs<SnailfishPair>(parsed)
+            .IsHierarchyIntact()
+            .Should()
+            .BeTrue();
     }
 
     [Fact]
@@ -87,27 +95,18 @@ public class Day18Tests
 
         var parsed = SnailfishBase.Parse(value);
 
-        parsed.Should().BeEquivalentTo(new
-        {
-            Left = new
-            {
-                Left = new
+        parsed.Should()
+            .BeEquivalentTo(
+                new
                 {
-                    Value = 2
-                },
-                Right = new
-                {
-                    Left = new { Value = 7 },
-                    Right = new { Value = 8 }
+                    Left = new { Left = new { Value = 2 }, Right = new { Left = new { Value = 7 }, Right = new { Value = 8 } } },
+                    Right = new { Left = new { Value = 3 }, Right = new { Value = 4 } }
                 }
-            },
-            Right = new
-            {
-                Left = new { Value = 3 },
-                Right = new { Value = 4 }
-            }
-        });
-        TakeAs<SnailfishPair>(parsed).IsHierarchyIntact().Should().BeTrue();
+            );
+        TakeAs<SnailfishPair>(parsed)
+            .IsHierarchyIntact()
+            .Should()
+            .BeTrue();
     }
 
     [Fact]
@@ -116,33 +115,32 @@ public class Day18Tests
         var pair = SnailfishBase.Parse("[[[[[1,2],3],1],2],6]");
 
         var explode = pair.AttemptExplode();
-        explode.Should().BeTrue();
-        pair.ToString().Should().Be("[[[[0,5],1],2],6]");
-        TakeAs<SnailfishPair>(pair).IsHierarchyIntact().Should().BeTrue();
+        explode.Should()
+            .BeTrue();
+        pair.ToString()
+            .Should()
+            .Be("[[[[0,5],1],2],6]");
+        TakeAs<SnailfishPair>(pair)
+            .IsHierarchyIntact()
+            .Should()
+            .BeTrue();
     }
 
     [Fact]
     public void Snailfish_Split_ShouldWork()
     {
-        var pair = new SnailfishPair
-        {
-            Left = new Snailfish(11),
-            Right = new Snailfish(2)
-        };
+        var pair = new SnailfishPair { Left = new Snailfish(value: 11), Right = new Snailfish(value: 2) };
 
         var splitSucceeded = pair.AttemptSplit();
 
-        splitSucceeded.Should().BeTrue();
-        pair.Should().BeEquivalentTo(new
-        {
-            Left = new
-            {
-                Left = new { Value = 5 },
-                Right = new { Value = 6 }
-            },
-            Right = new { Value = 2 }
-        });
-        TakeAs<SnailfishPair>(pair).IsHierarchyIntact().Should().BeTrue();
+        splitSucceeded.Should()
+            .BeTrue();
+        pair.Should()
+            .BeEquivalentTo(new { Left = new { Left = new { Value = 5 }, Right = new { Value = 6 } }, Right = new { Value = 2 } });
+        TakeAs<SnailfishPair>(pair)
+            .IsHierarchyIntact()
+            .Should()
+            .BeTrue();
     }
 
     [Fact]
@@ -150,7 +148,8 @@ public class Day18Tests
     {
         var sut = SnailfishBase.Parse("[[[2,3],[7,8]],[2,3]]");
         var pair = TakeAs<SnailfishPair>(sut, Direction.Right);
-        pair.FindClosestLeft()!.Value.Should().Be(8);
+        pair.FindClosestLeft()!.Value.Should()
+            .Be(expected: 8);
     }
 
     [Fact]
@@ -158,7 +157,8 @@ public class Day18Tests
     {
         var sut = SnailfishBase.Parse("[[[2,3],[7,8]],[2,3]]");
         var pair = TakeAs<SnailfishPair>(sut, Direction.Left, Direction.Right);
-        pair.FindClosestRight()!.Value.Should().Be(2);
+        pair.FindClosestRight()!.Value.Should()
+            .Be(expected: 2);
     }
 
     [Fact]
@@ -166,10 +166,11 @@ public class Day18Tests
     {
         var sut = SnailfishBase.Parse("[[[2,3],[7,8]],[2,3]]");
         var pair = TakeAs<SnailfishPair>(sut, Direction.Right);
-        pair.FindClosestRight().Should().BeNull();
+        pair.FindClosestRight()
+            .Should()
+            .BeNull();
     }
 
-    private enum Direction { Left, Right };
     private TSnailfish TakeAs<TSnailfish>(SnailfishBase snailfish, params Direction[] directions)
         where TSnailfish : SnailfishBase
     {
@@ -183,6 +184,9 @@ public class Day18Tests
                 _ => throw new InvalidOperationException()
             };
         }
+
         return (TSnailfish)snailfish;
     }
+
+    private enum Direction { Left, Right }
 }

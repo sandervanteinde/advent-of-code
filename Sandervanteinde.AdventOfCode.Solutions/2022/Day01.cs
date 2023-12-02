@@ -3,16 +3,17 @@
 internal class Day01 : BaseSolution
 {
     public Day01()
-        : base("Calorie Counting", 2022, 1)
+        : base("Calorie Counting", year: 2022, day: 1)
     {
-
     }
+
     public override object DetermineStepOneResult(FileReader reader)
     {
         var lines = reader.ReadLineByLine(StringSplitOptions.None);
         var sum = 0;
         var highestSum = 0;
-        foreach(var line in lines)
+
+        foreach (var line in lines)
         {
             if (string.IsNullOrEmpty(line))
             {
@@ -20,8 +21,10 @@ internal class Day01 : BaseSolution
                 sum = 0;
                 continue;
             }
+
             sum += int.Parse(line);
         }
+
         return highestSum;
     }
 
@@ -30,6 +33,7 @@ internal class Day01 : BaseSolution
         var lines = reader.ReadLineByLine(StringSplitOptions.None);
         var sum = 0;
         var calories = new List<int>();
+
         foreach (var line in lines)
         {
             if (string.IsNullOrEmpty(line))
@@ -38,14 +42,17 @@ internal class Day01 : BaseSolution
                 sum = 0;
                 continue;
             }
+
             sum += int.Parse(line);
         }
-        if(sum != 0)
+
+        if (sum != 0)
         {
             calories.Add(sum);
         }
+
         return calories.OrderByDescending(c => c)
-            .Take(3)
+            .Take(count: 3)
             .Sum();
     }
 }

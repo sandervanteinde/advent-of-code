@@ -17,7 +17,9 @@ public class Day9Tests
     {
         var sut = new Day09();
 
-        sut.GetStepOneResult(input).Should().Be(result.ToString());
+        sut.GetStepOneResult(input)
+            .Should()
+            .Be(result.ToString());
     }
 
     [Theory]
@@ -27,6 +29,8 @@ public class Day9Tests
     {
         var sut = new Day09();
 
-        sut.GetDecodedLengthVersion2(input).Should().Be(result);
+        sut.GetDecodedLengthVersion2(input)
+            .Should()
+            .Be(result);
     }
 }

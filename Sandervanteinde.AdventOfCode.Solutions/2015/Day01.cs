@@ -3,22 +3,25 @@
 internal class Day01 : BaseSolution
 {
     public Day01()
-        : base("Not Quite List", 2015, 1)
+        : base("Not Quite List", year: 2015, day: 1)
     {
-
     }
 
     public override object DetermineStepOneResult(FileReader reader)
     {
-        var asLookup = reader.ReadCharByChar().ToLookup(c => c);
-        var leftBracketCount = asLookup['('].Count();
-        var rightBracketCount = asLookup[')'].Count();
+        var asLookup = reader.ReadCharByChar()
+            .ToLookup(c => c);
+        var leftBracketCount = asLookup[key: '(']
+            .Count();
+        var rightBracketCount = asLookup[key: ')']
+            .Count();
         return leftBracketCount - rightBracketCount;
     }
 
     public override object DetermineStepTwoResult(FileReader reader)
     {
         var currentFloor = 0;
+
         for (var i = 0; i < reader.Input.Length; i++)
         {
             var value = reader.Input[i];

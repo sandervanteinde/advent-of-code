@@ -17,7 +17,8 @@ public class Day22Tests
     [Fact]
     public void StepOne_ShouldWorkWithExample()
     {
-        var reader = new FileReader(@"on x=-20..26,y=-36..17,z=-47..7
+        var reader = new FileReader(
+            @"on x=-20..26,y=-36..17,z=-47..7
 on x=-20..33,y=-21..23,z=-26..28
 on x=-22..28,y=-29..23,z=-38..16
 on x=-46..7,y=-6..46,z=-50..-1
@@ -38,16 +39,19 @@ on x=-49..-5,y=-3..45,z=-29..18
 off x=18..30,y=-20..-8,z=-3..13
 on x=-41..9,y=-7..43,z=-33..15
 on x=-54112..-39298,y=-85059..-49293,z=-27449..7877
-on x=967..23432,y=45373..81175,z=27513..5368");
+on x=967..23432,y=45373..81175,z=27513..5368"
+        );
 
         _sut.DetermineStepOneResult(reader)
-            .Should().Be(590784);
+            .Should()
+            .Be(expected: 590784);
     }
 
     [Fact]
     public void StepTwo_ShouldWorkWithExample()
     {
-        var reader = new FileReader(@"on x=-5..47,y=-31..22,z=-19..33
+        var reader = new FileReader(
+            @"on x=-5..47,y=-31..22,z=-19..33
 on x=-44..5,y=-27..21,z=-14..35
 on x=-49..-1,y=-11..42,z=-10..38
 on x=-20..34,y=-40..6,z=-44..1
@@ -106,8 +110,10 @@ off x=-37810..49457,y=-71013..-7894,z=-105357..-13188
 off x=-27365..46395,y=31009..98017,z=15428..76570
 off x=-70369..-16548,y=22648..78696,z=-1892..86821
 on x=-53470..21291,y=-120233..-33476,z=-44150..38147
-off x=-93533..-4276,y=-16170..68771,z=-104985..-24507");
+off x=-93533..-4276,y=-16170..68771,z=-104985..-24507"
+        );
         _sut.DetermineStepTwoResult(reader)
-            .Should().Be(2758514936282235);
+            .Should()
+            .Be(expected: 2758514936282235);
     }
 }

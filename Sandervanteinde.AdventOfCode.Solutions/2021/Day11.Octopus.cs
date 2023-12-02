@@ -4,12 +4,12 @@ internal partial class Day11
 {
     public class Octopus
     {
-        public int Value { get; private set; }
-
         public Octopus(int value)
         {
             Value = value;
         }
+
+        public int Value { get; private set; }
 
         public bool Flash()
         {
@@ -18,6 +18,7 @@ internal partial class Day11
                 Value = 0;
                 return true;
             }
+
             return false;
         }
 
@@ -33,6 +34,7 @@ internal partial class Day11
                 Increment();
                 return Flash();
             }
+
             return false;
         }
 

@@ -3,10 +3,10 @@
 public class Day02 : BaseSolution
 {
     public Day02()
-        : base("Rock Paper Scissors", 2022, 2)
+        : base("Rock Paper Scissors", year: 2022, day: 2)
     {
-
     }
+
     public override object DetermineStepOneResult(FileReader reader)
     {
         const int WIN = 6;
@@ -17,12 +17,12 @@ public class Day02 : BaseSolution
         const int PAPER = 2;
         const int SCISSORS = 3;
 
-
         // A X Rock -- 1
         // B Y Paper -- 2
         // C Z Scisssors -- 3
         var score = 0;
-        foreach(var line in reader.ReadLineByLine())
+
+        foreach (var line in reader.ReadLineByLine())
         {
             score += line switch
             {
@@ -38,6 +38,7 @@ public class Day02 : BaseSolution
                 _ => throw new NotSupportedException()
             };
         }
+
         return score;
     }
 
@@ -51,7 +52,6 @@ public class Day02 : BaseSolution
         const int PAPER = 2;
         const int SCISSORS = 3;
 
-
         // A Rock -- 1
         // B Paper -- 2
         // C Scisssors -- 3
@@ -59,22 +59,24 @@ public class Day02 : BaseSolution
         // Y Draw
         // Z Win
         var score = 0;
+
         foreach (var line in reader.ReadLineByLine())
         {
             score += line switch
             {
                 "A X" => LOSS + SCISSORS,
-                "A Y" => DRAW + ROCK ,
+                "A Y" => DRAW + ROCK,
                 "A Z" => WIN + PAPER,
                 "B X" => LOSS + ROCK,
                 "B Y" => DRAW + PAPER,
                 "B Z" => WIN + SCISSORS,
                 "C X" => LOSS + PAPER,
                 "C Y" => DRAW + SCISSORS,
-                "C Z" =>  WIN + ROCK,
+                "C Z" => WIN + ROCK,
                 _ => throw new NotSupportedException()
             };
         }
+
         return score;
     }
 }

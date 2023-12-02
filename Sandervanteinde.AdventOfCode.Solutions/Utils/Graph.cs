@@ -17,11 +17,13 @@ internal class Graph<T>
     public Node<T> GetOrCreateNode(T value)
     {
         var node = _nodes.Find(node => node.Value.Equals(value));
+
         if (node is null)
         {
-            node = new(value);
+            node = new Node<T>(value);
             _nodes.Add(node);
         }
+
         return node;
     }
 
@@ -37,14 +39,13 @@ internal class Graph<T>
 
     private int BruteForce(int initialValue, Func<int, IEnumerable<int>, int> onNewValue)
     {
-
         var target = initialValue;
 
         foreach (var node in _nodes)
         {
             var remainingNodes = new HashSet<Node<T>>(_nodes);
             remainingNodes.Remove(node);
-            var possibilities = IteratePossibilities(remainingNodes, node, 0);
+            var possibilities = IteratePossibilities(remainingNodes, node, distance: 0);
             target = onNewValue(target, possibilities);
         }
 
@@ -57,23 +58,27 @@ internal class Graph<T>
         {
             yield return distance;
         }
+
         foreach (var edge in currentNode.Edges)
         {
             if (!edge.ContainsNode(currentNode))
             {
                 continue;
             }
+
             var otherSide = edge.OppositeOf(currentNode);
+
             if (!nodesToVisit.Remove(otherSide))
             {
                 continue;
             }
+
             foreach (var possibility in IteratePossibilities(nodesToVisit, otherSide, distance + edge.Distance))
             {
                 yield return possibility;
             }
+
             nodesToVisit.Add(otherSide);
         }
     }
 }
-

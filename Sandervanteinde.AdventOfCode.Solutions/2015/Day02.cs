@@ -5,25 +5,25 @@ namespace Sandervanteinde.AdventOfCode.Solutions._2015;
 internal class Day02 : BaseSolution
 {
     public Day02()
-        : base("I Was Told There Would Be No Math", 2015, 2)
+        : base("I Was Told There Would Be No Math", year: 2015, day: 2)
     {
-
     }
 
     public override object DetermineStepOneResult(FileReader reader)
     {
         var regex = new Regex("(\\d+)x(\\d+)x(\\d+)", RegexOptions.Compiled);
         uint total = 0;
+
         foreach (var (length, width, height) in GetPresentDimensions(reader))
         {
-            var wrappingPaperRequired = length * width * 2 + length * height * 2 + width * height * 2;
-            var slackSizes = new uint[] { length, width, height }
+            var wrappingPaperRequired = (length * width * 2) + (length * height * 2) + (width * height * 2);
+            var slackSizes = new[] { length, width, height }
                 .OrderBy(i => i)
-                .Take(2)
+                .Take(count: 2)
                 .ToArray();
             var slack = slackSizes[0] * slackSizes[1];
 
-            total += (wrappingPaperRequired + slack);
+            total += wrappingPaperRequired + slack;
         }
 
         return total;
@@ -32,13 +32,14 @@ internal class Day02 : BaseSolution
     public override object DetermineStepTwoResult(FileReader reader)
     {
         uint total = 0;
+
         foreach (var (length, width, height) in GetPresentDimensions(reader))
         {
-            var smallestSides = new uint[] { length, width, height }
+            var smallestSides = new[] { length, width, height }
                 .OrderBy(i => i)
-                .Take(2)
+                .Take(count: 2)
                 .ToArray();
-            var ribbonForWrap = smallestSides[0] * 2 + smallestSides[1] * 2;
+            var ribbonForWrap = (smallestSides[0] * 2) + (smallestSides[1] * 2);
             var ribbonForBow = length * width * height;
             total += ribbonForBow + ribbonForWrap;
         }
@@ -50,19 +51,21 @@ internal class Day02 : BaseSolution
     {
         var regex = new Regex("(\\d+)x(\\d+)x(\\d+)", RegexOptions.Compiled);
         return reader.ReadLineByLine()
-            .Select(line =>
-            {
-
-                var match = regex.Match(line);
-                if (!match.Success)
+            .Select(
+                line =>
                 {
-                    throw new NotSupportedException($"The line {line} did not meet the input requirements");
-                }
+                    var match = regex.Match(line);
 
-                var length = uint.Parse(match.Groups[1].Value);
-                var width = uint.Parse(match.Groups[2].Value);
-                var height = uint.Parse(match.Groups[3].Value);
-                return (length, width, height);
-            });
+                    if (!match.Success)
+                    {
+                        throw new NotSupportedException($"The line {line} did not meet the input requirements");
+                    }
+
+                    var length = uint.Parse(match.Groups[groupnum: 1].Value);
+                    var width = uint.Parse(match.Groups[groupnum: 2].Value);
+                    var height = uint.Parse(match.Groups[groupnum: 3].Value);
+                    return (length, width, height);
+                }
+            );
     }
 }

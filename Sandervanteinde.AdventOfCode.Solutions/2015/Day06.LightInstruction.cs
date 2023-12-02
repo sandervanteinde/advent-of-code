@@ -7,6 +7,5 @@ internal partial class Day06
         public Point From { get; init; }
         public Point Through { get; init; }
         public LightOperation Operation { get; init; }
-
     }
 }

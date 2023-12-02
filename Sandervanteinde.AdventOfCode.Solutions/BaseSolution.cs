@@ -2,10 +2,6 @@
 
 public abstract class BaseSolution : IAdventOfCodeSolution
 {
-    public string Title { get; }
-    public int Day { get; }
-    public int Year { get; }
-
     private readonly string _fileNameOne;
     private readonly string _fileNameTwo;
 
@@ -18,18 +14,21 @@ public abstract class BaseSolution : IAdventOfCodeSolution
         _fileNameTwo = fileNameTwo ?? _fileNameOne;
     }
 
+    public string Title { get; }
+    public int Day { get; }
+    public int Year { get; }
+
     public string GetStepOneResult(string input)
     {
-        return DetermineStepOneResult(new(input))?.ToString() ?? throw new InvalidOperationException("A result was expected");
+        return DetermineStepOneResult(new FileReader(input))
+            ?.ToString() ?? throw new InvalidOperationException("A result was expected");
     }
 
     public string GetStepTwoResult(string input)
     {
-        return DetermineStepTwoResult(new(input))?.ToString() ?? throw new InvalidOperationException("A result was expected");
+        return DetermineStepTwoResult(new FileReader(input))
+            ?.ToString() ?? throw new InvalidOperationException("A result was expected");
     }
-
-    public abstract object DetermineStepOneResult(FileReader reader);
-    public abstract object DetermineStepTwoResult(FileReader reader);
 
     public string StepOneFileName()
     {
@@ -40,4 +39,7 @@ public abstract class BaseSolution : IAdventOfCodeSolution
     {
         return _fileNameTwo;
     }
+
+    public abstract object DetermineStepOneResult(FileReader reader);
+    public abstract object DetermineStepTwoResult(FileReader reader);
 }

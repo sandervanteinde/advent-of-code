@@ -5,10 +5,10 @@ namespace Sandervanteinde.AdventOfCode.Solutions._2021;
 internal partial class Day16 : BaseSolution
 {
     public Day16()
-        : base("Packet Decoder", 2021, 16)
+        : base("Packet Decoder", year: 2021, day: 16)
     {
-
     }
+
     public override object DetermineStepOneResult(FileReader reader)
     {
         var bitReader = ToBitReader(reader);
@@ -25,9 +25,8 @@ internal partial class Day16 : BaseSolution
 
     private static Package ReadPackage(BitReader reader)
     {
-
-        var packageVersion = reader.ReadAsNumber(3);
-        var packetTypeId = (PackageTypeId)reader.ReadAsNumber(3);
+        var packageVersion = reader.ReadAsNumber(amountOfBits: 3);
+        var packetTypeId = (PackageTypeId)reader.ReadAsNumber(amountOfBits: 3);
 
         return packetTypeId switch
         {
@@ -40,14 +39,18 @@ internal partial class Day16 : BaseSolution
     {
         var items = new LinkedList<bool[]>();
         var sections = 0;
+
         while (true)
         {
-            var nextSection = reader.Read(5);
+            var nextSection = reader.Read(amount: 5);
             sections++;
 
-            items.AddLast(nextSection[1..].ToArray());
+            items.AddLast(
+                nextSection[1..]
+                    .ToArray()
+            );
 
-            if (!nextSection[0])
+            if (!nextSection[index: 0])
             {
                 break;
             }
@@ -61,22 +64,30 @@ internal partial class Day16 : BaseSolution
     private static OperatorPackage HandleOperatorPackage(long packageVersion, PackageTypeId packageTypeId, BitReader reader)
     {
         var operatorPackage = new OperatorPackage(packageVersion, packageTypeId);
+
         if (reader.ReadNext())
         {
-            var numberOfSubpackets = reader.ReadAsNumber(11);
+            var numberOfSubpackets = reader.ReadAsNumber(amountOfBits: 11);
+
             for (var i = 0; i < numberOfSubpackets; i++)
             {
                 operatorPackage.Add(ReadPackage(reader));
             }
+
             return operatorPackage;
         }
 
-        var subpacketLength = (int)reader.ReadAsNumber(15);
-        var innerReader = new BitReader(reader.Read(subpacketLength).ToArray());
+        var subpacketLength = (int)reader.ReadAsNumber(amountOfBits: 15);
+        var innerReader = new BitReader(
+            reader.Read(subpacketLength)
+                .ToArray()
+        );
+
         while (innerReader.HasMore)
         {
             operatorPackage.Add(ReadPackage(innerReader));
         }
+
         return operatorPackage;
     }
 
@@ -95,6 +106,7 @@ internal partial class Day16 : BaseSolution
                 >= 'A' and <= 'F' => ToBits(c - 55),
                 _ => throw new InvalidOperationException("Invalid character encountered")
             };
+
             foreach (var bit in bits)
             {
                 yield return bit;
@@ -103,7 +115,8 @@ internal partial class Day16 : BaseSolution
 
         static IEnumerable<bool> ToBits(int @byte)
         {
-            var bitArray = new BitArray(new byte[] { (byte)@byte });
+            var bitArray = new BitArray(new[] { (byte)@byte });
+
             for (var i = 3; i >= 0; i--)
             {
                 yield return bitArray[i];

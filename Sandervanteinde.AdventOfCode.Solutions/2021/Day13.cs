@@ -6,15 +6,16 @@ namespace Sandervanteinde.AdventOfCode.Solutions._2021;
 internal partial class Day13 : BaseSolution
 {
     public Day13()
-        : base("Transparent Origami", 2021, 13)
+        : base("Transparent Origami", year: 2021, day: 13)
     {
-
     }
+
     public override object DetermineStepOneResult(FileReader reader)
     {
         var (points, folds) = ParseInput(reader);
         var firstFold = folds.First();
         var mutationFunc = GetMutationFunc(firstFold);
+
         foreach (var p in points)
         {
             if (ShouldMutate(p.Point, firstFold))
@@ -31,9 +32,11 @@ internal partial class Day13 : BaseSolution
     public override object DetermineStepTwoResult(FileReader reader)
     {
         var (points, folds) = ParseInput(reader);
+
         foreach (var fold in folds)
         {
             var mutationFunc = GetMutationFunc(fold);
+
             foreach (var p in points)
             {
                 if (ShouldMutate(p.Point, fold))
@@ -46,20 +49,24 @@ internal partial class Day13 : BaseSolution
         var distinctPoints = points.Select(p => p.Point)
             .ToHashSet();
 
-        var maxX = distinctPoints.Select(p => p.X).Max();
-        var maxY = distinctPoints.Select(p => p.Y).Max();
+        var maxX = distinctPoints.Select(p => p.X)
+            .Max();
+        var maxY = distinctPoints.Select(p => p.Y)
+            .Max();
 
         var sb = new StringBuilder();
+
         for (var y = 0; y <= maxY; y++)
         {
             for (var x = 0; x <= maxX; x++)
             {
                 sb.Append(
-                   distinctPoints.Contains(new Point { X = x, Y = y })
-                   ? '#'
-                   : ' '
+                    distinctPoints.Contains(new Point { X = x, Y = y })
+                        ? '#'
+                        : ' '
                 );
             }
+
             sb.AppendLine();
         }
 
@@ -79,14 +86,13 @@ internal partial class Day13 : BaseSolution
     private Func<Point, Point> GetMutationFunc(Fold fold)
     {
         var foldValue = fold.Value;
+
         if (fold.Axis == Axis.X)
         {
             return point => point with { X = fold.Value - (point.X - foldValue) };
         }
-        else
-        {
-            return point => point with { Y = fold.Value - (point.Y - foldValue) };
-        }
+
+        return point => point with { Y = fold.Value - (point.Y - foldValue) };
     }
 
     private (ICollection<PointWithMutation> points, ICollection<Fold> folds) ParseInput(FileReader reader)
@@ -99,16 +105,21 @@ internal partial class Day13 : BaseSolution
         foreach (var line in reader.ReadLineByLine())
         {
             var match = pointMatch.Match(line);
+
             if (match.Success)
             {
-                var point = new Point { X = int.Parse(match.Groups[1].Value), Y = int.Parse(match.Groups[2].Value) };
-                points.Add(new(point));
+                var point = new Point { X = int.Parse(match.Groups[groupnum: 1].Value), Y = int.Parse(match.Groups[groupnum: 2].Value) };
+                points.Add(new PointWithMutation(point));
                 continue;
             }
+
             match = foldMatch.Match(line);
+
             if (match.Success)
             {
-                folds.Add(new Fold { Axis = Enum.Parse<Axis>(match.Groups[1].Value, ignoreCase: true), Value = int.Parse(match.Groups[2].Value) });
+                folds.Add(
+                    new Fold { Axis = Enum.Parse<Axis>(match.Groups[groupnum: 1].Value, ignoreCase: true), Value = int.Parse(match.Groups[groupnum: 2].Value) }
+                );
                 continue;
             }
 

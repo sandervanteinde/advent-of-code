@@ -5,9 +5,8 @@ namespace Sandervanteinde.AdventOfCode.Solutions._2015;
 internal class Day09 : BaseSolution
 {
     public Day09()
-        : base("All in a Single Night", 2015, 9)
+        : base("All in a Single Night", year: 2015, day: 9)
     {
-
     }
 
     public override object DetermineStepOneResult(FileReader reader)
@@ -26,15 +25,15 @@ internal class Day09 : BaseSolution
     {
         var regex = new Regex(@"([A-Za-z]+) to ([A-Za-z]+) = (\d+)");
         var graph = new Graph<string>();
+
         foreach (var match in reader.MatchLineByLine(regex))
         {
-            var from = match.Groups[1].Value;
-            var to = match.Groups[2].Value;
-            var distance = int.Parse(match.Groups[3].ValueSpan);
+            var from = match.Groups[groupnum: 1].Value;
+            var to = match.Groups[groupnum: 2].Value;
+            var distance = int.Parse(match.Groups[groupnum: 3].ValueSpan);
             graph.AddEdge(from, to, distance);
         }
 
         return graph;
-
     }
 }

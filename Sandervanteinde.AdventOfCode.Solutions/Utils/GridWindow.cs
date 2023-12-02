@@ -7,21 +7,12 @@ public class GridWindow<T> : IDisposable
     private static readonly ArrayPool<(int x, int y, T value)> pool = ArrayPool<(int x, int y, T value)>.Shared;
     private readonly GridWindow<T>[,] grid;
     private readonly T[,] values;
-    public object? Tag { get; set; }
-
-    public int X { get; }
-    public int Y { get; }
-
-    public T Value => values[X, Y];
-
-    public bool IsCorner => X is 0 && (Y == 0 || Y == grid.GetLength(1) - 1)
-        || X == grid.GetLength(0) - 1 && (Y == 0 || Y == grid.GetLength(1) - 1);
-
-    private (int x, int y, T value)[] surroundings = Array.Empty<(int x, int y, T value)>();
-    private int? amountOfSurroundings = null;
 
     private (int x, int y, T value)[] adjacents = Array.Empty<(int x, int y, T value)>();
-    private int? amountOfAdjacents = null;
+    private int? amountOfAdjacents;
+    private int? amountOfSurroundings;
+
+    private (int x, int y, T value)[] surroundings = Array.Empty<(int x, int y, T value)>();
 
     public GridWindow(GridWindow<T>[,] grid, T[,] values, int x, int y)
     {
@@ -29,6 +20,24 @@ public class GridWindow<T> : IDisposable
         this.values = values;
         X = x;
         Y = y;
+    }
+
+    public object? Tag { get; set; }
+
+    public int X { get; }
+    public int Y { get; }
+
+    public T Value => values[X, Y];
+
+    public bool IsCorner => (X is 0 && (Y == 0 || Y == grid.GetLength(dimension: 1) - 1))
+        || (X == grid.GetLength(dimension: 0) - 1 && (Y == 0 || Y == grid.GetLength(dimension: 1) - 1));
+
+    public void Dispose()
+    {
+        if (surroundings.Length > 0)
+        {
+            pool.Return(surroundings);
+        }
     }
 
     public IEnumerable<GridWindow<T>> AdjacentWindows()
@@ -42,12 +51,13 @@ public class GridWindow<T> : IDisposable
         {
             yield return grid[X, Y - 1];
         }
-        if (Y + 1 < grid.GetLength(1))
+
+        if (Y + 1 < grid.GetLength(dimension: 1))
         {
             yield return grid[X, Y + 1];
         }
 
-        if (X + 1 < grid.GetLength(0))
+        if (X + 1 < grid.GetLength(dimension: 0))
         {
             yield return grid[X + 1, Y];
         }
@@ -57,8 +67,9 @@ public class GridWindow<T> : IDisposable
     {
         if (!amountOfAdjacents.HasValue)
         {
-            var array = pool.Rent(4);
+            var array = pool.Rent(minimumLength: 4);
             var amount = 0;
+
             if (X > 0)
             {
                 array[amount++] = (X - 1, Y, grid[X - 1, Y].Value);
@@ -68,12 +79,13 @@ public class GridWindow<T> : IDisposable
             {
                 array[amount++] = (X, Y - 1, grid[X, Y - 1].Value);
             }
-            if (Y + 1 < grid.GetLength(1))
+
+            if (Y + 1 < grid.GetLength(dimension: 1))
             {
                 array[amount++] = (X, Y + 1, grid[X, Y + 1].Value);
             }
 
-            if (X + 1 < grid.GetLength(0))
+            if (X + 1 < grid.GetLength(dimension: 0))
             {
                 array[amount++] = (X + 1, Y, grid[X + 1, Y].Value);
             }
@@ -81,15 +93,17 @@ public class GridWindow<T> : IDisposable
             adjacents = array;
             amountOfAdjacents = amount;
         }
-        return adjacents.AsSpan(0, amountOfAdjacents.Value);
+
+        return adjacents.AsSpan(start: 0, amountOfAdjacents.Value);
     }
 
     public Span<(int x, int y, T value)> Surroundings(bool includeSelf = false)
     {
         if (!amountOfSurroundings.HasValue)
         {
-            var array = pool.Rent(9);
+            var array = pool.Rent(minimumLength: 9);
             var amount = 0;
+
             if (X > 0)
             {
                 array[amount++] = (X - 1, Y, grid[X - 1, Y].Value);
@@ -98,7 +112,8 @@ public class GridWindow<T> : IDisposable
                 {
                     array[amount++] = (X - 1, Y - 1, grid[X - 1, Y - 1].Value);
                 }
-                if (Y + 1 < grid.GetLength(1))
+
+                if (Y + 1 < grid.GetLength(dimension: 1))
                 {
                     array[amount++] = (X - 1, Y + 1, grid[X - 1, Y + 1].Value);
                 }
@@ -108,16 +123,18 @@ public class GridWindow<T> : IDisposable
             {
                 array[amount++] = (X, Y - 1, grid[X, Y - 1].Value);
             }
+
             if (includeSelf)
             {
                 array[amount++] = (X, Y, Value);
             }
-            if (Y + 1 < grid.GetLength(1))
+
+            if (Y + 1 < grid.GetLength(dimension: 1))
             {
                 array[amount++] = (X, Y + 1, grid[X, Y + 1].Value);
             }
 
-            if (X + 1 < grid.GetLength(0))
+            if (X + 1 < grid.GetLength(dimension: 0))
             {
                 array[amount++] = (X + 1, Y, grid[X + 1, Y].Value);
 
@@ -125,7 +142,8 @@ public class GridWindow<T> : IDisposable
                 {
                     array[amount++] = (X + 1, Y - 1, grid[X + 1, Y - 1].Value);
                 }
-                if (Y + 1 < grid.GetLength(1))
+
+                if (Y + 1 < grid.GetLength(dimension: 1))
                 {
                     array[amount++] = (X + 1, Y + 1, grid[X + 1, Y + 1].Value);
                 }
@@ -134,23 +152,16 @@ public class GridWindow<T> : IDisposable
             amountOfSurroundings = amount;
             surroundings = array;
         }
-        return surroundings.AsSpan(0, amountOfSurroundings.Value);
-    }
 
-
-    public void Dispose()
-    {
-        if (surroundings.Length > 0)
-        {
-            pool.Return(surroundings);
-        }
+        return surroundings.AsSpan(start: 0, amountOfSurroundings.Value);
     }
 
     public static IEnumerable<GridWindow<T>> EnumerateGrid(T[,] grid)
     {
-        var yLength = grid.GetLength(1);
-        var xLength = grid.GetLength(0);
+        var yLength = grid.GetLength(dimension: 1);
+        var xLength = grid.GetLength(dimension: 0);
         var windows = grid.ToGridwindows();
+
         for (var y = 0; y < yLength; y++)
         {
             for (var x = 0; x < xLength; x++)
@@ -165,5 +176,4 @@ public class GridWindow<T> : IDisposable
     {
         return Value?.ToString();
     }
-
 }

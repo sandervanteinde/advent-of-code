@@ -7,6 +7,7 @@ internal partial class Day07
         public int Constant { get; }
         public string? MemoryAddress { get; }
         public bool IsMemoryAddress => MemoryAddress is not null;
+
         private MemoryAddressOrConstant(int constant)
         {
             Constant = constant;
@@ -25,20 +26,18 @@ internal partial class Day07
             {
                 return memory[MemoryAddress!];
             }
-            else
-            {
-                return Constant;
-            }
+
+            return Constant;
         }
 
         public static implicit operator MemoryAddressOrConstant(int constant)
         {
-            return new(constant);
+            return new MemoryAddressOrConstant(constant);
         }
 
         public static implicit operator MemoryAddressOrConstant(string memoryAddress)
         {
-            return new(memoryAddress);
+            return new MemoryAddressOrConstant(memoryAddress);
         }
     }
 }

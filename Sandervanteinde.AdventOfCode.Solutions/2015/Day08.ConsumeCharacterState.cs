@@ -7,6 +7,7 @@ internal partial class Day08
         public void Next(StringParser parser, OpMode mode)
         {
             var c = parser.ConsumeNextChar();
+
             if (c == '\\')
             {
                 switch (mode)
@@ -26,12 +27,15 @@ internal partial class Day08
                 {
                     parser.AddToOutput('\\', c);
                 }
+
                 if (!parser.HasNext)
                 {
                     parser.EndString();
                 }
+
                 return;
             }
+
             parser.AddToOutput(c);
         }
     }

@@ -5,47 +5,53 @@ internal partial class Day02
     private class PassCodePosition
     {
         public int X { get; private set; } = -2;
-        public int Y { get; private set; } = 0;
+        public int Y { get; private set; }
 
         public PassCodePosition MoveUp()
         {
             Y--;
+
             if (Math.Abs(Y) + Math.Abs(X) > 2)
             {
                 Y++;
             }
+
             return this;
         }
 
         public PassCodePosition MoveDown()
         {
             Y++;
+
             if (Math.Abs(Y) + Math.Abs(X) > 2)
             {
                 Y--;
             }
+
             return this;
         }
 
         public PassCodePosition MoveLeft()
         {
             X--;
+
             if (Math.Abs(Y) + Math.Abs(X) > 2)
             {
                 X++;
             }
-            return this;
 
+            return this;
         }
 
         public PassCodePosition MoveRight()
         {
-
             X++;
+
             if (Math.Abs(Y) + Math.Abs(X) > 2)
             {
                 X--;
             }
+
             return this;
         }
 

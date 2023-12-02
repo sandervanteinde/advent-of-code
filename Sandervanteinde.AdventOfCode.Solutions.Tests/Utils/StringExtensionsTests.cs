@@ -12,6 +12,8 @@ public class StringExtensionsTests
     [InlineData("1337", false)]
     public void IsPalindrome(string input, bool expected)
     {
-        input.IsPalindrome().Should().Be(expected);
+        input.IsPalindrome()
+            .Should()
+            .Be(expected);
     }
 }

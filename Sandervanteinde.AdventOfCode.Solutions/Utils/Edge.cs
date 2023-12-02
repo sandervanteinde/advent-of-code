@@ -8,7 +8,10 @@ internal record Edge<T>(Node<T> Left, Node<T> Right, int Distance)
         {
             throw new InvalidOperationException();
         }
-        return node == Left ? Right : Left;
+
+        return node == Left
+            ? Right
+            : Left;
     }
 
     public bool ContainsNode(Node<T> node)
@@ -21,4 +24,3 @@ internal record Edge<T>(Node<T> Left, Node<T> Right, int Distance)
         return $"{Left} <=> {Right} (Distance: {Distance})";
     }
 }
-

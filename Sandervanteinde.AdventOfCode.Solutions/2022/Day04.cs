@@ -3,21 +3,23 @@
 internal class Day04 : BaseSolution
 {
     public Day04()
-        : base("Camp Cleanup", 2022, 4)
+        : base("Camp Cleanup", year: 2022, day: 4)
     {
-
     }
+
     public override object DetermineStepOneResult(FileReader reader)
     {
         var counter = 0;
-        foreach(var line in reader.ReadAsSpanLineByLine())
+
+        foreach (var line in reader.ReadAsSpanLineByLine())
         {
-            var (left, right) = line.SplitAtFirstOccurenceOf(',');
-            var (leftStart, leftEnd) = left.SplitAtFirstOccurenceOf('-');
-            var (rightStart, rightEnd) = right.SplitAtFirstOccurenceOf('-');
+            var (left, right) = line.SplitAtFirstOccurenceOf(c: ',');
+            var (leftStart, leftEnd) = left.SplitAtFirstOccurenceOf(c: '-');
+            var (rightStart, rightEnd) = right.SplitAtFirstOccurenceOf(c: '-');
             var leftRange = new Range(int.Parse(leftStart), int.Parse(leftEnd));
             var rightRange = new Range(int.Parse(rightStart), int.Parse(rightEnd));
-            if(leftRange.FullyContains(rightRange) || rightRange.FullyContains(leftRange))
+
+            if (leftRange.FullyContains(rightRange) || rightRange.FullyContains(leftRange))
             {
                 counter++;
             }
@@ -29,13 +31,15 @@ internal class Day04 : BaseSolution
     public override object DetermineStepTwoResult(FileReader reader)
     {
         var counter = 0;
+
         foreach (var line in reader.ReadAsSpanLineByLine())
         {
-            var (left, right) = line.SplitAtFirstOccurenceOf(',');
-            var (leftStart, leftEnd) = left.SplitAtFirstOccurenceOf('-');
-            var (rightStart, rightEnd) = right.SplitAtFirstOccurenceOf('-');
+            var (left, right) = line.SplitAtFirstOccurenceOf(c: ',');
+            var (leftStart, leftEnd) = left.SplitAtFirstOccurenceOf(c: '-');
+            var (rightStart, rightEnd) = right.SplitAtFirstOccurenceOf(c: '-');
             var leftRange = new Range(int.Parse(leftStart), int.Parse(leftEnd));
             var rightRange = new Range(int.Parse(rightStart), int.Parse(rightEnd));
+
             if (leftRange.PartiallyOverlaps(rightRange))
             {
                 counter++;
@@ -64,12 +68,11 @@ file record Range(int From, int To)
 
     public bool PartiallyOverlaps(Range other)
     {
-        if(other.From > To || other.To < From)
+        if (other.From > To || other.To < From)
         {
             return false;
         }
 
         return true;
-
     }
 }

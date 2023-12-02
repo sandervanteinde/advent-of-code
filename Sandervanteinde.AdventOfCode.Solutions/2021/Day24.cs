@@ -3,23 +3,28 @@
 internal partial class Day24 : BaseSolution
 {
     public Day24()
-        : base(@"Arithmetic Logic Unit", 2021, 24)
+        : base(@"Arithmetic Logic Unit", year: 2021, day: 24)
     {
-
     }
 
     public override object DetermineStepOneResult(FileReader reader)
     {
-        var instructions = ParseInstructions(reader).ToList();
+        var instructions = ParseInstructions(reader)
+            .ToList();
         var subroutines = instructions.Chunk(instructions.Count / 14)
-            .Select((instruction, index) => new SimpleInstruction
-            {
-                Instruction = instruction,
-                Div = instruction[4].Right(),
-                Check = instruction[5].Right(),
-                Offset = instruction[15].Right(),
-                Index = index
-            })
+            .Select(
+                (instruction, index) => new SimpleInstruction
+                {
+                    Instruction = instruction,
+                    Div = instruction[4]
+                        .Right(),
+                    Check = instruction[5]
+                        .Right(),
+                    Offset = instruction[15]
+                        .Right(),
+                    Index = index
+                }
+            )
             .ToArray();
 
         var offsets = new long[14];
@@ -44,12 +49,14 @@ internal partial class Day24 : BaseSolution
         }
 
         var sum = 0L;
+
         foreach (var offset in offsets)
         {
             sum *= 10;
+
             if (offset < 0)
             {
-                sum += (9L + offset);
+                sum += 9L + offset;
             }
             else
             {
@@ -62,16 +69,22 @@ internal partial class Day24 : BaseSolution
 
     public override object DetermineStepTwoResult(FileReader reader)
     {
-        var instructions = ParseInstructions(reader).ToList();
+        var instructions = ParseInstructions(reader)
+            .ToList();
         var subroutines = instructions.Chunk(instructions.Count / 14)
-            .Select((instruction, index) => new SimpleInstruction
-            {
-                Instruction = instruction,
-                Div = instruction[4].Right(),
-                Check = instruction[5].Right(),
-                Offset = instruction[15].Right(),
-                Index = index
-            })
+            .Select(
+                (instruction, index) => new SimpleInstruction
+                {
+                    Instruction = instruction,
+                    Div = instruction[4]
+                        .Right(),
+                    Check = instruction[5]
+                        .Right(),
+                    Offset = instruction[15]
+                        .Right(),
+                    Index = index
+                }
+            )
             .ToArray();
 
         var offsets = new long[14];
@@ -96,9 +109,11 @@ internal partial class Day24 : BaseSolution
         }
 
         var sum = 0L;
+
         foreach (var offset in offsets)
         {
             sum *= 10;
+
             if (offset < 0)
             {
                 sum += 1;
@@ -117,7 +132,5 @@ internal partial class Day24 : BaseSolution
         return reader.ReadLineByLine()
             .Select(line => new Instruction(line))
             .ToArray();
-
-
     }
 }

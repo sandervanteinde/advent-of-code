@@ -13,6 +13,7 @@ public static class Primes
         }
 
         var sqrt = Math.Sqrt(value);
+
         for (var i = 3; i < sqrt; i += 2)
         {
             while (value % i == 0)
@@ -35,12 +36,14 @@ public static class Primes
         try
         {
             var actualMax = Convert.ToInt32(Math.Sqrt(max));
+
             for (var i = 2; i <= actualMax; i++)
             {
                 if (!sieve[i])
                 {
                     var j = 2;
                     var jIndex = j * i;
+
                     while (jIndex < max)
                     {
                         sieve[jIndex] = true;

@@ -1,16 +1,17 @@
 ﻿namespace Sandervanteinde.AdventOfCode.Solutions._2022;
+
 public class Day09 : BaseSolution
 {
     public Day09()
-        : base("Rope Bridge", 2022, 9)
+        : base("Rope Bridge", year: 2022, day: 9)
     {
-
     }
+
     public override object DetermineStepOneResult(FileReader reader)
     {
         var ownPoint = new Point { X = 0, Y = 0 };
         var tailPoint = new Point { X = 0, Y = 0 };
-        var visitedPoints = new HashSet<Point>() { tailPoint };
+        var visitedPoints = new HashSet<Point> { tailPoint };
 
         foreach (var line in reader.ReadAsSpanLineByLine())
         {
@@ -18,6 +19,7 @@ public class Day09 : BaseSolution
             {
                 throw new InvalidOperationException("Expeced a different line");
             }
+
             var amount = int.Parse(amountAsString);
 
             for (var i = 0; i < amount; i++)
@@ -38,16 +40,17 @@ public class Day09 : BaseSolution
                     visitedPoints.Add(tailPoint);
                 }
             }
-
         }
+
         return visitedPoints.Count;
     }
 
     public override object DetermineStepTwoResult(FileReader reader)
     {
         var ownPoint = new Point { X = 0, Y = 0 };
-        var tailPoints = Enumerable.Repeat(ownPoint, 9).ToArray();
-        var visitedPoints = new HashSet<Point>() { ownPoint };
+        var tailPoints = Enumerable.Repeat(ownPoint, count: 9)
+            .ToArray();
+        var visitedPoints = new HashSet<Point> { ownPoint };
 
         foreach (var line in reader.ReadAsSpanLineByLine())
         {
@@ -55,6 +58,7 @@ public class Day09 : BaseSolution
             {
                 throw new InvalidOperationException("Expeced a different line");
             }
+
             var amount = int.Parse(amountAsString);
 
             for (var i = 0; i < amount; i++)
@@ -68,16 +72,16 @@ public class Day09 : BaseSolution
                     _ => throw new NotSupportedException()
                 };
 
-
                 if (DetermineNewPoint(ref ownPoint, ref tailPoints[0]))
                 {
-                    for(var tail = 1; tail < 9; tail++)
+                    for (var tail = 1; tail < 9; tail++)
                     {
                         if (!DetermineNewPoint(ref tailPoints[tail - 1], ref tailPoints[tail]))
                         {
                             break;
                         }
-                        if(tail == 8)
+
+                        if (tail == 8)
                         {
                             visitedPoints.Add(tailPoints[tail]);
                         }
@@ -86,8 +90,8 @@ public class Day09 : BaseSolution
 
                 //Print(ownPoint, tailPoints);
             }
-
         }
+
         return visitedPoints.Count;
     }
 
@@ -98,7 +102,7 @@ public class Day09 : BaseSolution
             return false;
         }
 
-        if(previous.X != next.X)
+        if (previous.X != next.X)
         {
             if (previous.X > next.X)
             {
@@ -110,7 +114,7 @@ public class Day09 : BaseSolution
             }
         }
 
-        if(previous.Y != next.Y)
+        if (previous.Y != next.Y)
         {
             if (previous.Y > next.Y)
             {
@@ -121,29 +125,31 @@ public class Day09 : BaseSolution
                 next = next with { Y = next.Y - 1 };
             }
         }
+
         return true;
     }
 
     private static void Print(Point own, Point[] tails)
     {
         Console.Clear();
-        var writtenPoints = new HashSet<Point>() { own };
+        var writtenPoints = new HashSet<Point> { own };
         Console.CursorTop = own.Y + 25;
         Console.CursorLeft = own.X + 50;
-        Console.Write('H');
+        Console.Write(value: 'H');
 
-        for(var i = 0; i < tails.Length; i++)
+        for (var i = 0; i < tails.Length; i++)
         {
             var tailItem = tails[i];
+
             if (!writtenPoints.Add(tailItem))
             {
                 continue;
             }
+
             Console.CursorTop = tailItem.Y + 25;
             Console.CursorLeft = tailItem.X + 50;
             Console.Write((char)(i + 49));
         }
-
     }
 
     private static void Switcheroo<T>(ref T assign, ref T newValue)

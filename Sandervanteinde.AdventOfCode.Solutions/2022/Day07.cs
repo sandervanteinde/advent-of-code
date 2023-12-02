@@ -3,22 +3,23 @@
 internal class Day07 : BaseSolution
 {
     public Day07()
-        : base("No Space Left On Device", 2022, 7)
+        : base("No Space Left On Device", year: 2022, day: 7)
     {
-
     }
 
     public override object DetermineStepOneResult(FileReader reader)
     {
         var root = ParseDirectories(reader);
         var sum = 0UL;
-        foreach(var directory in root.EnumerateSelfAndChildren())
+
+        foreach (var directory in root.EnumerateSelfAndChildren())
         {
-            if(directory.TotalSize <= 100000)
+            if (directory.TotalSize <= 100000)
             {
                 sum += directory.TotalSize;
             }
         }
+
         return sum;
     }
 
@@ -37,6 +38,7 @@ internal class Day07 : BaseSolution
     {
         var root = new Directory("/");
         var currentDirectory = root;
+
         foreach (var line in reader.ReadAsSpanLineByLine())
         {
             switch (line)
@@ -50,14 +52,13 @@ internal class Day07 : BaseSolution
                     currentDirectory.AddDirectory(directoryName.ToString());
                     break;
                 default: // file with size
-                    var split = line.SplitAtFirstOccurenceOf(' ');
+                    var split = line.SplitAtFirstOccurenceOf(c: ' ');
                     currentDirectory.AddFile(split.Right.ToString(), ulong.Parse(split.Left));
                     break;
             }
         }
 
         return root;
-
 
         void SetCurrentDirectory(ReadOnlySpan<char> path)
         {
@@ -72,21 +73,22 @@ internal class Day07 : BaseSolution
 
     private class Directory
     {
-        public Directory? Parent { get; init; }
-        private readonly Dictionary<string, ulong> _files = new();
-        public IReadOnlyDictionary<string, ulong> Files => _files;
         private readonly Dictionary<string, Directory> _directories = new();
+        private readonly Dictionary<string, ulong> _files = new();
+
+        public Directory(string path)
+        {
+            Path = path;
+        }
+
+        public Directory? Parent { get; init; }
+        public IReadOnlyDictionary<string, ulong> Files => _files;
         public IReadOnlyDictionary<string, Directory> Directories => _directories;
 
         public ulong OwnSize { get; private set; }
         public ulong TotalSize { get; private set; }
 
         public string Path { get; }
-
-        public Directory(string path)
-        {
-            Path = path;
-        }
 
         public void AddDirectory(string directory)
         {
@@ -95,7 +97,7 @@ internal class Day07 : BaseSolution
 
         public Directory GetDirectory(string directory)
         {
-            if(!_directories.TryGetValue(directory, out var matchedDirectory))
+            if (!_directories.TryGetValue(directory, out var matchedDirectory))
             {
                 throw new Exception("Directory did not exist");
             }
@@ -110,7 +112,8 @@ internal class Day07 : BaseSolution
             TotalSize += size;
 
             var parent = Parent;
-            while(parent is not null)
+
+            while (parent is not null)
             {
                 parent.TotalSize += size;
                 parent = parent.Parent;
@@ -120,7 +123,8 @@ internal class Day07 : BaseSolution
         public IEnumerable<Directory> EnumerateSelfAndChildren()
         {
             yield return this;
-            foreach(var childs in _directories.Values.SelectMany(dir => dir.EnumerateSelfAndChildren()))
+
+            foreach (var childs in _directories.Values.SelectMany(dir => dir.EnumerateSelfAndChildren()))
             {
                 yield return childs;
             }

@@ -12,11 +12,8 @@ internal partial class Day22
             {
                 Console.WriteLine("Draining 2 health from dragon");
             }
-            return stats with
-            {
-                DragonHealth = stats.DragonHealth - 2,
-                PlayerHealth = stats.PlayerHealth + 2
-            };
+
+            return stats with { DragonHealth = stats.DragonHealth - 2, PlayerHealth = stats.PlayerHealth + 2 };
         }
     }
 }

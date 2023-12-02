@@ -12,6 +12,7 @@ internal partial class Day22
             Apply = apply;
             Turn = turns;
         }
+
         public GameStats ApplyEffect(GameStats gameStats)
         {
             return Apply(gameStats, Turn);

@@ -5,8 +5,8 @@ internal partial class Day07
     private class TwoValueOperand : IOperand
     {
         private readonly MemoryAddressOrConstant left;
-        private readonly MemoryAddressOrConstant right;
         private readonly Func<int, int, int> operand;
+        private readonly MemoryAddressOrConstant right;
 
         public TwoValueOperand(
             MemoryAddressOrConstant left,

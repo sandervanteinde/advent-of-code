@@ -8,21 +8,20 @@ internal partial class Day08
     {
         private readonly string input;
         private readonly OpMode mode;
-        private int index;
-        private bool finalized;
-
-
-        public bool HasNext => input.Length > index;
-
-        private IState state = new ExpectStartStringState();
 
         private readonly StringBuilder sb = new();
+        private bool finalized;
+        private int index;
+
+        private IState state = new ExpectStartStringState();
 
         public StringParser(string input, OpMode mode)
         {
             this.input = input;
             this.mode = mode;
         }
+
+        public bool HasNext => input.Length > index;
 
         internal void SetState<T>()
             where T : IState, new()
@@ -52,8 +51,9 @@ internal partial class Day08
         {
             if (mode is OpMode.Write)
             {
-                sb.Append('"');
+                sb.Append(value: '"');
             }
+
             while (!finalized)
             {
                 state.Next(this, mode);
@@ -66,10 +66,10 @@ internal partial class Day08
 
             if (mode is OpMode.Write)
             {
-                sb.Append('"');
+                sb.Append(value: '"');
             }
+
             return sb.ToString();
         }
-
     }
 }

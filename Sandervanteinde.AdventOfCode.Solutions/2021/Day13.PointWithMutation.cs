@@ -5,22 +5,23 @@ internal partial class Day13
     private class PointWithMutation
     {
         private readonly Point point;
-        private Func<Point, Point> mutation;
         private Lazy<Point> lazyPoint;
-        public Point Point => lazyPoint.Value;
+        private Func<Point, Point> mutation;
 
         public PointWithMutation(Point point)
         {
             this.point = point;
             mutation = Noop;
-            lazyPoint = new(point);
+            lazyPoint = new Lazy<Point>(point);
         }
+
+        public Point Point => lazyPoint.Value;
 
         public void ApplyMutation(Func<Point, Point> mutation)
         {
             var oldMutation = this.mutation;
             this.mutation = point => mutation(oldMutation(point));
-            lazyPoint = new(LazyInit);
+            lazyPoint = new Lazy<Point>(LazyInit);
         }
 
         public override string ToString()

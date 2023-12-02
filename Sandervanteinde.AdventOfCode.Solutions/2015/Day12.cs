@@ -2,12 +2,11 @@
 
 namespace Sandervanteinde.AdventOfCode.Solutions._2015;
 
-internal partial class Day12 : BaseSolution
+internal class Day12 : BaseSolution
 {
     public Day12()
-        : base("JSAbacusFramework.io", 2015, 12)
+        : base("JSAbacusFramework.io", year: 2015, day: 12)
     {
-
     }
 
     public override object DetermineStepOneResult(FileReader reader)
@@ -26,16 +25,19 @@ internal partial class Day12 : BaseSolution
                     break;
                 case JsonValueKind.Array:
                     var arrayLength = element.GetArrayLength();
+
                     foreach (var arrayItem in element.EnumerateArray())
                     {
                         Iterate(arrayItem);
                     }
+
                     break;
                 case JsonValueKind.Object:
                     foreach (var entry in element.EnumerateObject())
                     {
                         Iterate(entry.Value);
                     }
+
                     break;
             }
         }
@@ -43,7 +45,6 @@ internal partial class Day12 : BaseSolution
 
     public override object DetermineStepTwoResult(FileReader reader)
     {
-
         var jsonDoc = reader.DeserializeJsonAs<JsonDocument>() ?? throw new InvalidOperationException();
         var total = 0;
         Iterate(jsonDoc.RootElement);
@@ -58,21 +59,27 @@ internal partial class Day12 : BaseSolution
                     break;
                 case JsonValueKind.Array:
                     var arrayLength = element.GetArrayLength();
+
                     foreach (var arrayItem in element.EnumerateArray())
                     {
                         Iterate(arrayItem);
                     }
+
                     break;
                 case JsonValueKind.Object:
-                    var objects = element.EnumerateObject().ToArray();
+                    var objects = element.EnumerateObject()
+                        .ToArray();
+
                     if (objects.Any(obj => obj.Value.ValueKind == JsonValueKind.String && obj.Value.GetString() == "red"))
                     {
                         return;
                     }
+
                     foreach (var entry in element.EnumerateObject())
                     {
                         Iterate(entry.Value);
                     }
+
                     break;
             }
         }

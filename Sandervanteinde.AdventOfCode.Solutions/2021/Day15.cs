@@ -3,17 +3,17 @@
 internal partial class Day15 : BaseSolution
 {
     public Day15()
-        : base("Chiton", 2021, 15)
+        : base("Chiton", year: 2021, day: 15)
     {
-
     }
 
     public override object DetermineStepOneResult(FileReader reader)
     {
         var grid = reader.ReadAsIntegerGrid();
-        var xLength = grid.GetLength(0);
-        var yLength = grid.GetLength(1);
-        var distanceGrid = new int[grid.GetLength(0), grid.GetLength(1)];
+        var xLength = grid.GetLength(dimension: 0);
+        var yLength = grid.GetLength(dimension: 1);
+        var distanceGrid = new int[grid.GetLength(dimension: 0), grid.GetLength(dimension: 1)];
+
         for (var y = 0; y < yLength; y++)
         {
             for (var x = 0; x < xLength; x++)
@@ -26,11 +26,14 @@ internal partial class Day15 : BaseSolution
         distanceGrid[0, 0] = 0;
         var current = new Point { X = 0, Y = 0 };
         var sortedList = new SortedSet<PointWithValue>(new PointWithValue.CompareByValue());
+
         while (current.X != xLength - 1 || current.Y != yLength - 1)
         {
-            foreach (var adjacent in grid[current.X, current.Y].AdjacentNonDiagonals())
+            foreach (var adjacent in grid[current.X, current.Y]
+                         .AdjacentNonDiagonals())
             {
                 var point = new Point { X = adjacent.x, Y = adjacent.y };
+
                 if (visited.Contains(point))
                 {
                     continue;
@@ -40,12 +43,14 @@ internal partial class Day15 : BaseSolution
                 distanceGrid[point.X, point.Y] = Math.Min(distanceGrid[point.X, point.Y], distanceGrid[current.X, current.Y] + adjacent.value);
                 sortedList.Add(new PointWithValue { Point = point, Value = newDistance });
             }
+
             visited.Add(current);
 
             var next = sortedList.First();
             sortedList.Remove(next);
             current = next.Point;
         }
+
         return distanceGrid[xLength - 1, yLength - 1];
     }
 
@@ -53,9 +58,10 @@ internal partial class Day15 : BaseSolution
     {
         var grid = reader.ReadAsIntegerGrid();
         grid = MakeFiveTimesLarger(grid);
-        var xLength = grid.GetLength(0);
-        var yLength = grid.GetLength(1);
-        var distanceGrid = new int[grid.GetLength(0), grid.GetLength(1)];
+        var xLength = grid.GetLength(dimension: 0);
+        var yLength = grid.GetLength(dimension: 1);
+        var distanceGrid = new int[grid.GetLength(dimension: 0), grid.GetLength(dimension: 1)];
+
         for (var y = 0; y < yLength; y++)
         {
             for (var x = 0; x < xLength; x++)
@@ -68,11 +74,14 @@ internal partial class Day15 : BaseSolution
         distanceGrid[0, 0] = 0;
         var current = new Point { X = 0, Y = 0 };
         var sortedList = new SortedSet<PointWithValue>(new PointWithValue.CompareByValue());
+
         while (current.X != xLength - 1 || current.Y != yLength - 1)
         {
-            foreach (var adjacent in grid[current.X, current.Y].AdjacentNonDiagonals())
+            foreach (var adjacent in grid[current.X, current.Y]
+                         .AdjacentNonDiagonals())
             {
                 var point = new Point { X = adjacent.x, Y = adjacent.y };
+
                 if (visited.Contains(point))
                 {
                     continue;
@@ -82,34 +91,39 @@ internal partial class Day15 : BaseSolution
                 distanceGrid[point.X, point.Y] = Math.Min(distanceGrid[point.X, point.Y], distanceGrid[current.X, current.Y] + adjacent.value);
                 sortedList.Add(new PointWithValue { Point = point, Value = newDistance });
             }
+
             visited.Add(current);
 
             var next = sortedList.First();
             sortedList.Remove(next);
             current = next.Point;
         }
+
         return distanceGrid[xLength - 1, yLength - 1];
     }
 
     private GridWindow<int>[,] MakeFiveTimesLarger(GridWindow<int>[,] grid)
     {
-        var xLength = grid.GetLength(0);
-        var yLength = grid.GetLength(1);
+        var xLength = grid.GetLength(dimension: 0);
+        var yLength = grid.GetLength(dimension: 1);
         var newGrid = new int[xLength * 5, yLength * 5];
+
         for (var y = 0; y < yLength; y++)
         {
             for (var x = 0; x < xLength; x++)
             {
                 var gridValue = grid[x, y].Value;
+
                 for (var dy = 0; dy < 5; dy++)
                 {
                     for (var dx = 0; dx < 5; dx++)
                     {
-                        newGrid[dx * xLength + x, dy * yLength + y] = CutoffMoreThan9(gridValue + dx + dy);
+                        newGrid[(dx * xLength) + x, (dy * yLength) + y] = CutoffMoreThan9(gridValue + dx + dy);
                     }
                 }
             }
         }
+
         return newGrid.ToGridwindows();
 
         static int CutoffMoreThan9(int value)
@@ -118,6 +132,7 @@ internal partial class Day15 : BaseSolution
             {
                 return value;
             }
+
             return value - 9;
         }
     }

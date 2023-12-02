@@ -6,7 +6,9 @@ internal partial class Day24
     {
         public long PerformOperation(long left, long right)
         {
-            return left == right ? 1 : 0;
+            return left == right
+                ? 1
+                : 0;
         }
     }
 }

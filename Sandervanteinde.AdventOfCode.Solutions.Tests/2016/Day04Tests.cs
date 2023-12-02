@@ -14,18 +14,14 @@ public class Day04Tests
     public void Code_ValidatesChecksum(string name, int sectorId, string checkSum, bool isValid)
     {
         // arrange
-        var code = new Day04.Code
-        {
-            SectorId = sectorId,
-            Checksum = checkSum,
-            Name = name
-        };
+        var code = new Day04.Code { SectorId = sectorId, Checksum = checkSum, Name = name };
 
         // act
         var result = code.IsValidChecksum();
 
         // assert
-        result.Should().Be(isValid);
+        result.Should()
+            .Be(isValid);
     }
 
     [Theory]
@@ -36,17 +32,13 @@ public class Day04Tests
     public void Decipher_ShouldCorrectlyDecipher(string name, int sectorId, string decipheredText)
     {
         // arrange
-        var code = new Day04.Code
-        {
-            Checksum = "",
-            Name = name,
-            SectorId = sectorId
-        };
+        var code = new Day04.Code { Checksum = "", Name = name, SectorId = sectorId };
 
         // act
         var result = code.Decipher();
 
         // assert
-        result.Should().Be(decipheredText);
+        result.Should()
+            .Be(decipheredText);
     }
 }

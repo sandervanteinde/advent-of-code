@@ -4,11 +4,12 @@ internal partial class Day18
 {
     public class Snailfish : SnailfishBase
     {
-        public int Value { get; set; }
         public Snailfish(int value)
         {
             Value = value;
         }
+
+        public int Value { get; set; }
 
         public override bool AttemptExplode(int depth)
         {
@@ -31,24 +32,23 @@ internal partial class Day18
             {
                 return false;
             }
+
             if (Parent is null)
             {
                 throw new InvalidOperationException("Parent was not a snail fish pair, which is not possible");
             }
+
             var left = Value / 2;
             var right = Value - left;
 
-            var newSnailfish = new SnailfishPair
-            {
-                Left = new Snailfish(left),
-                Right = new Snailfish(right)
-            };
+            var newSnailfish = new SnailfishPair { Left = new Snailfish(left), Right = new Snailfish(right) };
 
             if (Parent.Left == this)
             {
                 Parent.Left = newSnailfish;
                 return true;
             }
+
             if (Parent.Right == this)
             {
                 Parent.Right = newSnailfish;

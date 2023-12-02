@@ -4,17 +4,19 @@ public class Problem0006 : IProjectEulerSolution
 {
     public string Title => "Sum Square Difference";
     public int Id => 6;
+
     public object GetSolution()
     {
         var sumOfPowers = 0.0;
         var sum = 0;
+
         for (var i = 1; i <= 100; i++)
         {
-            sumOfPowers += Math.Pow(i, 2);
+            sumOfPowers += Math.Pow(i, y: 2);
             sum += i;
         }
 
-        var sumSquared = Math.Pow(sum, 2);
+        var sumSquared = Math.Pow(sum, y: 2);
         return sumSquared - sumOfPowers;
     }
 }

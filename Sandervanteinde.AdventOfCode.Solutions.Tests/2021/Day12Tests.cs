@@ -23,7 +23,8 @@ b-end";
 
         var result = day12.DetermineStepOneResult(reader);
 
-        result.Should().Be(10);
+        result.Should()
+            .Be(expected: 10);
     }
 
     [Fact]
@@ -42,6 +43,7 @@ b-end";
 
         var result = day12.DetermineStepTwoResult(reader);
 
-        result.Should().Be(36);
+        result.Should()
+            .Be(expected: 36);
     }
 }

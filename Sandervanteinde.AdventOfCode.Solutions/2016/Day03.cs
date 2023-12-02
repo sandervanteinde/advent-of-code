@@ -3,32 +3,29 @@
 internal class Day03 : BaseSolution
 {
     public Day03()
-        : base("Squares With Three Sides", 2016, 3)
+        : base("Squares With Three Sides", year: 2016, day: 3)
     {
-
     }
 
     public override object DetermineStepOneResult(FileReader reader)
     {
         return ParseInputsHorizontally(reader)
-            .Where(input => (input.lowest + input.middle) > input.highest)
+            .Where(input => input.lowest + input.middle > input.highest)
             .Count();
     }
 
     public override object DetermineStepTwoResult(FileReader reader)
     {
         return ParseInputsVertically(reader)
-            .Where(input => (input.lowest + input.middle) > input.highest)
+            .Where(input => input.lowest + input.middle > input.highest)
             .Count();
     }
-
-
 
     private static IEnumerable<(int lowest, int middle, int highest)> ParseInputsHorizontally(FileReader reader)
     {
         foreach (var line in reader.ReadLineByLine())
         {
-            var split = line.Split(' ', StringSplitOptions.RemoveEmptyEntries)
+            var split = line.Split(separator: ' ', StringSplitOptions.RemoveEmptyEntries)
                 .Select(int.Parse)
                 .OrderBy(x => x)
                 .ToArray();
@@ -40,6 +37,7 @@ internal class Day03 : BaseSolution
     {
         var lines = reader.ReadLineByLine()
             .ToArray();
+
         for (var i = 0; i < lines.Length; i += 3)
         {
             var line1 = ParseLine(lines[i]);
@@ -50,13 +48,17 @@ internal class Day03 : BaseSolution
             yield return ReturnInOrder(line1[2], line2[2], line3[2]);
         }
 
-        static int[] ParseLine(string input) => input.Split(' ', StringSplitOptions.RemoveEmptyEntries)
+        static int[] ParseLine(string input)
+        {
+            return input.Split(separator: ' ', StringSplitOptions.RemoveEmptyEntries)
                 .Select(int.Parse)
                 .ToArray();
+        }
 
         static (int, int, int) ReturnInOrder(int first, int second, int third)
         {
-            var ordered = new[] { first, second, third }.OrderBy(x => x).ToArray();
+            var ordered = new[] { first, second, third }.OrderBy(x => x)
+                .ToArray();
             return (ordered[0], ordered[1], ordered[2]);
         }
     }

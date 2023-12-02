@@ -10,7 +10,9 @@ internal partial class Day08
             {
                 throw new NotSupportedException();
             }
+
             var c = parser.ConsumeNextChar();
+
             if (c != '"')
             {
                 throw new NotImplementedException();
@@ -20,6 +22,7 @@ internal partial class Day08
             {
                 parser.AddToOutput('\\', c);
             }
+
             parser.SetState<ConsumeCharacterState>();
         }
     }

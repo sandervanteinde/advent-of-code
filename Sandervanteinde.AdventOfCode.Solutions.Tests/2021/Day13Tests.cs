@@ -1,19 +1,20 @@
 ﻿using FluentAssertions;
-using Sandervanteinde.AdventOfCode.Solutions.Utils;
 using Sandervanteinde.AdventOfCode.Solutions._2021;
+using Sandervanteinde.AdventOfCode.Solutions.Utils;
 using Xunit;
 
 namespace Sandervanteinde.AdventOfCode.Solutions.Tests._2021;
 
 public class Day13Tests
 {
-    private readonly Day13 _sut;
     private readonly FileReader _reader;
+    private readonly Day13 _sut;
 
     public Day13Tests()
     {
         _sut = new Day13();
-        _reader = new FileReader(@"6,10
+        _reader = new FileReader(
+            @"6,10
 0,14
 9,10
 0,3
@@ -33,12 +34,15 @@ public class Day13Tests
 9,0
 
 fold along y=7
-fold along x=5");
+fold along x=5"
+        );
     }
 
     [Fact]
     public void Step1_ShouldWorkWithExample()
     {
-        _sut.DetermineStepOneResult(_reader).Should().Be(17);
+        _sut.DetermineStepOneResult(_reader)
+            .Should()
+            .Be(expected: 17);
     }
 }

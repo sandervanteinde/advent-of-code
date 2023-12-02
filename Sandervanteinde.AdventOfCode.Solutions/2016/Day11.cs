@@ -3,9 +3,8 @@
 public class Day11 : BaseSolution
 {
     public Day11()
-        : base("Radioisotope Thermoelectric Generators", 2016, 11)
+        : base("Radioisotope Thermoelectric Generators", year: 2016, day: 11)
     {
-
     }
 
     public override object DetermineStepOneResult(FileReader reader)
@@ -21,28 +20,35 @@ public class Day11 : BaseSolution
     private object ParseFloor(string line, int index)
     {
         var floor = new Floor { FloorNumber = index + 1 };
-        foreach(var machineType in AllMachineTypes())
+
+        foreach (var machineType in AllMachineTypes())
         {
             if (line.Contains(machineType.Item1))
             {
                 floor.AddMachine(new Machine((Type)machineType.Item2, (MachineType)machineType.Item3));
             }
         }
+
         return floor;
     }
 
     private List<(string, object, object)> AllMachineTypes()
     {
         return Enum.GetValues<Type>()
-            .SelectMany(type => Enum.GetValues<MachineType>().Select(machineType =>
-            {
-                return
-                (
-                $"{type.ToString().ToLower()}{(machineType == MachineType.Generator ? " generator" : "-compatible microchip")}",
-                type as object,
-                machineType as object
-                );
-            }))
+            .SelectMany(
+                type => Enum.GetValues<MachineType>()
+                    .Select(
+                        machineType =>
+                        {
+                            return
+                            (
+                                $"{type.ToString().ToLower()}{(machineType == MachineType.Generator ? " generator" : "-compatible microchip")}",
+                                type as object,
+                                machineType as object
+                            );
+                        }
+                    )
+            )
             .ToList();
     }
 }
@@ -64,7 +70,7 @@ file enum MachineType
 
 file record struct Machine(Type Type, MachineType MachineType);
 
-file class Office 
+file class Office
 {
     public required Floor One { get; init; }
     public required Floor Two { get; init; }
@@ -74,8 +80,8 @@ file class Office
 
 file class Floor
 {
-    public required int FloorNumber { get; init; }
     private readonly List<Machine> _machines = new();
+    public required int FloorNumber { get; init; }
 
     public void AddMachine(Machine machine)
     {
@@ -86,10 +92,12 @@ file class Floor
     {
         var hashcode = new HashCode();
         hashcode.Add(FloorNumber);
-        foreach(var machine in _machines)
+
+        foreach (var machine in _machines)
         {
             hashcode.Add(machine);
         }
+
         return hashcode.ToHashCode();
     }
 }

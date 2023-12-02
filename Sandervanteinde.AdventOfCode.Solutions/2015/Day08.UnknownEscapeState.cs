@@ -10,13 +10,16 @@ internal partial class Day08
             {
                 throw new InvalidOperationException();
             }
+
             var c = parser.ConsumeNextChar();
+
             if (c is '\\' or '"')
             {
                 parser.AddToOutput(c);
                 parser.SetState<ConsumeCharacterState>();
                 return;
             }
+
             if (c == 'x')
             {
                 parser.SetState<ConsumeHexadecimalEscapeState>();

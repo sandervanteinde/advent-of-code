@@ -3,15 +3,15 @@
 internal partial class Day08 : BaseSolution
 {
     public Day08()
-        : base("Matchsticks", 2015, 8)
+        : base("Matchsticks", year: 2015, day: 8)
     {
-
     }
 
     public override object DetermineStepOneResult(FileReader reader)
     {
         var rawStringLength = 0;
         var withoutQuotes = 0;
+
         foreach (var line in reader.ReadLineByLine())
         {
             var parser = new StringParser(line, OpMode.Read);
@@ -27,6 +27,7 @@ internal partial class Day08 : BaseSolution
     {
         var rawStringLength = 0;
         var withQuotes = 0;
+
         foreach (var line in reader.ReadLineByLine())
         {
             var parser = new StringParser(line, OpMode.Write);

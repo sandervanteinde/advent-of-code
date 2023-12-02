@@ -5,15 +5,13 @@ internal partial class Day22
     private abstract class Spell
     {
         public abstract int Mana { get; }
-        internal static bool Log { get; set; }
+        internal static bool Log { get; }
 
         public GameStats CastSpell(GameStats stats, ref IEnumerable<Effect> effects)
         {
-            return OnCast(stats, ref effects) with
-            {
-                PlayerMana = stats.PlayerMana - Mana
-            };
+            return OnCast(stats, ref effects) with { PlayerMana = stats.PlayerMana - Mana };
         }
+
         protected abstract GameStats OnCast(GameStats stats, ref IEnumerable<Effect> effects);
 
         public static IEnumerable<Spell> All()

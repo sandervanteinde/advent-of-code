@@ -4,9 +4,6 @@ internal partial class Day12
 {
     private class Cave : IEquatable<Cave>
     {
-        public string Id { get; }
-        public bool IsSmallCave { get; }
-        public bool IsStartOrEnd { get; }
         public Cave(string id)
         {
             Id = id;
@@ -14,6 +11,9 @@ internal partial class Day12
             IsStartOrEnd = id is "start" or "end";
         }
 
+        public string Id { get; }
+        public bool IsSmallCave { get; }
+        public bool IsStartOrEnd { get; }
 
         public bool Equals(Cave? other)
         {

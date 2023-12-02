@@ -5,9 +5,8 @@ namespace Sandervanteinde.AdventOfCode.Solutions._2015;
 internal partial class Day13 : BaseSolution
 {
     public Day13()
-        : base("Knights of the Dinner Table", 2015, 13)
+        : base("Knights of the Dinner Table", year: 2015, day: 13)
     {
-
     }
 
     public override object DetermineStepOneResult(FileReader reader)
@@ -20,19 +19,22 @@ internal partial class Day13 : BaseSolution
         const string SELF = "self";
         var pairs = GetPairRatings(reader);
         var uniquePersons = UniquePersonsIn(pairs.Keys);
+
         if (seatSelf)
         {
             foreach (var person in uniquePersons)
             {
                 var pairWithSelf = new Pair(SELF, person);
-                pairs.Add(pairWithSelf, 0);
+                pairs.Add(pairWithSelf, value: 0);
             }
+
             uniquePersons.Add(SELF);
         }
 
         var bestScore = int.MinValue;
         int currentScore;
         string? firstPerson;
+
         for (var i = 0; i < uniquePersons.Count; i++)
         {
             firstPerson = uniquePersons[i];
@@ -50,13 +52,16 @@ internal partial class Day13 : BaseSolution
             {
                 var pairScore = pairs[new Pair(previousPerson, firstPerson)];
                 currentScore += pairScore;
+
                 if (currentScore > bestScore)
                 {
                     bestScore = currentScore;
                 }
+
                 currentScore -= pairScore;
                 return;
             }
+
             for (var j = 0; j < uniquePersons.Count; j++)
             {
                 var seatWith = uniquePersons[j];
@@ -91,17 +96,21 @@ internal partial class Day13 : BaseSolution
 
         foreach (var match in reader.MatchLineByLine(regex))
         {
-            var personOne = match.Groups[1].Value;
-            var lose = match.Groups[2].Value is "lose";
-            var amount = int.Parse(match.Groups[3].Value);
-            var personTwo = match.Groups[4].Value;
-            amount = lose ? -amount : amount;
+            var personOne = match.Groups[groupnum: 1].Value;
+            var lose = match.Groups[groupnum: 2].Value is "lose";
+            var amount = int.Parse(match.Groups[groupnum: 3].Value);
+            var personTwo = match.Groups[groupnum: 4].Value;
+            amount = lose
+                ? -amount
+                : amount;
 
             var pair = new Pair(personOne, personTwo);
+
             if (result.TryGetValue(pair, out var pairRatings))
             {
                 amount = pairRatings + amount;
             }
+
             result[pair] = amount;
         }
 

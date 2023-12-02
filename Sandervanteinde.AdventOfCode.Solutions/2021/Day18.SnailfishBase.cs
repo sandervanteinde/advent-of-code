@@ -22,36 +22,39 @@ internal partial class Day18
         public static SnailfishBase Parse(string str)
         {
             return ParseSnailfish(str.GetEnumerator());
+
             static SnailfishBase ParseSnailfish(IEnumerator<char> enumerator)
             {
                 enumerator.MoveNext();
+
                 if (enumerator.Current == '[')
                 {
-                    var pair = new SnailfishPair
-                    {
-                        Left = ParseSnailfish(enumerator)
-                    };
+                    var pair = new SnailfishPair { Left = ParseSnailfish(enumerator) };
                     enumerator.MoveNext();
+
                     if (enumerator.Current != ',')
                     {
                         throw new InvalidOperationException("Expected a comma separating the snailfishes.");
                     }
+
                     pair.Right = ParseSnailfish(enumerator);
                     enumerator.MoveNext();
+
                     if (enumerator.Current != ']')
                     {
                         throw new InvalidOperationException("Expected closing ']' after parsing snailfish");
                     }
+
                     return pair;
                 }
+
                 if (enumerator.Current == ']')
                 {
                     throw new InvalidOperationException("Missing starting bracket");
                 }
+
                 return new Snailfish(enumerator.Current - 48);
             }
         }
-
-
     }
 }

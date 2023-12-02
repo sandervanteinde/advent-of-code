@@ -2,24 +2,20 @@
 
 internal partial class Day22 : BaseSolution
 {
-    private enum LogLevel
-    {
-        Success,
-        SuccessAndFail,
-        None
-    }
     private readonly LogLevel logLevel = LogLevel.Success;
     private int lowestManaKill;
-    public Day22()
-        : base("Wizard Simulator 20XX", 2015, 22)
-    {
 
+    public Day22()
+        : base("Wizard Simulator 20XX", year: 2015, day: 22)
+    {
     }
 
     public override object DetermineStepOneResult(FileReader reader)
     {
         var (hitPoints, damage) = ParseDragonStats(reader);
-        var allSpells = Spell.All().OrderBy(spell => spell.Mana).ToArray();
+        var allSpells = Spell.All()
+            .OrderBy(spell => spell.Mana)
+            .ToArray();
         var spells = new Stack<Spell>();
         var initGameStats = new GameStats
         {
@@ -31,7 +27,7 @@ internal partial class Day22 : BaseSolution
         };
         var castSpells = new Stack<Spell>();
         lowestManaKill = int.MaxValue;
-        AttemptCastSpell(initGameStats, initGameStats, Enumerable.Empty<Effect>(), 1, allSpells, castSpells);
+        AttemptCastSpell(initGameStats, initGameStats, Enumerable.Empty<Effect>(), turn: 1, allSpells, castSpells);
 
         return lowestManaKill;
     }
@@ -39,7 +35,9 @@ internal partial class Day22 : BaseSolution
     public override object DetermineStepTwoResult(FileReader reader)
     {
         var (hitPoints, damage) = ParseDragonStats(reader);
-        var allSpells = Spell.All().OrderBy(spell => spell.Mana).ToArray();
+        var allSpells = Spell.All()
+            .OrderBy(spell => spell.Mana)
+            .ToArray();
         var spells = new Stack<Spell>();
         var initGameStats = new GameStats
         {
@@ -52,17 +50,14 @@ internal partial class Day22 : BaseSolution
         };
         var castSpells = new Stack<Spell>();
         lowestManaKill = int.MaxValue;
-        AttemptCastSpell(initGameStats, initGameStats, Enumerable.Empty<Effect>(), 1, allSpells, castSpells);
+        AttemptCastSpell(initGameStats, initGameStats, Enumerable.Empty<Effect>(), turn: 1, allSpells, castSpells);
 
         return lowestManaKill;
     }
 
     private static GameStats DragonAttack(GameStats stats)
     {
-        return stats with
-        {
-            PlayerHealth = stats.PlayerHealth - Math.Max(1, stats.DragonDamage - stats.PlayerArmor)
-        };
+        return stats with { PlayerHealth = stats.PlayerHealth - Math.Max(val1: 1, stats.DragonDamage - stats.PlayerArmor) };
     }
 
     private void LogReplay(bool won, int manaSpent, GameStats initGameStats, Stack<Spell> castSpells)
@@ -79,38 +74,58 @@ internal partial class Day22 : BaseSolution
             case LogLevel.None:
                 return;
         }
+
         var gameStats = initGameStats;
         var effects = Enumerable.Empty<Effect>();
-        Console.ForegroundColor = won ? ConsoleColor.Green : ConsoleColor.Red;
+        Console.ForegroundColor = won
+            ? ConsoleColor.Green
+            : ConsoleColor.Red;
         Console.WriteLine($"Player {(won ? "won" : "lost")}");
         Console.ForegroundColor = ConsoleColor.Gray;
+
         foreach (var spell in castSpells.Reverse())
         {
             gameStats = ApplyEffects(gameStats, ref effects);
+
             if (Log("Apply pre-player effects"))
             {
                 break;
             }
 
             gameStats = spell.CastSpell(gameStats, ref effects);
-            if (Log(spell.GetType().Name))
+
+            if (Log(
+                    spell.GetType()
+                        .Name
+                ))
             {
                 break;
             }
 
             gameStats = ApplyEffects(gameStats, ref effects);
+
             if (Log("Apply pre-dragon effects"))
             {
                 break;
             }
 
             gameStats = DragonAttack(gameStats);
+
             if (Log("Dragon attack"))
             {
                 break;
             }
         }
-        Console.WriteLine(string.Join(" -> ", castSpells.Reverse().Select(spell => spell.GetType().Name)));
+
+        Console.WriteLine(
+            string.Join(
+                " -> ", castSpells.Reverse()
+                    .Select(
+                        spell => spell.GetType()
+                            .Name
+                    )
+            )
+        );
         Console.WriteLine($"Mana spent: {manaSpent}");
         Console.WriteLine();
 
@@ -129,11 +144,14 @@ internal partial class Day22 : BaseSolution
         {
             var playerWon = stats.PlayerHealth > 0;
             var manaSpent = castSpells.Sum(spell => spell.Mana);
+
             if (playerWon)
             {
                 lowestManaKill = Math.Min(lowestManaKill, castSpells.Sum(spell => spell.Mana));
             }
+
             LogReplay(playerWon, manaSpent, initGameState, castSpells);
+
             if (playerWon)
             {
                 Console.WriteLine(stats);
@@ -141,25 +159,30 @@ internal partial class Day22 : BaseSolution
 
             return true;
         }
+
         return false;
     }
 
     private static GameStats ApplyEffects(GameStats stats, ref IEnumerable<Effect> spellEffects)
     {
         spellEffects = spellEffects.Select(effect => effect with { Turn = effect.Turn - 1 });
+
         foreach (var effect in spellEffects)
         {
             stats = effect.ApplyEffect(stats);
         }
+
         return stats;
     }
 
-    private void AttemptCastSpell(GameStats initGameState, GameStats startStats, IEnumerable<Effect> startEffects, int turn, Spell[] allSpells, Stack<Spell> castSpells)
+    private void AttemptCastSpell(GameStats initGameState, GameStats startStats, IEnumerable<Effect> startEffects, int turn, Spell[] allSpells,
+        Stack<Spell> castSpells)
     {
         if (lowestManaKill < castSpells.Sum(s => s.Mana))
         {
             return;
         }
+
         foreach (var spell in allSpells)
         {
             var stats = startStats;
@@ -168,7 +191,9 @@ internal partial class Day22 : BaseSolution
             // player turn effects
             stats = ApplyEffects(stats, ref effects) with
             {
-                PlayerHealth = initGameState.LoseOneHpAtStart ? stats.PlayerHealth - 1 : stats.PlayerHealth
+                PlayerHealth = initGameState.LoseOneHpAtStart
+                    ? stats.PlayerHealth - 1
+                    : stats.PlayerHealth
             };
 
             if (ShouldStop(ref stats, castSpells, initGameState))
@@ -182,31 +207,35 @@ internal partial class Day22 : BaseSolution
             }
 
             // player turn cast
-            CastAndReturn(spell, () =>
-            {
-                stats = spell.CastSpell(stats, ref effects);
-
-                if (ShouldStop(ref stats, castSpells, initGameState))
+            CastAndReturn(
+                spell, () =>
                 {
-                    return;
-                }
+                    stats = spell.CastSpell(stats, ref effects);
 
-                // dragon turn effects
-                stats = ApplyEffects(stats, ref effects);
-                if (ShouldStop(ref stats, castSpells, initGameState))
-                {
-                    return;
-                }
+                    if (ShouldStop(ref stats, castSpells, initGameState))
+                    {
+                        return;
+                    }
 
-                // dragon attack
-                stats = DragonAttack(stats);
-                if (ShouldStop(ref stats, castSpells, initGameState))
-                {
-                    return;
-                }
+                    // dragon turn effects
+                    stats = ApplyEffects(stats, ref effects);
 
-                AttemptCastSpell(initGameState, stats, effects, turn + 1, allSpells, castSpells);
-            });
+                    if (ShouldStop(ref stats, castSpells, initGameState))
+                    {
+                        return;
+                    }
+
+                    // dragon attack
+                    stats = DragonAttack(stats);
+
+                    if (ShouldStop(ref stats, castSpells, initGameState))
+                    {
+                        return;
+                    }
+
+                    AttemptCastSpell(initGameState, stats, effects, turn + 1, allSpells, castSpells);
+                }
+            );
 
             void CastAndReturn(Spell spell, Action act)
             {
@@ -215,16 +244,17 @@ internal partial class Day22 : BaseSolution
                 castSpells.Pop();
             }
         }
-
-
     }
+
     private static (int hitpoints, int damage) ParseDragonStats(FileReader reader)
     {
         int hitpoints = -1, damage = -1;
+
         foreach (var line in reader.ReadLineByLine())
         {
             var value = int.Parse(line.Split(": ")[1]);
-            switch (line[0])
+
+            switch (line[index: 0])
             {
                 case 'H':
                     hitpoints = value;
@@ -236,6 +266,14 @@ internal partial class Day22 : BaseSolution
                     throw new InvalidOperationException();
             }
         }
+
         return (hitpoints, damage);
+    }
+
+    private enum LogLevel
+    {
+        Success,
+        SuccessAndFail,
+        None
     }
 }

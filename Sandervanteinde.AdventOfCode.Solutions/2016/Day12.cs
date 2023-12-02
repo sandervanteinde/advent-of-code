@@ -1,12 +1,12 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
 namespace Sandervanteinde.AdventOfCode.Solutions._2016;
+
 public class Day12 : BaseSolution
 {
     public Day12()
-        : base("Radioisotope Thermoelectric Generators", 2016, 12)
+        : base("Radioisotope Thermoelectric Generators", year: 2016, day: 12)
     {
-
     }
 
     public override object DetermineStepOneResult(FileReader reader)
@@ -31,7 +31,7 @@ public class Day12 : BaseSolution
             .ToArray();
 
         var computer = new Computer(lines);
-        computer.WriteMemoryAddress("c", 1);
+        computer.WriteMemoryAddress("c", value: 1);
 
         computer.Execute();
 
@@ -40,7 +40,7 @@ public class Day12 : BaseSolution
 
     private static object ParseOperation(string s)
     {
-        return s.Split(' ') switch
+        return s.Split(separator: ' ') switch
         {
             ["cpy", var firstArg, var secondArg] => new CopyOperation { Source = firstArg, Target = secondArg },
             ["inc", var incArgument] => new IncrementOperation { Target = incArgument },
@@ -58,9 +58,9 @@ file interface IOperation
 
 file class Computer
 {
-    private readonly IList<IOperation> operations;
-    private int instructionPointer = 0;
     private readonly Dictionary<string, int> memory = new();
+    private readonly IList<IOperation> operations;
+    private int instructionPointer;
 
     public Computer(IList<IOperation> operations)
     {
@@ -69,11 +69,13 @@ file class Computer
 
     public void Execute()
     {
-        while(instructionPointer < operations.Count)
+        while (instructionPointer < operations.Count)
         {
             var currentPointer = instructionPointer;
-            operations[instructionPointer].Process(this);
-            if(currentPointer == instructionPointer)
+            operations[instructionPointer]
+                .Process(this);
+
+            if (currentPointer == instructionPointer)
             {
                 instructionPointer++;
             }
@@ -99,9 +101,10 @@ file class Computer
 
 file class Address
 {
-    [MemberNotNullWhen(true, nameof(MemoryAddress))]
-    [MemberNotNullWhen(false, nameof(Constant))]
+    [MemberNotNullWhen(returnValue: true, nameof(MemoryAddress))]
+    [MemberNotNullWhen(returnValue: false, nameof(Constant))]
     public required bool IsMemoryAddress { get; init; }
+
     public string? MemoryAddress { get; init; }
     public int? Constant { get; init; }
 
@@ -111,6 +114,7 @@ file class Address
         {
             return new Address { IsMemoryAddress = false, Constant = integerValue };
         }
+
         return new Address { IsMemoryAddress = true, MemoryAddress = input };
     }
 }
@@ -159,7 +163,7 @@ file class JumpOperation : IOperation
             ? computer.ReadMemoryAddress(Address.MemoryAddress)
             : Address.Constant.Value;
 
-        if(evaluateValue == 0)
+        if (evaluateValue == 0)
         {
             return;
         }

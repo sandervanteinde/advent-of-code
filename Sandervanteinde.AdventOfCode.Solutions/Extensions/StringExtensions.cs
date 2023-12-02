@@ -6,7 +6,7 @@ public static class StringExtensions
     {
         var span = s.AsSpan();
         var firstIndex = 0;
-        Index lastIndex = ^1;
+        var lastIndex = ^1;
 
         while (span.Length > 1)
         {
@@ -15,7 +15,7 @@ public static class StringExtensions
                 return false;
             }
 
-            span = span.Slice(1, span.Length - 2);
+            span = span.Slice(start: 1, span.Length - 2);
         }
 
         return true;

@@ -1,30 +1,26 @@
 ﻿namespace Sandervanteinde.AdventOfCode.Solutions._2021;
 
-internal partial class Day10 : BaseSolution
+internal class Day10 : BaseSolution
 {
     public Day10()
-        : base("Syntax Scoring", 2021, 10)
+        : base("Syntax Scoring", year: 2021, day: 10)
     {
-
     }
+
     public override object DetermineStepOneResult(FileReader reader)
     {
-        var invalidChars = new Dictionary<char, int>
-        {
-            { '}', 0 },
-            { ')', 0 },
-            { ']', 0 },
-            { '>', 0 }
-        };
+        var invalidChars = new Dictionary<char, int> { { '}', 0 }, { ')', 0 }, { ']', 0 }, { '>', 0 } };
 
         foreach (var line in reader.ReadLineByLine())
         {
             var stack = new Stack<char>();
             var shouldContinue = true;
             var i = 0;
+
             while (shouldContinue && i < line.Length)
             {
                 var c = line[i];
+
                 switch (c)
                 {
                     case '{':
@@ -42,6 +38,7 @@ internal partial class Day10 : BaseSolution
                     default:
                         throw new NotSupportedException("Invalid input character found: " + c);
                 }
+
                 i++;
             }
 
@@ -55,7 +52,7 @@ internal partial class Day10 : BaseSolution
             }
         }
 
-        return invalidChars[')'] * 3 + invalidChars[']'] * 57 + invalidChars['}'] * 1197 + invalidChars['>'] * 25137;
+        return (invalidChars[key: ')'] * 3) + (invalidChars[key: ']'] * 57) + (invalidChars[key: '}'] * 1197) + (invalidChars[key: '>'] * 25137);
     }
 
     private static char OppositeOf(char c)
@@ -77,33 +74,32 @@ internal partial class Day10 : BaseSolution
     private static bool RemoveFromStack(Stack<char> stack, char c, out char invalidChar)
     {
         var result = stack.Pop();
+
         if (result != c)
         {
             invalidChar = result;
             return false;
         }
+
         invalidChar = '\0';
         return true;
     }
 
     public override object DetermineStepTwoResult(FileReader reader)
     {
-        var autoCompleteCharsValues = new Dictionary<char, int>
-        {
-            { '(', 1 },
-            { '[', 2 },
-            { '{', 3 },
-            { '<', 4 }
-        };
+        var autoCompleteCharsValues = new Dictionary<char, int> { { '(', 1 }, { '[', 2 }, { '{', 3 }, { '<', 4 } };
         var scores = new List<long>();
+
         foreach (var line in reader.ReadLineByLine())
         {
             var stack = new Stack<char>();
             var shouldContinue = true;
             var i = 0;
+
             while (shouldContinue && i < line.Length)
             {
                 var c = line[i];
+
                 switch (c)
                 {
                     case '{':
@@ -121,6 +117,7 @@ internal partial class Day10 : BaseSolution
                     default:
                         throw new NotSupportedException("Invalid input character found: " + c);
                 }
+
                 i++;
             }
 

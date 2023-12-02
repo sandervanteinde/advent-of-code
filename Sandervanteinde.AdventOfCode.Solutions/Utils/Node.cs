@@ -9,4 +9,3 @@ internal record Node<T>(T Value)
         return Value?.ToString();
     }
 }
-

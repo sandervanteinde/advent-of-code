@@ -17,12 +17,16 @@ public class Day25Tests
     [InlineData(6, 1, 16)]
     public void Test(long row, long column, long result)
     {
-        Day25.DetermineId(row, column).Should().Be(result);
+        Day25.DetermineId(row, column)
+            .Should()
+            .Be(result);
     }
 
     [Fact]
     public void Test2()
     {
-        Day25.DetermineNextValue(20151125).Should().Be(31916031);
+        Day25.DetermineNextValue(currentValue: 20151125)
+            .Should()
+            .Be(expected: 31916031);
     }
 }
