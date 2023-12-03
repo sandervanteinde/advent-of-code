@@ -1,4 +1,5 @@
 ﻿using System.Buffers;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Sandervanteinde.AdventOfCode.Solutions.Utils;
 
@@ -26,6 +27,19 @@ public class GridWindow<T> : IDisposable
 
     public int X { get; }
     public int Y { get; }
+    public bool IsTopRow => Y is 0;
+    public bool IsBottomRow => (Y + 1) == grid.GetLength(1);
+    public bool IsLeftColumn => X is 0;
+    public bool IsRightColumn => (X + 1) == grid.GetLength(0);
+
+    public GridWindow<T> TopLeft => grid[X - 1, Y - 1];
+    public GridWindow<T> Top => grid[X, Y - 1];
+    public GridWindow<T> TopRight => grid[X + 1, Y - 1];
+    public GridWindow<T> Left => grid[X - 1, Y];
+    public GridWindow<T> Right => grid[X + 1, Y];
+    public GridWindow<T> BottomLeft => grid[X - 1, Y + 1];
+    public GridWindow<T> Bottom => grid[X, Y + 1];
+    public GridWindow<T> BottomRight => grid[X + 1, Y + 1];
 
     public T Value => values[X, Y];
 
@@ -60,6 +74,51 @@ public class GridWindow<T> : IDisposable
         if (X + 1 < grid.GetLength(dimension: 0))
         {
             yield return grid[X + 1, Y];
+        }
+    }
+
+    public IEnumerable<GridWindow<T>> AdjacentWindowsIncludingDiagonals()
+    {
+        if (!IsLeftColumn)
+        {
+            if (!IsTopRow)
+            {
+                yield return TopLeft;
+            }
+
+            yield return Left;
+
+            if (!IsBottomRow)
+            {
+                yield return BottomLeft;
+            }
+        }
+
+        if (!IsTopRow)
+        {
+            yield return Top;
+        }
+
+        if (!IsBottomRow)
+        {
+            yield return Bottom;
+        }
+
+        if (IsRightColumn)
+        {
+            yield break;
+        }
+
+        if (!IsTopRow)
+        {
+            yield return TopRight;
+        }
+
+        yield return Right;
+
+        if (!IsBottomRow)
+        {
+            yield return BottomRight;
         }
     }
 
@@ -175,5 +234,29 @@ public class GridWindow<T> : IDisposable
     public override string? ToString()
     {
         return Value?.ToString();
+    }
+
+    public bool TryGetValueAtRightSide([NotNullWhen(returnValue: true)] out GridWindow<T>? o)
+    {
+        if (!IsRightColumn)
+        {
+            o = Right;
+            return true;
+        }
+
+        o = default!;
+        return false;
+    }
+
+    public bool TryGetValueAtLeftSide([NotNullWhen(returnValue: true)] out GridWindow<T>? o)
+    {
+        if (!IsLeftColumn)
+        {
+            o = Left;
+            return true;
+        }
+
+        o = default!;
+        return false;
     }
 }
