@@ -69,6 +69,22 @@ public class FileReader
         }
     }
 
+    public IEnumerable<TResult> MatchLineByLine<TOne, TTwo, TThree, TResult>(Regex regex, Func<TOne, TTwo, TThree, TResult> parser)
+    {
+        foreach (var match in MatchLineByLine(regex))
+        {
+            if (match.Groups.Count != 4)
+            {
+                throw new InvalidOperationException("Expected 3 capture groups for regex with 3 parameters");
+            }
+
+            var one = (TOne)Convert.ChangeType(match.Groups[groupnum: 1].Value, typeof(TOne));
+            var two = (TTwo)Convert.ChangeType(match.Groups[groupnum: 2].Value, typeof(TTwo));
+            var three = (TThree)Convert.ChangeType(match.Groups[groupnum: 3].Value, typeof(TThree));
+            yield return parser.Invoke(one, two, three);
+        }
+    }
+
     public GridWindow<T>[,] ReadAsGrid<T>(Func<char, T> mapper)
     {
         var lines = new List<List<T>>();
